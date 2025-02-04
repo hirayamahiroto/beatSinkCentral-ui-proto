@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Calendar, MapPin, Users, Clock, Share2, Trophy } from "lucide-react";
-
+import Header from "./../../../component/header";
 const EVENT_DATA = {
   id: 1,
   title: "Beatbox Championship 2024",
@@ -31,7 +31,8 @@ const EVENT_DATA = {
 export default function EventDetail() {
   return (
     <div className="min-h-screen bg-black text-white pt-16">
-      {/* Hero Section */}
+      <Header />
+
       <section className="relative h-[60vh]">
         <Image src={EVENT_DATA.image} alt={EVENT_DATA.title} fill className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />

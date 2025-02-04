@@ -3,38 +3,39 @@
 import React, { useState } from "react";
 import { Search, Filter, ArrowUpDown } from "lucide-react";
 import Link from "next/link";
+import Header from "./../../../component/header";
 
 const Card = ({ className = "", ...props }) => {
   return <div className={`rounded-lg shadow-lg overflow-hidden ${className}`} {...props}></div>;
 };
 
+const players = [
+  {
+    id: 1,
+    name: "HIROTO",
+    realName: "HIROTO HIRAYAMA",
+    age: 22,
+    team: "Phoenix Squad",
+    rank: "#1",
+    speciality: "Aggressive",
+    image: "/heroSlide3Pc.webp",
+  },
+  {
+    id: 2,
+    name: "HIROTO",
+    realName: "HIROTO HIRAYAMA",
+    age: 20,
+    team: "Night Raiders",
+    rank: "#2",
+    speciality: "Tactical",
+    image: "/heroSlide3Pc.webp",
+  },
+];
+
 const PlayerList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filterSpeciality, setFilterSpeciality] = useState<string | null>(null);
-
-  const players = [
-    {
-      id: 1,
-      name: "HIROTO",
-      realName: "HIROTO HIRAYAMA",
-      age: 22,
-      team: "Phoenix Squad",
-      rank: "#1",
-      speciality: "Aggressive",
-      image: "/heroSlide3Pc.webp",
-    },
-    {
-      id: 2,
-      name: "HIROTO",
-      realName: "HIROTO HIRAYAMA",
-      age: 20,
-      team: "Night Raiders",
-      rank: "#2",
-      speciality: "Tactical",
-      image: "/heroSlide3Pc.webp",
-    },
-  ];
 
   const processedPlayers = players
     .filter((player) => {
@@ -67,7 +68,8 @@ const PlayerList = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900 p-4 md:p-8">
       {/* Header Section */}
-      <div className="max-w-6xl mx-auto mb-8 md:mb-12">
+      <Header />
+      <div className="max-w-6xl mx-auto mb-8 md:mb-12 mt-32">
         <div className="flex flex-col items-center text-center mb-8 md:mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tight">
             Our Players

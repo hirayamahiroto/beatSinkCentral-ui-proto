@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Calendar, MapPin, Users, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Header from "./../../../component/header";
+
 const EVENTS_DATA = [
   {
     id: 1,
@@ -80,7 +82,7 @@ const EventSchedule = () => {
   const regularEvents = EVENTS_DATA.filter((event) => !event.isFeatured);
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Featured Event */}
+      <Header />
       {featuredEvent && (
         <Link href="/eventDetail" className="py-12">
           <div className="container mx-auto px-4">

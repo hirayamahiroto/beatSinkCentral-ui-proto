@@ -1,11 +1,12 @@
 import React from "react";
 import { Code, Youtube, Music, Mic, Github } from "lucide-react";
 import Image from "next/image";
+import Header from "./../../../component/header";
 
 const PlayerProfile = () => {
   return (
     <div className="min-h-screen relative bg-black">
-      {/* MV Section */}
+      <Header />
       <section className="h-screen relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-pink-900/20 mix-blend-overlay" />
