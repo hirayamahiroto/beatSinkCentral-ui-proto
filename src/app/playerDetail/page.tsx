@@ -21,10 +21,10 @@ const PlayerProfile = () => {
         </div>
 
         <div className="relative h-full flex flex-col items-center justify-center px-4 ">
-          <h1 className="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 mb-6">
+          <h1 className="absolute bottom-32 right-8 text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
             HIROTO
           </h1>
-          <p className="text-xl text-gray-300 mb-12 tracking-wide">
+          <p className="absolute bottom-24 right-8 text-xl text-gray-300 tracking-wide">
             Beatboxer / Engineer / Creator
           </p>
           <div className="flex gap-6 mb-16">

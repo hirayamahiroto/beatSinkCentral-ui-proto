@@ -30,6 +30,46 @@ const players = [
     speciality: "Tactical",
     image: "/heroSlide3Pc.webp",
   },
+  {
+    id: 3,
+    name: "HIROTO",
+    realName: "HIROTO HIRAYAMA",
+    age: 20,
+    team: "Night Raiders",
+    rank: "#3",
+    speciality: "Tactical",
+    image: "/heroSlide3Pc.webp",
+  },
+  {
+    id: 4,
+    name: "HIROTO",
+    realName: "HIROTO HIRAYAMA",
+    age: 20,
+    team: "Night Raiders",
+    rank: "#4",
+    speciality: "Tactical",
+    image: "/heroSlide3Pc.webp",
+  },
+  {
+    id: 5,
+    name: "HIROTO",
+    realName: "HIROTO HIRAYAMA",
+    age: 20,
+    team: "Night Raiders",
+    rank: "#5",
+    speciality: "Tactical",
+    image: "/heroSlide3Pc.webp",
+  },
+  {
+    id: 6,
+    name: "HIROTO",
+    realName: "HIROTO HIRAYAMA",
+    age: 20,
+    team: "Night Raiders",
+    rank: "#6",
+    speciality: "Tactical",
+    image: "/heroSlide3Pc.webp",
+  },
 ];
 
 const PlayerList = () => {
@@ -113,7 +153,7 @@ const PlayerList = () => {
 
       {/* Player Grid */}
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {processedPlayers.map((player) => (
             <Link href={`/playerDetail`} key={player.id}>
               <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
@@ -122,7 +162,7 @@ const PlayerList = () => {
                   <img
                     src={player.image}
                     alt={player.name}
-                    className="w-full h-[300px] md:h-[600px] object-cover filter brightness-75 saturate-50 group-hover:scale-105 transition-transform duration-700 ease-out"
+                    className="w-full h-[300px] object-cover filter brightness-75 saturate-50 group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
                   <div className="absolute top-4 md:top-6 right-4 md:right-6">
                     <span className="bg-purple-600/80 backdrop-blur-sm px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-bold text-sm md:text-base">
