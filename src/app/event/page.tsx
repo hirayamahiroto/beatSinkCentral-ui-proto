@@ -125,6 +125,12 @@ const EventSchedule = () => {
     <div className="min-h-screen bg-black text-white">
       <Header />
       <div className="container mx-auto px-4 pt-24">
+        <h1 className="text-4xl font-bold mb-2">Events</h1>
+        <p className="text-xl text-gray-400 mb-4">イベント情報</p>
+        <p className="text-gray-400 mb-8">
+          ビートボックスの大会やワークショップなど、日本全国で開催される様々なイベント情報をご紹介します。
+          参加者募集中のイベントから過去の開催情報まで、最新の情報をチェックできます。
+        </p>
         <div className="bg-white/5 backdrop-blur-lg rounded-lg p-6 mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
