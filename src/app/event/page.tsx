@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Calendar, MapPin, Users, Clock, Search, Filter, ArrowRight } from "lucide-react";
+import { Calendar, MapPin, Users, ArrowRight } from "lucide-react";
 
 const EVENTS_DATA = [
   {
