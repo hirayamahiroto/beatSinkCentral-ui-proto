@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Calendar, MapPin, Users, ArrowRight } from "lucide-react";
-
+import Link from "next/link";
 const EVENTS_DATA = [
   {
     id: 1,
@@ -82,7 +82,7 @@ const EventSchedule = () => {
     <div className="min-h-screen bg-black text-white">
       {/* Featured Event */}
       {featuredEvent && (
-        <section className="py-12">
+        <Link href="/eventDetail" className="py-12">
           <div className="container mx-auto px-4">
             <div className="relative rounded-2xl overflow-hidden">
               <Image
@@ -114,12 +114,12 @@ const EventSchedule = () => {
               </div>
             </div>
           </div>
-        </section>
+        </Link>
       )}
 
       {/* Event List */}
       <section className="py-12">
-        <div className="container mx-auto px-4">
+        <Link href="/eventDetail" className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {regularEvents.map((event) => (
               <div
@@ -160,7 +160,7 @@ const EventSchedule = () => {
               </div>
             ))}
           </div>
-        </div>
+        </Link>
       </section>
     </div>
   );

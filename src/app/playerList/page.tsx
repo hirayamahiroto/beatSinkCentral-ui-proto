@@ -103,7 +103,7 @@ const PlayerList = () => {
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-2 gap-8">
           {processedPlayers.map((player) => (
-            <Link href={`/ui`} key={player.id}>
+            <Link href={`/playerDetail`} key={player.id}>
               <Card
                 key={player.id}
                 className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer"

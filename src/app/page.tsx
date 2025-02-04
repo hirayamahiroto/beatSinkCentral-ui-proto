@@ -49,18 +49,25 @@ export default function Home() {
           <div className="md:hidden bg-black/90 backdrop-blur-md">
             <div className="container mx-auto px-4 py-4">
               <nav className="flex flex-col gap-4">
-                <a href="#" className="text-gray-300 hover:text-white transition-colors px-4 py-2">
+                <Link
+                  href="/"
+                  className="text-gray-300 hover:text-white transition-colors px-4 py-2"
+                >
                   ホーム
-                </a>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors px-4 py-2">
+                </Link>
+                <Link
+                  href="/player"
+                  className="text-gray-300 hover:text-white transition-colors px-4 py-2"
+                >
                   プレイヤー
-                </a>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors px-4 py-2">
+                </Link>
+                <Link
+                  href="/event"
+                  className="text-gray-300 hover:text-white transition-colors px-4 py-2"
+                >
                   イベント
-                </a>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors px-4 py-2">
-                  コンテンツ
-                </a>
+                </Link>
+
                 <hr className="border-white/10" />
                 <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-full text-sm font-medium transition-colors w-full">
                   ログイン
@@ -88,13 +95,13 @@ export default function Home() {
           </p>
           <div className="flex gap-4">
             <Link
-              href="/list"
+              href="/playerList"
               className="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-full font-medium transition-all"
             >
               プレイヤーを探す
             </Link>
             <Link
-              href="/list"
+              href="/event"
               className="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-full font-medium transition-all"
             >
               イベントを見る
@@ -152,7 +159,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-20">主な機能</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <Link
-              href="/list"
+              href="/playerList"
               className="group backdrop-blur-md bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition-all"
             >
               <Mic className="w-10 h-10 text-blue-400 mb-4" />
@@ -164,7 +171,7 @@ export default function Home() {
             </Link>
 
             <Link
-              href="/list"
+              href="/event"
               className="group backdrop-blur-md bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition-all"
             >
               <Calendar className="w-10 h-10 text-purple-400 mb-4" />
@@ -179,7 +186,7 @@ export default function Home() {
             </Link>
 
             <Link
-              href="/list"
+              href="/playerList"
               className="group backdrop-blur-md bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition-all"
             >
               <Play className="w-10 h-10 text-pink-400 mb-4" />
