@@ -56,7 +56,7 @@ export default function Home() {
                   ホーム
                 </Link>
                 <Link
-                  href="/player"
+                  href="/playerList"
                   className="text-gray-300 hover:text-white transition-colors px-4 py-2"
                 >
                   プレイヤー
