@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Code, Music, Mic } from "lucide-react";
+import { Code, Music, Mic, Youtube, Twitter, Instagram } from "lucide-react";
 import Image from "next/image";
 import Header from "./../../../component/header";
 
@@ -235,17 +235,40 @@ const PlayerProfile = () => {
           />
         </div>
 
-        <div className="relative h-full flex flex-col items-center justify-center px-4 ">
-          <h1 className="absolute bottom-32 right-8 text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
-            HIROTO
-          </h1>
-          <p className="absolute bottom-24 right-8 text-xl text-gray-300 tracking-wide">
-            Beatboxer / Engineer / Creator
-          </p>
-          <div className="flex gap-6 mb-16">
-            {["YouTube", "Twitter", "Instagram", "SoundCloud"].map((platform) => (
-              <div key={platform} className="w-3 h-3 rounded-full bg-blue-500 animate-pulse" />
-            ))}
+        <div className="relative h-full flex flex-col items-center justify-center px-4">
+          <div className="absolute bottom-32 right-8 flex flex-col items-end">
+            <div className="flex gap-4 mb-4">
+              <a
+                href="https://youtube.com/@your-channel"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#FF0000] hover:text-[#FF0000]/80 transition-colors"
+              >
+                <Youtube className="w-5 h-5" />
+              </a>
+              <a
+                href="https://twitter.com/@your-handle"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#1DA1F2] hover:text-[#1DA1F2]/80 transition-colors"
+              >
+                <Twitter className="w-5 h-5" />
+              </a>
+              <a
+                href="https://instagram.com/@your-handle"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#E4405F] hover:text-[#E4405F]/80 transition-colors"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+            </div>
+            <h1 className="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+              HIROTO
+            </h1>
+            <span className="text-xl text-gray-300 tracking-wide mt-2">
+              Beatboxer / Engineer / Creator
+            </span>
           </div>
           <button className="animate-bounce cursor-pointer bg-transparent border border-white/20 rounded-full p-3 hover:bg-white/10 transition-colors duration-300">
             <svg
