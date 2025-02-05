@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, Menu } from "lucide-react";
+import { Search, X, Menu } from "lucide-react";
 import Link from "next/link";
 
 const Header = () => {
@@ -28,6 +28,12 @@ const Header = () => {
             <nav className="flex flex-col gap-4">
               <Link href="/" className="text-gray-300 hover:text-white transition-colors px-4 py-2">
                 ホーム
+              </Link>
+              <Link
+                href="/about"
+                className="text-gray-300 hover:text-white transition-colors px-4 py-2"
+              >
+                運営情報
               </Link>
               <Link
                 href="/playerList"
