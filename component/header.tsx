@@ -13,6 +13,24 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           <div className="text-xl font-bold text-white">Beat Sink Central</div>
 
+          <nav className="hidden md:flex items-center gap-6">
+            <Link href="/" className="text-gray-300 hover:text-white transition-colors">
+              ホーム
+            </Link>
+            <Link href="/about" className="text-gray-300 hover:text-white transition-colors">
+              運営情報
+            </Link>
+            <Link href="/playerList" className="text-gray-300 hover:text-white transition-colors">
+              プレイヤー
+            </Link>
+            <Link href="/event" className="text-gray-300 hover:text-white transition-colors">
+              イベント
+            </Link>
+            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-full text-sm font-medium transition-colors">
+              ログイン
+            </button>
+          </nav>
+
           <button
             className="md:hidden p-2 text-gray-300 hover:text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
