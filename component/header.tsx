@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, X, Menu } from "lucide-react";
+import { X, Menu } from "lucide-react";
 import Link from "next/link";
 
 const Header = () => {
