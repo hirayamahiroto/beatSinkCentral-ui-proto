@@ -5,80 +5,7 @@ import { MapPin, Users, ArrowRight, Search, Filter, ArrowUpDown } from "lucide-r
 import Link from "next/link";
 import Header from "./../../../component/header";
 import { useState } from "react";
-
-const EVENTS_DATA = [
-  {
-    id: 1,
-    title: "Beatbox Championship 2024",
-    date: "2024.03.21",
-    type: "大会",
-    location: "東京都渋谷区",
-    participants: 128,
-    description:
-      "日本一のビートボクサーを決める年に一度の大会。優勝者は世界大会への切符を手にします。",
-    image: "/heroSlide3Pc.webp",
-    isFeatured: true,
-  },
-  {
-    id: 2,
-    title: "Regional Beatbox Battle",
-    date: "2024.04.15",
-    type: "大会",
-    location: "横浜",
-    participants: 32,
-    description: "関東地区予選大会。優勝者は全国大会への切符を手にします。",
-    image: "/heroSlide3Pc.webp",
-  },
-  {
-    id: 3,
-    title: "Beatbox Workshop 2024",
-    date: "2024.05.01",
-    type: "ワークショップ",
-    location: "大阪",
-    participants: 20,
-    description: "初心者から中級者向けのワークショップ。基礎テクニックを学びます。",
-    image: "/heroSlide3Pc.webp",
-  },
-  {
-    id: 4,
-    title: "Beatbox Workshop 2024",
-    date: "2024.05.01",
-    type: "ワークショップ",
-    location: "大阪",
-    image: "/heroSlide3Pc.webp",
-    participants: 20,
-  },
-
-  {
-    id: 5,
-    title: "Beatbox Workshop 2024",
-    date: "2024.05.01",
-    type: "ワークショップ",
-    location: "大阪",
-    image: "/heroSlide3Pc.webp",
-    participants: 20,
-  },
-
-  {
-    id: 6,
-    title: "Beatbox Workshop 2024",
-    date: "2024.05.01",
-    type: "ワークショップ",
-    location: "大阪",
-    image: "/heroSlide3Pc.webp",
-    participants: 20,
-  },
-
-  {
-    id: 7,
-    title: "Beatbox Workshop 2024",
-    date: "2024.05.01",
-    type: "ワークショップ",
-    location: "大阪",
-    image: "/heroSlide3Pc.webp",
-    participants: 20,
-  },
-];
+import { events } from "./../../data/events";
 
 const EventSchedule = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -86,10 +13,11 @@ const EventSchedule = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
 
-  const featuredEvent = EVENTS_DATA.find((event) => event.isFeatured);
+  const featuredEvent = events.find((event) => event.isFeatured);
   const currentDate = new Date();
 
-  const filteredEvents = EVENTS_DATA.filter((event) => !event.isFeatured)
+  const filteredEvents = events
+    .filter((event) => !event.isFeatured)
     .filter((event) => {
       const eventDate = new Date(event.date);
       if (activeTab === "upcoming") {
@@ -102,7 +30,9 @@ const EventSchedule = () => {
       const searchLower = searchQuery.toLowerCase();
       const matchesSearch =
         event.title.toLowerCase().includes(searchLower) ||
-        event.location.toLowerCase().includes(searchLower);
+        event.location.toLowerCase().includes(searchLower) ||
+        event.description?.toLowerCase().includes(searchLower) ||
+        false;
       const matchesType = !filterType || event.type === filterType;
       return matchesSearch && matchesType;
     })
@@ -116,7 +46,7 @@ const EventSchedule = () => {
   };
 
   const handleFilter = () => {
-    const types = ["大会", "ワークショップ"];
+    const types = ["大会", "ワークショップ", "セミナー", "ショーケース"];
     const currentIndex = types.indexOf(filterType || "");
     setFilterType(currentIndex === types.length - 1 ? null : types[currentIndex + 1]);
   };
@@ -159,7 +89,7 @@ const EventSchedule = () => {
                 onClick={handleSort}
               >
                 <ArrowUpDown className="w-4 h-4" />
-                {sortOrder === "asc" ? "新しい順" : "古い順"}
+                {sortOrder === "asc" ? "開催日が近い順" : "開催日が遠い順"}
               </button>
             </div>
           </div>
