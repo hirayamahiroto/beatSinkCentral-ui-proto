@@ -10,59 +10,6 @@ const Card = ({ className = "", ...props }) => {
   return <div className={`rounded-lg shadow-lg overflow-hidden ${className}`} {...props}></div>;
 };
 
-const players = [
-  {
-    id: 1,
-    name: "HIROTO",
-    realName: "HIROTO HIRAYAMA",
-    age: 22,
-    team: "Phoenix Squad",
-    rank: "#1",
-    speciality: "Aggressive",
-    image: "/heroSlide1Pc.jpeg",
-  },
-  {
-    id: 2,
-    name: "HIROTO",
-    realName: "HIROTO HIRAYAMA",
-    age: 20,
-    team: "Night Raiders",
-    rank: "#2",
-    speciality: "Tactical",
-    image: "/heroSlide2Pc.jpeg",
-  },
-  {
-    id: 3,
-    name: "HIROTO",
-    realName: "HIROTO HIRAYAMA",
-    age: 20,
-    team: "Night Raiders",
-    rank: "#3",
-    speciality: "Tactical",
-    image: "/heroSlide3Pc.jpeg",
-  },
-  {
-    id: 4,
-    name: "HIROTO",
-    realName: "HIROTO HIRAYAMA",
-    age: 20,
-    team: "Night Raiders",
-    rank: "#4",
-    speciality: "Tactical",
-    image: "/heroSlide4Pc.jpeg",
-  },
-  {
-    id: 5,
-    name: "HIROTO",
-    realName: "HIROTO HIRAYAMA",
-    age: 20,
-    team: "Night Raiders",
-    rank: "#5",
-    speciality: "Tactical",
-    image: "/heroSlide1Pc.jpeg",
-  },
-];
-
 const PlayerList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -155,7 +102,7 @@ const PlayerList = () => {
                 <button className="text-purple-400 hover:text-purple-300">View all</button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {players.slice(0, 3).map((player) => (
+                {playerData.slice(0, 3).map((player) => (
                   <Link href={`/playerDetail`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
@@ -201,7 +148,7 @@ const PlayerList = () => {
                 <button className="text-purple-400 hover:text-purple-300">View all</button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {players.slice(3, 7).map((player) => (
+                {playerData.slice(3, 7).map((player) => (
                   <Link href={`/playerDetail`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
@@ -253,7 +200,7 @@ const PlayerList = () => {
                 </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {players.slice(0, 4).map((player) => (
+                {playerData.slice(0, 4).map((player) => (
                   <Link href={`/playerDetail`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
