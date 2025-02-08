@@ -289,7 +289,7 @@ const PlayerList = () => {
             {/* 検索結果グリッド */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {processedPlayers.map((player) => (
-                <Link href={`/player/${player.id}`} key={player.id}>
+                <Link href={`/playerDetail`} key={player.id}>
                   <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                     <div className="relative">
                       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
