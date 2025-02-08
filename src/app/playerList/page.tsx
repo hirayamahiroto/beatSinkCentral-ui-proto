@@ -156,7 +156,7 @@ const PlayerList = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {players.slice(0, 3).map((player) => (
-                  <Link href={`/playerDetail/${player.id}`} key={player.id}>
+                  <Link href={`/playerDetail`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
@@ -202,7 +202,7 @@ const PlayerList = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {players.slice(3, 7).map((player) => (
-                  <Link href={`/playerDetail/${player.id}`} key={player.id}>
+                  <Link href={`/playerDetail`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
@@ -254,7 +254,7 @@ const PlayerList = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {players.slice(0, 4).map((player) => (
-                  <Link href={`/playerDetail/${player.id}`} key={player.id}>
+                  <Link href={`/playerDetail`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
@@ -342,9 +342,35 @@ const PlayerList = () => {
             {/* 検索結果グリッド */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {processedPlayers.map((player) => (
-                <Link href={`/playerDetail/${player.id}`} key={player.id}>
+                <Link href={`/player/${player.id}`} key={player.id}>
                   <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
-                    {/* プレイヤーカードの内容（上記と同様） */}
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
+                      <img
+                        src={player.image}
+                        alt={player.name}
+                        className="w-full h-[300px] object-cover filter brightness-75 saturate-50 group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                      <div className="absolute top-4 right-4">
+                        <span className="bg-purple-600/80 backdrop-blur-sm px-3 py-1 rounded-full text-white font-bold">
+                          {player.rank}
+                        </span>
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <p className="text-purple-400/80 text-sm tracking-widest uppercase">
+                              {player.team}
+                            </p>
+                            <span className="text-gray-400 text-sm px-2 py-1 rounded-full bg-gray-800/50">
+                              {player.speciality}
+                            </span>
+                          </div>
+                          <h2 className="text-4xl font-bold text-white">{player.name}</h2>
+                          <p className="text-gray-300/90">{player.realName}</p>
+                        </div>
+                      </div>
+                    </div>
                   </Card>
                 </Link>
               ))}
