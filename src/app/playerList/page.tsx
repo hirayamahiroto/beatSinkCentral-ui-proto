@@ -15,6 +15,7 @@ const PlayerList = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [filterSpeciality, setFilterSpeciality] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState("discover"); // discover or search
+  const [randomPlayers, setRandomPlayers] = useState(playerData.slice(0, 4));
 
   const processedPlayers = playerData
     .filter((player) => {
@@ -45,7 +46,8 @@ const PlayerList = () => {
   };
 
   const handleShuffle = () => {
-    // シャッフルロジックの実装
+    const shuffled = [...playerData].sort(() => Math.random() - 0.5).slice(0, 4);
+    setRandomPlayers(shuffled);
   };
 
   return (
@@ -99,7 +101,6 @@ const PlayerList = () => {
                   <Star className="w-5 h-5 text-purple-400" />
                   Featured Players
                 </h2>
-                <button className="text-purple-400 hover:text-purple-300">View all</button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {playerData.slice(0, 3).map((player) => (
@@ -145,7 +146,6 @@ const PlayerList = () => {
                   <TrendingUp className="w-5 h-5 text-purple-400" />
                   New Players
                 </h2>
-                <button className="text-purple-400 hover:text-purple-300">View all</button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {playerData.slice(3, 7).map((player) => (
@@ -200,7 +200,7 @@ const PlayerList = () => {
                 </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {playerData.slice(0, 4).map((player) => (
+                {randomPlayers.map((player) => (
                   <Link href={`/playerDetail`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
