@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Filter, ArrowUpDown } from "lucide-react";
+import { Search, Filter, ArrowUpDown, Star, TrendingUp, Shuffle } from "lucide-react";
 import Link from "next/link";
 import Header from "./../../../component/header";
+import { players as playerData } from "@/data/players";
 
 const Card = ({ className = "", ...props }) => {
   return <div className={`rounded-lg shadow-lg overflow-hidden ${className}`} {...props}></div>;
@@ -18,7 +19,7 @@ const players = [
     team: "Phoenix Squad",
     rank: "#1",
     speciality: "Aggressive",
-    image: "/heroSlide3Pc.webp",
+    image: "/heroSlide1Pc.jpeg",
   },
   {
     id: 2,
@@ -28,7 +29,7 @@ const players = [
     team: "Night Raiders",
     rank: "#2",
     speciality: "Tactical",
-    image: "/heroSlide3Pc.webp",
+    image: "/heroSlide2Pc.jpeg",
   },
   {
     id: 3,
@@ -38,7 +39,7 @@ const players = [
     team: "Night Raiders",
     rank: "#3",
     speciality: "Tactical",
-    image: "/heroSlide3Pc.webp",
+    image: "/heroSlide3Pc.jpeg",
   },
   {
     id: 4,
@@ -48,7 +49,7 @@ const players = [
     team: "Night Raiders",
     rank: "#4",
     speciality: "Tactical",
-    image: "/heroSlide3Pc.webp",
+    image: "/heroSlide4Pc.jpeg",
   },
   {
     id: 5,
@@ -58,26 +59,17 @@ const players = [
     team: "Night Raiders",
     rank: "#5",
     speciality: "Tactical",
-    image: "/heroSlide3Pc.webp",
-  },
-  {
-    id: 6,
-    name: "HIROTO",
-    realName: "HIROTO HIRAYAMA",
-    age: 20,
-    team: "Night Raiders",
-    rank: "#6",
-    speciality: "Tactical",
-    image: "/heroSlide3Pc.webp",
+    image: "/heroSlide1Pc.jpeg",
   },
 ];
 
 const PlayerList = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [filterSpeciality, setFilterSpeciality] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [filterSpeciality, setFilterSpeciality] = useState(null);
+  const [activeSection, setActiveSection] = useState("discover"); // discover or search
 
-  const processedPlayers = players
+  const processedPlayers = playerData
     .filter((player) => {
       const searchLower = searchQuery.toLowerCase();
       const matchesSearch =
@@ -105,98 +97,260 @@ const PlayerList = () => {
     );
   };
 
+  const handleShuffle = () => {
+    // シャッフルロジックの実装
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900 p-4 md:p-8">
-      {/* Header Section */}
       <Header />
+
+      {/* ヒーローセクション */}
       <div className="max-w-6xl mx-auto mb-8 md:mb-12 mt-32">
         <div className="flex flex-col items-center text-center mb-8 md:mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tight">
-            Our Players
+            Discover Beatbox Artists
           </h1>
           <p className="text-gray-400 text-lg md:text-xl max-w-2xl">
-            Meet the elite players who define the competitive gaming landscape
+            From rising stars to established champions - explore the diverse world of beatbox
           </p>
         </div>
 
-        {/* Search and Filter */}
-        <div className="bg-black/50 backdrop-blur-lg rounded-lg p-4 md:p-6 mb-8 md:mb-12">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
-              <input
-                className="w-full pl-10 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-white"
-                placeholder="Search players..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+        {/* タブナビゲーション */}
+        <div className="flex justify-center gap-4 mb-8">
+          <button
+            onClick={() => setActiveSection("discover")}
+            className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-all ${
+              activeSection === "discover"
+                ? "bg-purple-600 text-white"
+                : "bg-gray-800/50 text-gray-400 hover:bg-gray-800"
+            }`}
+          >
+            <Star className="w-4 h-4" />
+            Discover
+          </button>
+          <button
+            onClick={() => setActiveSection("search")}
+            className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-all ${
+              activeSection === "search"
+                ? "bg-purple-600 text-white"
+                : "bg-gray-800/50 text-gray-400 hover:bg-gray-800"
+            }`}
+          >
+            <Search className="w-4 h-4" />
+            Search
+          </button>
+        </div>
+
+        {/* Discoverセクション (受動的ユーザー向け) */}
+        {activeSection === "discover" && (
+          <div className="space-y-12">
+            {/* 注目のプレイヤー */}
+            <section className="mb-12">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl text-white font-bold flex items-center gap-2">
+                  <Star className="w-5 h-5 text-purple-400" />
+                  Featured Players
+                </h2>
+                <button className="text-purple-400 hover:text-purple-300">View all</button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {players.slice(0, 3).map((player) => (
+                  <Link href={`/playerDetail/${player.id}`} key={player.id}>
+                    <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
+                        <img
+                          src={player.image}
+                          alt={player.name}
+                          className="w-full h-[300px] object-cover filter brightness-75 saturate-50 group-hover:scale-105 transition-transform duration-700 ease-out"
+                        />
+                        <div className="absolute top-4 right-4">
+                          <span className="bg-purple-600/80 backdrop-blur-sm px-3 py-1 rounded-full text-white font-bold">
+                            {player.rank}
+                          </span>
+                        </div>
+                        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <p className="text-purple-400/80 text-sm tracking-widest uppercase">
+                                {player.team}
+                              </p>
+                              <span className="text-gray-400 text-sm px-2 py-1 rounded-full bg-gray-800/50">
+                                {player.speciality}
+                              </span>
+                            </div>
+                            <h2 className="text-4xl font-bold text-white">{player.name}</h2>
+                            <p className="text-gray-300/90">{player.realName}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            {/* 新規プレイヤー */}
+            <section className="mb-12">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl text-white font-bold flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-purple-400" />
+                  New Players
+                </h2>
+                <button className="text-purple-400 hover:text-purple-300">View all</button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {players.slice(3, 7).map((player) => (
+                  <Link href={`/playerDetail/${player.id}`} key={player.id}>
+                    <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
+                        <img
+                          src={player.image}
+                          alt={player.name}
+                          className="w-full h-[300px] object-cover filter brightness-75 saturate-50 group-hover:scale-105 transition-transform duration-700 ease-out"
+                        />
+                        <div className="absolute top-4 right-4">
+                          <span className="bg-purple-600/80 backdrop-blur-sm px-3 py-1 rounded-full text-white font-bold">
+                            {player.rank}
+                          </span>
+                        </div>
+                        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <p className="text-purple-400/80 text-sm tracking-widest uppercase">
+                                {player.team}
+                              </p>
+                              <span className="text-gray-400 text-sm px-2 py-1 rounded-full bg-gray-800/50">
+                                {player.speciality}
+                              </span>
+                            </div>
+                            <h2 className="text-4xl font-bold text-white">{player.name}</h2>
+                            <p className="text-gray-300/90">{player.realName}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            {/* ランダム発見 */}
+            <section>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl text-white font-bold flex items-center gap-2">
+                  <Shuffle className="w-5 h-5 text-purple-400" />
+                  Random Discoveries
+                </h2>
+                <button
+                  onClick={handleShuffle}
+                  className="text-purple-400 hover:text-purple-300 flex items-center gap-2"
+                >
+                  <Shuffle className="w-4 h-4" />
+                  Shuffle
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {players.slice(0, 4).map((player) => (
+                  <Link href={`/playerDetail/${player.id}`} key={player.id}>
+                    <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
+                        <img
+                          src={player.image}
+                          alt={player.name}
+                          className="w-full h-[300px] object-cover filter brightness-75 saturate-50 group-hover:scale-105 transition-transform duration-700 ease-out"
+                        />
+                        <div className="absolute top-4 right-4">
+                          <span className="bg-purple-600/80 backdrop-blur-sm px-3 py-1 rounded-full text-white font-bold">
+                            {player.rank}
+                          </span>
+                        </div>
+                        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <p className="text-purple-400/80 text-sm tracking-widest uppercase">
+                                {player.team}
+                              </p>
+                              <span className="text-gray-400 text-sm px-2 py-1 rounded-full bg-gray-800/50">
+                                {player.speciality}
+                              </span>
+                            </div>
+                            <h2 className="text-4xl font-bold text-white">{player.name}</h2>
+                            <p className="text-gray-300/90">{player.realName}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          </div>
+        )}
+
+        {/* Searchセクション (能動的ユーザー向け) */}
+        {activeSection === "search" && (
+          <div>
+            {/* 検索とフィルター */}
+            <div className="bg-black/50 backdrop-blur-lg rounded-lg p-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                  <input
+                    className="w-full pl-10 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-white"
+                    placeholder="Search players..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <button
+                    className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg flex items-center justify-center gap-2 text-white"
+                    onClick={handleFilter}
+                  >
+                    <Filter className="w-4 h-4" />
+                    Style
+                  </button>
+                  <button
+                    className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg flex items-center justify-center gap-2 text-white"
+                    onClick={handleSort}
+                  >
+                    <ArrowUpDown className="w-4 h-4" />
+                    Sort
+                  </button>
+                </div>
+                <div className="flex gap-4">
+                  <select className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-white">
+                    <option value="">Region</option>
+                    <option value="kanto">関東</option>
+                    <option value="kansai">関西</option>
+                    <option value="other">その他</option>
+                  </select>
+                  <select className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-white">
+                    <option value="">Experience</option>
+                    <option value="beginner">初心者</option>
+                    <option value="intermediate">中級者</option>
+                    <option value="advanced">上級者</option>
+                  </select>
+                </div>
+              </div>
             </div>
-            <div className="flex gap-2 md:gap-4">
-              <button
-                className="flex-1 md:flex-none px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg flex items-center justify-center gap-2 text-white"
-                onClick={handleFilter}
-              >
-                <Filter className="w-4 h-4" />
-                Filter
-              </button>
-              <button
-                className="flex-1 md:flex-none px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg flex items-center justify-center gap-2 text-white"
-                onClick={handleSort}
-              >
-                <ArrowUpDown className="w-4 h-4" />
-                Sort
-              </button>
+
+            {/* 検索結果グリッド */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {processedPlayers.map((player) => (
+                <Link href={`/playerDetail/${player.id}`} key={player.id}>
+                  <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
+                    {/* プレイヤーカードの内容（上記と同様） */}
+                  </Card>
+                </Link>
+              ))}
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Player Grid */}
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {processedPlayers.map((player) => (
-            <Link href={`/playerDetail`} key={player.id}>
-              <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
-                  <img
-                    src={player.image}
-                    alt={player.name}
-                    className="w-full h-[300px] object-cover filter brightness-75 saturate-50 group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute top-4 md:top-6 right-4 md:right-6">
-                    <span className="bg-purple-600/80 backdrop-blur-sm px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-bold text-sm md:text-base">
-                      {player.rank}
-                    </span>
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
-                    <div className="space-y-1 md:space-y-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                      <div className="flex justify-between items-center">
-                        <p className="text-purple-400/80 text-xs md:text-sm tracking-widest uppercase">
-                          {player.team}
-                        </p>
-                        <span className="text-gray-400 text-xs md:text-sm px-2 py-1 md:px-3 md:py-1 rounded-full bg-gray-800/50 backdrop-blur-sm">
-                          {player.speciality}
-                        </span>
-                      </div>
-                      <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight opacity-90">
-                        {player.name}
-                      </h2>
-                      <div className="pt-1 md:pt-2">
-                        <p className="text-gray-300/90 text-base md:text-lg font-light tracking-wider">
-                          {player.realName}
-                        </p>
-                        <p className="text-purple-400/70 text-xs md:text-sm mt-1 tracking-wider">
-                          {player.age}歳
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </Link>
-          ))}
-        </div>
+        )}
       </div>
     </div>
   );
