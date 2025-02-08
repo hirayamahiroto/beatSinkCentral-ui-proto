@@ -15,7 +15,7 @@ export default function Home() {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-pink-900/20 mix-blend-overlay" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.5)_100%)]" />
-          <Image src="/heroSlide3Pc.webp" alt="Hero" fill className="object-cover" />
+          <Image src="/image7.jpeg" alt="Hero" fill className="object-cover" />
         </div>
 
         <div className="relative h-full flex flex-col items-center justify-center px-4">

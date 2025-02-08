@@ -12,7 +12,7 @@ const EVENT_DATA = {
   participants: 128,
   description:
     "日本一のビートボクサーを決める年に一度の大会。優勝者は世界大会への切符を手にします。",
-  image: "/heroSlide3Pc.webp",
+  image: "/image1.jpeg",
   price: "5,000円",
   prizes: [
     { rank: "優勝", reward: "賞金50万円 + 世界大会出場権" },
