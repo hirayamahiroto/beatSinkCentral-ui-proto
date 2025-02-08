@@ -13,7 +13,7 @@ const Card = ({ className = "", ...props }) => {
 const PlayerList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
-  const [filterSpeciality, setFilterSpeciality] = useState(null);
+  const [filterSpeciality, setFilterSpeciality] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState("discover"); // discover or search
 
   const processedPlayers = playerData
