@@ -593,6 +593,9 @@ const EventManagement = () => {
     );
   };
 
+  // チェックイン済みの人数を計算
+  const checkedInCount = confirmedParticipants.filter((p) => p.isCheckedIn).length;
+
   return (
     <div className="min-h-screen relative bg-black">
       <AdminHeader />
@@ -655,6 +658,10 @@ const EventManagement = () => {
                     <div className="bg-white/5 rounded-lg p-4 flex-1">
                       <p className="text-sm text-gray-400">キャンセル待ち</p>
                       <p className="text-2xl font-bold">{eventData.waitlist}名</p>
+                    </div>
+                    <div className="bg-white/5 rounded-lg p-4 flex-1">
+                      <p className="text-sm text-gray-400">チェックイン済み</p>
+                      <p className="text-2xl font-bold">{checkedInCount}名</p>
                     </div>
                   </div>
                 </div>
