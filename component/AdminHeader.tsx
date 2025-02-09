@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "./../libs";
-import { LayoutDashboard, CalendarPlus, List } from "lucide-react";
+import { LayoutDashboard, CalendarPlus, List, Calendar } from "lucide-react";
 
 const AdminHeader = () => {
   const pathname = usePathname();
@@ -23,6 +23,11 @@ const AdminHeader = () => {
       name: "イベント登録",
       href: "/admin/register",
       icon: CalendarPlus,
+    },
+    {
+      name: "カレンダー",
+      href: "/admin/calendar",
+      icon: Calendar,
     },
   ];
 
