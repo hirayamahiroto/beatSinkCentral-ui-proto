@@ -128,11 +128,11 @@ export default function Home() {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-pink-900/20 mix-blend-overlay" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.5)_100%)]" />
-          <Image src="/image7.jpeg" alt="Hero" fill className="object-cover" />
+          <Image src="/mv.webp" alt="Hero" fill className="object-cover" />
         </div>
 
         <div className="relative h-full flex flex-col items-center justify-center px-4">
-          <h1 className="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 mb-6">
+          <h1 className="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 mb-6 [text-shadow:_-1px_-1px_0_#fff,_1px_-1px_0_#fff,_-1px_1px_0_#fff,_1px_1px_0_#fff,_0_0_20px_rgba(255,255,255,0.4)] drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
             Beat Sink Central
           </h1>
           <p className="text-xl text-gray-300 mb-12 text-center max-w-2xl">
