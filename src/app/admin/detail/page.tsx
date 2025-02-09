@@ -175,7 +175,7 @@ const EventManagement = () => {
     name: "Beatbox Battle 2025",
     date: "2025-04-01",
     capacity: 100,
-    entries: 75,
+    entries: 100,
     waitlist: 15,
     location: "渋谷区文化センター",
     startTime: "13:00",
@@ -239,7 +239,11 @@ const EventManagement = () => {
       } else if (newStatus === "confirmed") {
         // キャンセル待ちから参加確定への移動
         const participant = waitlist.find((p) => p.id === participantId);
-        if (participant && eventData.entries < eventData.capacity) {
+        if (participant) {
+          if (eventData.entries >= eventData.capacity) {
+            alert("定員に達しているため、これ以上参加者を追加できません。");
+            return;
+          }
           const updatedParticipant = {
             ...participant,
             status: "confirmed" as ParticipantStatus,
