@@ -4,6 +4,8 @@ import Image from "next/image";
 import { Calendar, MapPin, Users, Clock, Share2, Trophy, Check, XCircle } from "lucide-react";
 import Header from "./../../../component/header";
 import { useState } from "react";
+import { players } from "@/data/players";
+import Link from "next/link";
 
 const EVENT_DATA = {
   id: 1,
@@ -34,6 +36,7 @@ const EVENT_DATA = {
     { time: "18:00", content: "決勝戦" },
     { time: "19:30", content: "表彰式" },
   ],
+  entrants: players.slice(0, 5),
 };
 
 // モーダルコンポーネント
@@ -394,6 +397,35 @@ export default function EventDetail() {
                 ))}
               </div>
             </section>
+
+            {/* Entrants Section - PCでのみ表示 */}
+            <section className="hidden lg:block">
+              <h2 className="text-2xl font-bold mb-4">エントリー者一覧</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {eventData.entrants?.map((player) => (
+                  <Link
+                    key={player.id}
+                    href={`/playerDetail`}
+                    className="flex items-center gap-4 p-4 bg-white/5 rounded-lg"
+                  >
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden bg-blue-600/20">
+                      {player.image.startsWith("/") ? (
+                        <Image src={player.image} alt={player.name} fill className="object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-lg">
+                          {player.name.charAt(0)}
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-medium">{player.name}</p>
+                      <p className="text-sm text-gray-400">{player.rank}</p>
+                      <p className="text-xs text-gray-500">{player.team}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
           </div>
 
           {/* Sidebar */}
@@ -446,6 +478,35 @@ export default function EventDetail() {
             </div>
           </div>
         </div>
+
+        {/* Entrants Section - SPでのみ表示 */}
+        <section className="lg:hidden mt-12">
+          <h2 className="text-2xl font-bold mb-4">エントリー者一覧</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {eventData.entrants?.map((player) => (
+              <Link
+                key={player.id}
+                href={`/playerDetail`}
+                className="flex items-center gap-4 p-4 bg-white/5 rounded-lg"
+              >
+                <div className="relative w-12 h-12 rounded-full overflow-hidden bg-blue-600/20">
+                  {player.image.startsWith("/") ? (
+                    <Image src={player.image} alt={player.name} fill className="object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-lg">
+                      {player.name.charAt(0)}
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <p className="font-medium">{player.name}</p>
+                  <p className="text-sm text-gray-400">{player.rank}</p>
+                  <p className="text-xs text-gray-500">{player.team}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
 
       {/* Modals */}

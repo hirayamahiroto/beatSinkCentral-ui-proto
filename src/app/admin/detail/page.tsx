@@ -261,12 +261,14 @@ const ParticipantList = ({
                     確定する
                   </button>
                 )}
-                <button
-                  onClick={() => onStatusChange(participant.id, "cancelled")}
-                  className="px-4 py-2 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-full transition-all"
-                >
-                  キャンセル
-                </button>
+                {(!participant.isCheckedIn || participant.status === "waiting") && (
+                  <button
+                    onClick={() => onStatusChange(participant.id, "cancelled")}
+                    className="px-4 py-2 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-full transition-all"
+                  >
+                    キャンセル
+                  </button>
+                )}
               </div>
             </div>
           </div>
