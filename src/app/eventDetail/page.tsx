@@ -19,6 +19,9 @@ const EVENT_DATA = {
     "日本一のビートボクサーを決める年に一度の大会。優勝者は世界大会への切符を手にします。",
   image: "/image1.jpeg",
   price: "5,000円",
+  entryMemo: "※当日支払いとなります。",
+  ticketPrice: "2,000円",
+  ticketMemo: "※100名まで",
   prizes: [
     { rank: "優勝", reward: "賞金50万円 + 世界大会出場権" },
     { rank: "準優勝", reward: "賞金30万円" },
@@ -72,26 +75,136 @@ const EntryModal = ({
   );
 };
 
+// キャンセルモーダルコンポーネント
+const CancelModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  eventTitle,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  eventTitle: string;
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+      <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl max-w-md w-full mx-4">
+        <h3 className="text-2xl font-bold mb-4 text-white">キャンセル確認</h3>
+        <p className="text-gray-300 mb-6">「{eventTitle}」のエントリーをキャンセルしますか？</p>
+        <div className="flex gap-4">
+          <button
+            onClick={onConfirm}
+            className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 rounded-full font-medium transition-all flex items-center justify-center gap-2"
+          >
+            <XCircle className="w-5 h-5" />
+            キャンセルする
+          </button>
+          <button
+            onClick={onClose}
+            className="flex-1 px-6 py-3 bg-white/10 hover:bg-white/20 rounded-full font-medium transition-all"
+          >
+            戻る
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// チケット購入モーダル
+const TicketModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  eventTitle,
+  price,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  eventTitle: string;
+  price: string;
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+      <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl max-w-md w-full mx-4">
+        <h3 className="text-2xl font-bold mb-4 text-white">チケット購入確認</h3>
+        <p className="text-gray-300 mb-2">「{eventTitle}」の観戦チケット</p>
+        <p className="text-xl font-bold text-blue-400 mb-6">{price}</p>
+        <div className="flex gap-4">
+          <button
+            onClick={onConfirm}
+            className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-full font-medium transition-all flex items-center justify-center gap-2"
+          >
+            <Check className="w-5 h-5" />
+            購入する
+          </button>
+          <button
+            onClick={onClose}
+            className="flex-1 px-6 py-3 bg-white/10 hover:bg-white/20 rounded-full font-medium transition-all"
+          >
+            キャンセル
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // エントリーボタンコンポーネント
 const EntryButton = ({
   capacity,
   entries,
+  isEntered,
   onEntry,
+  onCancel,
 }: {
   capacity: number;
   entries: number;
+  isEntered: boolean;
   onEntry: () => void;
+  onCancel: () => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleClick = async () => {
+  const handleClick = async (action: () => void) => {
     try {
       setIsLoading(true);
-      await onEntry();
+      await action();
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (isEntered) {
+    return (
+      <div className="space-y-3">
+        <div className="w-full py-3 bg-green-600/20 text-green-400 rounded-full flex items-center justify-center gap-2">
+          <Check className="w-5 h-5" />
+          エントリー済み
+        </div>
+        <button
+          onClick={() => handleClick(onCancel)}
+          disabled={isLoading}
+          className="w-full py-3 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-full font-medium transition-all flex items-center justify-center gap-2"
+        >
+          {isLoading ? (
+            "処理中..."
+          ) : (
+            <>
+              <XCircle className="w-5 h-5" />
+              キャンセルする
+            </>
+          )}
+        </button>
+      </div>
+    );
+  }
 
   if (entries >= capacity) {
     return (
@@ -107,7 +220,7 @@ const EntryButton = ({
 
   return (
     <button
-      onClick={handleClick}
+      onClick={() => handleClick(onEntry)}
       disabled={isLoading}
       className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-full font-medium transition-all flex items-center justify-center gap-2"
     >
@@ -124,8 +237,14 @@ const EntryButton = ({
 };
 
 export default function EventDetail() {
-  const [eventData, setEventData] = useState(EVENT_DATA);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [eventData, setEventData] = useState({
+    ...EVENT_DATA,
+    isEntered: false,
+    hasTicket: false, // チケット購入状態を追加
+  });
+  const [isEntryModalOpen, setIsEntryModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isTicketModalOpen, setIsTicketModalOpen] = useState(false);
 
   const handleEntry = async () => {
     try {
@@ -138,17 +257,66 @@ export default function EventDetail() {
       //   body: JSON.stringify({ eventId: eventData.id }),
       // });
 
-      // 仮の実装：エントリー数を増やす
       setEventData((prev) => ({
         ...prev,
         participants: prev.participants + 1,
+        isEntered: true,
       }));
 
       alert("エントリーが完了しました！");
-      setIsModalOpen(false);
+      setIsEntryModalOpen(false);
     } catch (error) {
       console.error("エントリーに失敗しました:", error);
       alert("エントリーに失敗しました。もう一度お試しください。");
+    }
+  };
+
+  const handleCancel = async () => {
+    try {
+      // ここで実際のAPIコールを行う
+      // const response = await fetch('/api/events/cancel', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ eventId: eventData.id }),
+      // });
+
+      setEventData((prev) => ({
+        ...prev,
+        participants: prev.participants - 1,
+        isEntered: false,
+      }));
+
+      alert("キャンセルが完了しました。");
+      setIsCancelModalOpen(false);
+    } catch (error) {
+      console.error("キャンセルに失敗しました:", error);
+      alert("キャンセルに失敗しました。もう一度お試しください。");
+    }
+  };
+
+  const handleTicketPurchase = async () => {
+    try {
+      // ここで実際のAPIコールを行う
+      // const response = await fetch('/api/tickets/purchase', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ eventId: eventData.id }),
+      // });
+
+      setEventData((prev) => ({
+        ...prev,
+        hasTicket: true,
+      }));
+
+      alert("チケットの購入が完了しました！");
+      setIsTicketModalOpen(false);
+    } catch (error) {
+      console.error("チケットの購入に失敗しました:", error);
+      alert("チケットの購入に失敗しました。もう一度お試しください。");
     }
   };
 
@@ -232,14 +400,39 @@ export default function EventDetail() {
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
               <div className="p-6 bg-white/5 rounded-xl">
-                <h3 className="text-xl font-bold mb-4">参加チケット</h3>
+                <h3 className="text-xl font-bold mb-4">エントリー</h3>
                 <p className="text-2xl font-bold text-blue-400 mb-4">{eventData.price}</p>
+                <p className="text-gray-400 text-sm mb-4">{eventData.entryMemo}</p>
                 <EntryButton
                   capacity={eventData.capacity}
                   entries={eventData.participants}
-                  onEntry={() => setIsModalOpen(true)}
+                  isEntered={eventData.isEntered}
+                  onEntry={() => setIsEntryModalOpen(true)}
+                  onCancel={() => setIsCancelModalOpen(true)}
                 />
-                <button className="w-full mt-3 py-3 bg-white/10 hover:bg-white/20 rounded-full font-medium transition-all flex items-center justify-center gap-2">
+              </div>
+
+              <div className="p-6 bg-white/5 rounded-xl">
+                <h3 className="text-xl font-bold mb-4">観戦チケット</h3>
+                <p className="text-2xl font-bold text-blue-400 mb-4">{eventData.ticketPrice}</p>
+                <p className="text-gray-400 text-sm mb-4">{eventData.ticketMemo}</p>
+                {eventData.hasTicket ? (
+                  <div className="w-full py-3 bg-green-600/20 text-green-400 rounded-full flex items-center justify-center gap-2">
+                    <Check className="w-5 h-5" />
+                    購入済み
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setIsTicketModalOpen(true)}
+                    className="w-full py-3 bg-purple-600 hover:bg-purple-700 rounded-full font-medium transition-all flex items-center justify-center gap-2"
+                  >
+                    チケットを購入
+                  </button>
+                )}
+              </div>
+
+              <div className="p-6 bg-white/5 rounded-xl">
+                <button className="w-full py-3 bg-white/10 hover:bg-white/20 rounded-full font-medium transition-all flex items-center justify-center gap-2">
                   <Share2 className="w-4 h-4" />
                   シェアする
                 </button>
@@ -255,12 +448,25 @@ export default function EventDetail() {
         </div>
       </div>
 
-      {/* Entry Modal */}
+      {/* Modals */}
       <EntryModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isEntryModalOpen}
+        onClose={() => setIsEntryModalOpen(false)}
         onConfirm={handleEntry}
         eventTitle={eventData.title}
+      />
+      <CancelModal
+        isOpen={isCancelModalOpen}
+        onClose={() => setIsCancelModalOpen(false)}
+        onConfirm={handleCancel}
+        eventTitle={eventData.title}
+      />
+      <TicketModal
+        isOpen={isTicketModalOpen}
+        onClose={() => setIsTicketModalOpen(false)}
+        onConfirm={handleTicketPurchase}
+        eventTitle={eventData.title}
+        price="2,000円"
       />
     </div>
   );
