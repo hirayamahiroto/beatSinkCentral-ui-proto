@@ -1,6 +1,10 @@
+"use client";
+
 import Image from "next/image";
-import { Calendar, MapPin, Users, Clock, Share2, Trophy } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, Share2, Trophy, Check, XCircle } from "lucide-react";
 import Header from "./../../../component/header";
+import { useState } from "react";
+
 const EVENT_DATA = {
   id: 1,
   title: "Beatbox Championship 2024",
@@ -10,6 +14,7 @@ const EVENT_DATA = {
   location: "東京都渋谷区",
   venue: "渋谷ストリームホール",
   participants: 128,
+  capacity: 150,
   description:
     "日本一のビートボクサーを決める年に一度の大会。優勝者は世界大会への切符を手にします。",
   image: "/image1.jpeg",
@@ -28,37 +33,155 @@ const EVENT_DATA = {
   ],
 };
 
+// モーダルコンポーネント
+const EntryModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  eventTitle,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  eventTitle: string;
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+      <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl max-w-md w-full mx-4">
+        <h3 className="text-2xl font-bold mb-4 text-white">エントリー確認</h3>
+        <p className="text-gray-300 mb-6">「{eventTitle}」にエントリーしますか？</p>
+        <div className="flex gap-4">
+          <button
+            onClick={onConfirm}
+            className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-full font-medium transition-all flex items-center justify-center gap-2"
+          >
+            <Check className="w-5 h-5" />
+            エントリーする
+          </button>
+          <button
+            onClick={onClose}
+            className="flex-1 px-6 py-3 bg-white/10 hover:bg-white/20 rounded-full font-medium transition-all"
+          >
+            キャンセル
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// エントリーボタンコンポーネント
+const EntryButton = ({
+  capacity,
+  entries,
+  onEntry,
+}: {
+  capacity: number;
+  entries: number;
+  onEntry: () => void;
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = async () => {
+    try {
+      setIsLoading(true);
+      await onEntry();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (entries >= capacity) {
+    return (
+      <button
+        disabled
+        className="w-full py-3 bg-gray-600/20 text-gray-400 rounded-full flex items-center justify-center gap-2"
+      >
+        <XCircle className="w-5 h-5" />
+        定員に達しました
+      </button>
+    );
+  }
+
+  return (
+    <button
+      onClick={handleClick}
+      disabled={isLoading}
+      className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-full font-medium transition-all flex items-center justify-center gap-2"
+    >
+      {isLoading ? (
+        "処理中..."
+      ) : (
+        <>
+          <Check className="w-5 h-5" />
+          エントリーする
+        </>
+      )}
+    </button>
+  );
+};
+
 export default function EventDetail() {
+  const [eventData, setEventData] = useState(EVENT_DATA);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleEntry = async () => {
+    try {
+      // ここで実際のAPIコールを行う
+      // const response = await fetch('/api/events/entry', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ eventId: eventData.id }),
+      // });
+
+      // 仮の実装：エントリー数を増やす
+      setEventData((prev) => ({
+        ...prev,
+        participants: prev.participants + 1,
+      }));
+
+      alert("エントリーが完了しました！");
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("エントリーに失敗しました:", error);
+      alert("エントリーに失敗しました。もう一度お試しください。");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white pt-16">
       <Header />
 
       <section className="relative h-[60vh]">
-        <Image src={EVENT_DATA.image} alt={EVENT_DATA.title} fill className="object-cover" />
+        <Image src={eventData.image} alt={eventData.title} fill className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-8">
           <div className="container mx-auto">
             <div className="max-w-3xl">
               <span className="inline-block px-3 py-1 bg-blue-500 rounded-full text-sm mb-4">
-                {EVENT_DATA.type}
+                {eventData.type}
               </span>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">{EVENT_DATA.title}</h1>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">{eventData.title}</h1>
               <div className="flex flex-wrap gap-6 text-gray-300">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-5 h-5" />
-                  <span>{EVENT_DATA.date}</span>
+                  <span>{eventData.date}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="w-5 h-5" />
-                  <span>{EVENT_DATA.time}</span>
+                  <span>{eventData.time}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="w-5 h-5" />
-                  <span>{EVENT_DATA.venue}</span>
+                  <span>{eventData.venue}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5" />
-                  <span>参加者: {EVENT_DATA.participants}名</span>
+                  <span>参加者: {eventData.participants}名</span>
                 </div>
               </div>
             </div>
@@ -74,14 +197,14 @@ export default function EventDetail() {
             {/* Description */}
             <section>
               <h2 className="text-2xl font-bold mb-4">イベント詳細</h2>
-              <p className="text-gray-300 leading-relaxed">{EVENT_DATA.description}</p>
+              <p className="text-gray-300 leading-relaxed">{eventData.description}</p>
             </section>
 
             {/* Schedule */}
             <section>
               <h2 className="text-2xl font-bold mb-4">タイムスケジュール</h2>
               <div className="space-y-4">
-                {EVENT_DATA.schedule.map((item, index) => (
+                {eventData.schedule.map((item, index) => (
                   <div key={index} className="flex gap-6 items-start p-4 bg-white/5 rounded-lg">
                     <span className="text-blue-400 font-mono">{item.time}</span>
                     <span className="text-gray-300">{item.content}</span>
@@ -94,7 +217,7 @@ export default function EventDetail() {
             <section>
               <h2 className="text-2xl font-bold mb-4">賞金・賞品</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {EVENT_DATA.prizes.map((prize, index) => (
+                {eventData.prizes.map((prize, index) => (
                   <div key={index} className="p-4 bg-white/5 rounded-lg">
                     <Trophy className="w-6 h-6 text-yellow-400 mb-2" />
                     <h3 className="font-bold mb-1">{prize.rank}</h3>
@@ -110,10 +233,12 @@ export default function EventDetail() {
             <div className="sticky top-24 space-y-6">
               <div className="p-6 bg-white/5 rounded-xl">
                 <h3 className="text-xl font-bold mb-4">参加チケット</h3>
-                <p className="text-2xl font-bold text-blue-400 mb-4">{EVENT_DATA.price}</p>
-                <button className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-full font-medium transition-all">
-                  チケットを購入
-                </button>
+                <p className="text-2xl font-bold text-blue-400 mb-4">{eventData.price}</p>
+                <EntryButton
+                  capacity={eventData.capacity}
+                  entries={eventData.participants}
+                  onEntry={() => setIsModalOpen(true)}
+                />
                 <button className="w-full mt-3 py-3 bg-white/10 hover:bg-white/20 rounded-full font-medium transition-all flex items-center justify-center gap-2">
                   <Share2 className="w-4 h-4" />
                   シェアする
@@ -122,13 +247,21 @@ export default function EventDetail() {
 
               <div className="p-6 bg-white/5 rounded-xl">
                 <h3 className="text-xl font-bold mb-4">会場</h3>
-                <p className="text-gray-300 mb-2">{EVENT_DATA.venue}</p>
-                <p className="text-gray-400 text-sm">{EVENT_DATA.location}</p>
+                <p className="text-gray-300 mb-2">{eventData.venue}</p>
+                <p className="text-gray-400 text-sm">{eventData.location}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Entry Modal */}
+      <EntryModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleEntry}
+        eventTitle={eventData.title}
+      />
     </div>
   );
 }
