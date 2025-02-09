@@ -324,7 +324,7 @@ export default function EventDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white pt-16">
+    <div className="min-h-screen bg-black text-white">
       <Header />
 
       <section className="relative h-[60vh]">

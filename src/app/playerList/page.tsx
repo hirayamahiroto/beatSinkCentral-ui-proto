@@ -51,12 +51,12 @@ const PlayerList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900 ">
       <Header />
 
       {/* ヒーローセクション */}
-      <div className="max-w-6xl mx-auto mb-8 md:mb-12 mt-32">
-        <div className="flex flex-col items-center text-center mb-8 md:mb-12">
+      <div className="max-w-6xl mx-auto pt-[100px]">
+        <div className="flex flex-col items-center text-center  md:mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tight">
             Discover Beatbox Artists
           </h1>
@@ -93,7 +93,7 @@ const PlayerList = () => {
 
         {/* Discoverセクション (受動的ユーザー向け) */}
         {activeSection === "discover" && (
-          <div className="space-y-12">
+          <div className="space-y-12 p-4 md:p-8">
             {/* 注目のプレイヤー */}
             <section className="mb-12">
               <div className="flex items-center justify-between mb-6">
@@ -240,7 +240,7 @@ const PlayerList = () => {
 
         {/* Searchセクション (能動的ユーザー向け) */}
         {activeSection === "search" && (
-          <div>
+          <div className="p-4 md:p-8">
             {/* 検索とフィルター */}
             <div className="bg-black/50 backdrop-blur-lg rounded-lg p-6 mb-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
