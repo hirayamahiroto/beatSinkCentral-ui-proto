@@ -1,6 +1,5 @@
-import { Card as AtomCard } from "./../../atoms/Card";
 import { Image as AtomImage } from "./../../atoms/Image";
-import classes from "./index.module.css";
+import styles from "./index.module.css";
 import { cn } from "./../../../libs";
 
 type CardVariant = "player" | "news" | "profile";
@@ -9,48 +8,33 @@ type CardProps = {
   children?: React.ReactNode;
   image: string;
   variant?: CardVariant;
+  className?: string;
 };
 
-const Card = ({ children, image, variant = "player" }: CardProps) => {
-  const getCardClass = () => {
-    switch (variant) {
-      case "news":
-        return classes.newsCard;
-      case "profile":
-        return classes.profileCard;
-      default:
-        return classes.playerCard;
-    }
+const Card = ({ children, image, variant = "player", className }: CardProps) => {
+  const cardClasses = {
+    player: styles.cardPlayer,
+    news: styles.cardNews,
+    profile: styles.cardProfile,
   };
 
-  const getImageClass = () => {
-    switch (variant) {
-      case "news":
-        return cn(classes.image, classes.newsImage);
-      case "profile":
-        return cn(classes.image, classes.profileImage);
-      default:
-        return classes.image;
-    }
+  const imageClasses = {
+    player: styles.image,
+    news: styles.imageNews,
+    profile: styles.imageProfile,
   };
 
-  const getTextClass = () => {
-    switch (variant) {
-      case "news":
-        return cn(classes.text, classes.newsText);
-      case "profile":
-        return cn(classes.text, classes.profileText);
-      default:
-        return classes.text;
-    }
+  const textClasses = {
+    player: styles.text,
+    news: styles.textNews,
+    profile: styles.textProfile,
   };
 
   return (
-    <AtomCard styled={cn(classes.card, getCardClass())}>
-      <AtomImage src={image} alt="Image" className={getImageClass()} />
-      {children}
-      <div className={getTextClass()}>HIROTO</div>
-    </AtomCard>
+    <div className={cn(cardClasses[variant], className)}>
+      <AtomImage src={image} alt="Card image" className={imageClasses[variant]} />
+      <div className={textClasses[variant]}>{children}</div>
+    </div>
   );
 };
 
