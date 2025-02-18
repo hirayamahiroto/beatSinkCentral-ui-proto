@@ -6,7 +6,7 @@ const meta: Meta<typeof Card> = {
   component: Card,
   decorators: [
     (Story) => (
-      <div style={{ width: "100%", height: "100%" }}>
+      <div style={{ width: "fit-content", minWidth: "300px" }}>
         <Story />
       </div>
     ),
@@ -19,6 +19,10 @@ type Story = StoryObj<typeof Card>;
 
 export const Default: Story = {
   args: {
-    children: "Card",
+    children: (
+      <>
+        <div style={{ width: "300px", height: "300px" }}>Card</div>
+      </>
+    ),
   },
 };
