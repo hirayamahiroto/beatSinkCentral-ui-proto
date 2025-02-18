@@ -1,4 +1,5 @@
 import { Image as AtomImage } from "./../../atoms/Image";
+import { Card as AtomCard } from "./../../atoms/Card";
 import styles from "./index.module.css";
 import { cn } from "./../../../libs";
 
@@ -31,10 +32,10 @@ const Card = ({ children, image, variant = "player", className }: CardProps) => 
   };
 
   return (
-    <div className={cn(cardClasses[variant], className)}>
+    <AtomCard className={cn(cardClasses[variant], className)}>
       <AtomImage src={image} alt="Card image" className={imageClasses[variant]} />
       <div className={textClasses[variant]}>{children}</div>
-    </div>
+    </AtomCard>
   );
 };
 

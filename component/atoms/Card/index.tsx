@@ -3,12 +3,12 @@ import classes from "./index.module.css";
 import { cn } from "./../../../libs";
 
 type CardProps = {
-  styled?: string;
   children: React.ReactNode;
+  className?: string;
 };
 
-const Card = ({ children, styled }: CardProps) => {
-  return <MantineCard className={cn(classes.card, styled)}>{children}</MantineCard>;
+const Card = ({ children, className }: CardProps) => {
+  return <MantineCard className={cn(classes.card, className)}>{children}</MantineCard>;
 };
 
 export { Card };
