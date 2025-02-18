@@ -11,12 +11,14 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@types/react-lazy-load-image-component": "^1.6.4",
     "clsx": "^2.1.1",
     "fullcalendar": "^6.1.15",
     "lucide-react": "^0.474.0",
     "next": "15.1.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-lazy-load-image-component": "^1.6.3"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.4",
