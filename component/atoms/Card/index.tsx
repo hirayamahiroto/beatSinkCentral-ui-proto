@@ -1,12 +1,14 @@
 import { Card as MantineCard } from "@mantine/core";
 import classes from "./index.module.css";
+import { cn } from "./../../../libs";
 
 type CardProps = {
+  styled?: string;
   children: React.ReactNode;
 };
 
-const Card = ({ children }: CardProps) => {
-  return <MantineCard className={classes.card}>{children}</MantineCard>;
+const Card = ({ children, styled }: CardProps) => {
+  return <MantineCard className={cn(classes.card, styled)}>{children}</MantineCard>;
 };
 
-export default Card;
+export { Card };
