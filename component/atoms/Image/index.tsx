@@ -10,4 +10,4 @@ const Image = ({ src, alt }: ImageProps) => {
   return <LazyLoadImage src={src} alt={alt} className={classes.image} />;
 };
 
-export default Image;
+export { Image, type ImageProps };

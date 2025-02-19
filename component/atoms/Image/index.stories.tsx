@@ -1,4 +1,4 @@
-import Image from "./index";
+import { Image } from "./index";
 import ImageMock from "./index.mock";
 import { Meta, StoryObj } from "@storybook/react";
 
