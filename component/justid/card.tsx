@@ -19,10 +19,10 @@ const card = tv({
   },
 });
 
-const { root, header, title, description, content, footer } = card();
+const { root, header, title, description, footer } = card();
 
 const Card = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
-  return <div className={root({ className })} {...props} />;
+  return <div className={cn(root({ className }))} {...props} />;
 };
 
 interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -55,7 +55,7 @@ const Description = ({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
 };
 
 const Content = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
-  return <div className={content({ className })} {...props} />;
+  return <div className={className} {...props} />;
 };
 
 const Footer = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {

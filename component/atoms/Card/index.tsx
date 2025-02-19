@@ -1,14 +1,19 @@
 import { Card as BaseCard } from "./../../justid/card";
 import { cardVariants } from "./index.variants";
-
-const { default: root } = cardVariants();
+import { cn } from "../../../libs";
 
 type CardProps = {
   className?: string;
+  children: React.ReactNode;
+  color?: "default" | "black";
 };
 
-const Card = ({ className, ...props }: CardProps) => {
-  return <BaseCard className={root({ className })} {...props} />;
+const Card = ({ className, children, color, ...props }: CardProps) => {
+  return (
+    <BaseCard.Content className={cn(cardVariants({ className, color }))} {...props}>
+      {children}
+    </BaseCard.Content>
+  );
 };
 
 export default Card;

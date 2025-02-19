@@ -5,13 +5,7 @@ import { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof Card> = {
   title: "atoms/Card",
   component: Card,
-  decorators: [
-    (Story) => (
-      <div style={{ width: "100%", height: "100%" }}>
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [],
 };
 
 export default meta;
@@ -19,5 +13,7 @@ export default meta;
 type Story = StoryObj<typeof Card>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+    children: <div>Card</div>,
+  },
 };
