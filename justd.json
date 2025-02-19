@@ -1,5 +1,5 @@
 {
-  "ui": "component/ui",
+  "ui": "component/justid",
   "utils": "utils",
   "gray": "zinc",
   "css": "src/app/globals.css",
