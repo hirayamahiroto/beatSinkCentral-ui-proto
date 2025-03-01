@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Calendar, MapPin, Users, Clock, Share2, Trophy, Check, XCircle } from "lucide-react";
-import Header from "./../../../component/header";
+import Header from "./../../../components/header";
 import { useState } from "react";
 import { players } from "@/data/players";
 import Link from "next/link";

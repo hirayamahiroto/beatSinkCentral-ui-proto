@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "../../../component/header";
+import Header from "../../../components/header";
 
 const AboutPage = () => {
   return (

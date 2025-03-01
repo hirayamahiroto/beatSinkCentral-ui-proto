@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import { Search, Filter, ArrowUpDown, Star, TrendingUp, Shuffle } from "lucide-react";
 import Link from "next/link";
-import Header from "./../../../component/header";
+import Header from "./../../../components/header";
 import { players as playerData } from "@/data/players";
+import Image from "next/image";
 
 const Card = ({ className = "", ...props }) => {
   return <div className={`rounded-lg shadow-lg overflow-hidden ${className}`} {...props}></div>;
@@ -108,9 +109,11 @@ const PlayerList = () => {
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
-                        <img
+                        <Image
                           src={player.image}
                           alt={player.name}
+                          width={500}
+                          height={300}
                           className="w-full h-[300px] object-cover filter brightness-75 saturate-50 group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
                         <div className="absolute top-4 right-4">
@@ -153,9 +156,11 @@ const PlayerList = () => {
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
-                        <img
+                        <Image
                           src={player.image}
                           alt={player.name}
+                          width={500}
+                          height={300}
                           className="w-full h-[300px] object-cover filter brightness-75 saturate-50 group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
                         <div className="absolute top-4 right-4">
@@ -205,9 +210,11 @@ const PlayerList = () => {
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
-                        <img
+                        <Image
                           src={player.image}
                           alt={player.name}
+                          width={500}
+                          height={300}
                           className="w-full h-[300px] object-cover filter brightness-75 saturate-50 group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
                         <div className="absolute top-4 right-4">
@@ -293,9 +300,11 @@ const PlayerList = () => {
                   <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                     <div className="relative">
                       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
-                      <img
+                      <Image
                         src={player.image}
                         alt={player.name}
+                        width={500}
+                        height={300}
                         className="w-full h-[300px] object-cover filter brightness-75 saturate-50 group-hover:scale-105 transition-transform duration-700 ease-out"
                       />
                       <div className="absolute top-4 right-4">
