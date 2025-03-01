@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { MapPin, Users, ArrowRight, Search, Filter, ArrowUpDown } from "lucide-react";
 import Link from "next/link";
-import Header from "./../../../component/header";
+import Header from "./../../../components/header";
 import { useState } from "react";
 import { events } from "./../../data/events";
 
