@@ -85,29 +85,32 @@ const EventDetailModal = ({ event, onClose }: { event: CalendarEvent; onClose: (
 const CalendarView = () => {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
 
-  // サンプルイベントデータ
-  const events: CalendarEvent[] = [
-    {
-      id: "1",
-      title: "Beatbox Battle 2025",
-      start: "2025-04-01",
-      end: "2025-04-01",
-      organizer: "自分",
-      location: "渋谷区文化センター",
-      type: "own",
-      status: "upcoming",
-    },
-    {
-      id: "2",
-      title: "関西ビートボックスバトル",
-      start: "2025-04-15",
-      end: "2025-04-15",
-      organizer: "大阪ビートボックス協会",
-      location: "大阪市民センター",
-      type: "other",
-      status: "upcoming",
-    },
-  ];
+  // サンプルイベントデータをuseMemoでラップ
+  const events = React.useMemo<CalendarEvent[]>(
+    () => [
+      {
+        id: "1",
+        title: "Beatbox Battle 2025",
+        start: "2025-04-01",
+        end: "2025-04-01",
+        organizer: "自分",
+        location: "渋谷区文化センター",
+        type: "own",
+        status: "upcoming",
+      },
+      {
+        id: "2",
+        title: "関西ビートボックスバトル",
+        start: "2025-04-15",
+        end: "2025-04-15",
+        organizer: "大阪ビートボックス協会",
+        location: "大阪市民センター",
+        type: "other",
+        status: "upcoming",
+      },
+    ],
+    []
+  );
 
   React.useEffect(() => {
     const calendarEl = document.getElementById("calendar");
