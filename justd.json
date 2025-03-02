@@ -1,5 +1,5 @@
 {
-  "ui": " components/base",
+  "ui": "components/base",
   "utils": "utils",
   "gray": "zinc",
   "css": "src/app/globals.css",
