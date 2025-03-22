@@ -18,7 +18,7 @@ export const players: Player[] = [
     team: "Club Raiders",
     rank: "Club Master",
     speciality: "Club Style",
-    image: "image1.jpeg",
+    image: "/image1.jpeg",
   },
   {
     id: 2,
