@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { cn } from "../../../../libs";
-import AdminHeader from "./../../../../components/AdminHeader";
+import AdminHeader from "./../../../components/AdminHeader";
 
 // Button Component
 const Button = React.forwardRef<

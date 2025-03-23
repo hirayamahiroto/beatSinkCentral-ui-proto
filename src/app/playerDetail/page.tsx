@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Code, Music, Mic, Youtube, Twitter, Instagram } from "lucide-react";
 import Image from "next/image";
-import Header from "./../../../components/header";
+import Header from "./../../components/header";
 
 const PlayerProfile = () => {
   const [activeTab, setActiveTab] = useState("profile");
