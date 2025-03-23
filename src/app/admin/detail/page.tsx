@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as ProgressPrimitive from "@radix-ui/react-progress";
 import { Users, Calendar, Clock, MapPin, Search, Check } from "lucide-react";
-import { cn } from "../../../../libs";
+import { cn } from "../../../utils";
 import AdminHeader from "./../../../components/AdminHeader";
 // import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 

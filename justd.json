@@ -1,5 +1,5 @@
 {
-  "ui": "src/components/ui",
+  "ui": "src/components/ui/justtd",
   "utils": "src/utils",
   "gray": "neutral",
   "css": "globals.css",

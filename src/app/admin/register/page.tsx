@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { cn } from "../../../../libs";
+import { cn } from "../../../utils";
 import AdminHeader from "./../../../components/AdminHeader";
 
 // Button Component
