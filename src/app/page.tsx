@@ -140,7 +140,7 @@ export default function Home() {
           </p>
           <div className="flex gap-4">
             <Link
-              href="/playerList"
+              href="/prayers"
               className="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-full font-medium transition-all"
             >
               プレイヤーを探す
