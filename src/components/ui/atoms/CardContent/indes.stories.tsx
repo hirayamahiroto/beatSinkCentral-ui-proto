@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { CardContent } from "./index";
 
 const meta = {
-  title: "CardContent",
+  title: "atoms/CardContent",
   component: CardContent,
 } satisfies Meta<typeof CardContent>;
 

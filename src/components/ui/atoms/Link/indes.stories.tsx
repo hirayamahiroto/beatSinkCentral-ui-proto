@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Card } from "./index";
+import { Link } from "./index";
 
 const meta = {
-  title: "atoms/Card",
-  component: Card,
-} satisfies Meta<typeof Card>;
+  title: "Link",
+  component: Link,
+} satisfies Meta<typeof Link>;
 
 export default meta;
 
@@ -12,7 +12,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    className: "w-96 h-96",
+    href: "/",
     variant: "default",
+    children: "Link",
   },
 };

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Image } from "./index";
 
 const meta = {
-  title: "Image",
+  title: "atoms/Image",
   component: Image,
 } satisfies Meta<typeof Image>;
 
