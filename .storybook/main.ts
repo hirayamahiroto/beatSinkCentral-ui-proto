@@ -1,17 +1,32 @@
-import type { StorybookConfig } from "@storybook/nextjs";
+import type { StorybookConfig } from "@storybook/react-vite";
 
 const config: StorybookConfig = {
   stories: ["../src/components/**/*.mdx", "../src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   addons: [
-    "@storybook/addon-onboarding",
     "@storybook/addon-essentials",
-    "@chromatic-com/storybook",
+    "@storybook/addon-links",
     "@storybook/addon-interactions",
   ],
   framework: {
-    name: "@storybook/nextjs",
+    name: "@storybook/react-vite",
     options: {},
   },
-  staticDirs: ["../public"],
+  docs: {
+    autodocs: true,
+  },
+  async viteFinal(config) {
+    const { mergeConfig } = await import("vite");
+    return mergeConfig(config, {
+      resolve: {
+        alias: {
+          // 必要に応じてエイリアスを追加
+        },
+      },
+      define: {
+        // グローバル変数の定義が必要な場合
+      },
+    });
+  },
 };
+
 export default config;

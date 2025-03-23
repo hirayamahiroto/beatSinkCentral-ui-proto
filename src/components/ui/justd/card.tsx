@@ -1,3 +1,4 @@
+import React from "react";
 import { twMerge } from "tailwind-merge";
 
 const Card = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
