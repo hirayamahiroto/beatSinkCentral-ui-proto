@@ -1,5 +1,5 @@
 import React from "react";
-import { Card as BaseCard } from "./../../justtd/card";
+import { Card as BaseCard } from "../../justd/card";
 import { VariantProps } from "tailwind-variants";
 import { cardVariants } from "./index.variants";
 import { cn } from "./../../../../utils";
