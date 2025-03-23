@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Search, Filter, ArrowUpDown, Star, TrendingUp, Shuffle } from "lucide-react";
 import Link from "next/link";
-import Header from "./../../../components/header";
+import Header from "./../../components/header";
 import { players as playerData } from "@/data/players";
 import Image from "next/image";
 

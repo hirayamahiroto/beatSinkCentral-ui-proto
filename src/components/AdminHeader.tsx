@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "./../libs";
+import { cn } from "../../libs";
 import { LayoutDashboard, CalendarPlus, List, Calendar } from "lucide-react";
 
 const AdminHeader = () => {

@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Calendar, Users, ArrowRight, Clock, ListTodo } from "lucide-react";
 import { cn } from "../../../libs";
-import AdminHeader from "../../../components/AdminHeader";
+import AdminHeader from "../../components/AdminHeader";
 
 // Card Component
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
