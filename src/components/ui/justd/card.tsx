@@ -10,19 +10,8 @@ interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   description?: string;
 }
 
-const CardHeader = ({ className, title, description, children, ...props }: HeaderProps) => (
-  <div
-    data-slot="card-header"
-    className={twMerge(
-      "grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-(--card-spacing) has-[data-slot=card-action]:grid-cols-[1fr_auto]",
-      className
-    )}
-    {...props}
-  >
-    {title && <CardTitle>{title}</CardTitle>}
-    {description && <CardDescription>{description}</CardDescription>}
-    {!title && typeof children === "string" ? <CardTitle>{children}</CardTitle> : children}
-  </div>
+const CardHeader = ({ className, ...props }: HeaderProps) => (
+  <div data-slot="card-header" className={className} {...props} />
 );
 
 const CardTitle = ({ className, ...props }: React.ComponentProps<"div">) => {
