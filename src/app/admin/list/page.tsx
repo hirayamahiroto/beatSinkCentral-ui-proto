@@ -3,7 +3,7 @@
 import React from "react";
 import { Calendar, Users, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { cn } from "../../../../libs";
+import { cn } from "../../../utils";
 import AdminHeader from "./../../../components/AdminHeader";
 
 // Card Component
