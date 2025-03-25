@@ -105,7 +105,7 @@ const PlayersPage = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {playerData.slice(0, 3).map((player) => (
-                  <AtomLink href={`/playerDetail`} key={player.id}>
+                  <AtomLink href={`/player`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
@@ -152,7 +152,7 @@ const PlayersPage = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {playerData.slice(3, 7).map((player) => (
-                  <AtomLink href={`/playerDetail`} key={player.id}>
+                  <AtomLink href={`/player`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
@@ -206,7 +206,7 @@ const PlayersPage = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {randomPlayers.map((player) => (
-                  <AtomLink href={`/playerDetail`} key={player.id}>
+                  <AtomLink href={`/player`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
@@ -296,7 +296,7 @@ const PlayersPage = () => {
             {/* 検索結果グリッド */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {processedPlayers.map((player) => (
-                <AtomLink href={`/playerDetail`} key={player.id}>
+                <AtomLink href={`/player`} key={player.id}>
                   <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                     <div className="relative">
                       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
