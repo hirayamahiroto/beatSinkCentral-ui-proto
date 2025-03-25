@@ -2,20 +2,20 @@
 
 import React, { useState } from "react";
 import { Search, Filter, ArrowUpDown, Star, TrendingUp, Shuffle } from "lucide-react";
-import Link from "next/link";
+import { Link as AtomLink } from "../../atoms/Link";
 import Header from "../../../header";
 import { players as playerData } from "./../../../../data/players";
-import Image from "next/image";
+import { Image as AtomImage } from "../../atoms/Image";
 
 const Card = ({ className = "", ...props }) => {
   return <div className={`rounded-lg shadow-lg overflow-hidden ${className}`} {...props}></div>;
 };
 
-const PrayersPage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc");
+const PlayersPage = () => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filterSpeciality, setFilterSpeciality] = useState<string | null>(null);
-  const [activeSection, setActiveSection] = useState("discover"); // discover or search
+  const [activeSection, setActiveSection] = useState<"discover" | "search">("discover");
   const [randomPlayers, setRandomPlayers] = useState(playerData.slice(0, 4));
 
   const processedPlayers = playerData
@@ -105,11 +105,11 @@ const PrayersPage = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {playerData.slice(0, 3).map((player) => (
-                  <Link href={`/playerDetail`} key={player.id}>
+                  <AtomLink href={`/playerDetail`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
-                        <Image
+                        <AtomImage
                           src={player.image}
                           alt={player.name}
                           width={500}
@@ -137,7 +137,7 @@ const PrayersPage = () => {
                         </div>
                       </div>
                     </Card>
-                  </Link>
+                  </AtomLink>
                 ))}
               </div>
             </section>
@@ -152,11 +152,11 @@ const PrayersPage = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {playerData.slice(3, 7).map((player) => (
-                  <Link href={`/playerDetail`} key={player.id}>
+                  <AtomLink href={`/playerDetail`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
-                        <Image
+                        <AtomImage
                           src={player.image}
                           alt={player.name}
                           width={500}
@@ -184,7 +184,7 @@ const PrayersPage = () => {
                         </div>
                       </div>
                     </Card>
-                  </Link>
+                  </AtomLink>
                 ))}
               </div>
             </section>
@@ -206,11 +206,11 @@ const PrayersPage = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {randomPlayers.map((player) => (
-                  <Link href={`/playerDetail`} key={player.id}>
+                  <AtomLink href={`/playerDetail`} key={player.id}>
                     <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
-                        <Image
+                        <AtomImage
                           src={player.image}
                           alt={player.name}
                           width={500}
@@ -238,7 +238,7 @@ const PrayersPage = () => {
                         </div>
                       </div>
                     </Card>
-                  </Link>
+                  </AtomLink>
                 ))}
               </div>
             </section>
@@ -296,11 +296,11 @@ const PrayersPage = () => {
             {/* 検索結果グリッド */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {processedPlayers.map((player) => (
-                <Link href={`/playerDetail`} key={player.id}>
+                <AtomLink href={`/playerDetail`} key={player.id}>
                   <Card className="bg-black/40 backdrop-blur-lg border-0 overflow-hidden group cursor-pointer">
                     <div className="relative">
                       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black opacity-70" />
-                      <Image
+                      <AtomImage
                         src={player.image}
                         alt={player.name}
                         width={500}
@@ -328,7 +328,7 @@ const PrayersPage = () => {
                       </div>
                     </div>
                   </Card>
-                </Link>
+                </AtomLink>
               ))}
             </div>
           </div>
@@ -338,4 +338,4 @@ const PrayersPage = () => {
   );
 };
 
-export default PrayersPage;
+export default PlayersPage;
