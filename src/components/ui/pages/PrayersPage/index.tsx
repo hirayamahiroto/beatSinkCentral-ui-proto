@@ -4,14 +4,14 @@ import React, { useState } from "react";
 import { Search, Filter, ArrowUpDown, Star, TrendingUp, Shuffle } from "lucide-react";
 import Link from "next/link";
 import Header from "../../../header";
-import { players as playerData } from "@/data/players";
+import { players as playerData } from "./../../../../data/players";
 import Image from "next/image";
 
 const Card = ({ className = "", ...props }) => {
   return <div className={`rounded-lg shadow-lg overflow-hidden ${className}`} {...props}></div>;
 };
 
-const PlayerList = () => {
+const PrayersPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [filterSpeciality, setFilterSpeciality] = useState<string | null>(null);
@@ -338,4 +338,4 @@ const PlayerList = () => {
   );
 };
 
-export default PlayerList;
+export default PrayersPage;
