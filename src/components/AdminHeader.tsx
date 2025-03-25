@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Link from "next/link";
+import { Link as AtomLink } from "./ui/atoms/Link";
 import { usePathname } from "next/navigation";
 import { cn } from "../utils";
 import { LayoutDashboard, CalendarPlus, List, Calendar } from "lucide-react";
@@ -36,14 +36,14 @@ const AdminHeader = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link href="/admin/list" className="text-xl font-bold text-white">
+            <AtomLink href="/admin/list" className="text-xl font-bold text-white">
               Event Admin
-            </Link>
+            </AtomLink>
             <nav className="flex items-center space-x-4">
               {navigation.map((item) => {
                 const isActive = pathname === item.href;
                 return (
-                  <Link
+                  <AtomLink
                     key={item.href}
                     href={item.href}
                     className={cn(
@@ -55,7 +55,7 @@ const AdminHeader = () => {
                   >
                     <item.icon className="h-4 w-4" />
                     {item.name}
-                  </Link>
+                  </AtomLink>
                 );
               })}
             </nav>
