@@ -405,7 +405,7 @@ export default function EventDetail() {
                 {eventData.entrants?.map((player) => (
                   <Link
                     key={player.id}
-                    href={`/playerDetail`}
+                    href={`/player`}
                     className="flex items-center gap-4 p-4 bg-white/5 rounded-lg"
                   >
                     <div className="relative w-12 h-12 rounded-full overflow-hidden bg-blue-600/20">
@@ -486,7 +486,7 @@ export default function EventDetail() {
             {eventData.entrants?.map((player) => (
               <Link
                 key={player.id}
-                href={`/playerDetail`}
+                href={`/player`}
                 className="flex items-center gap-4 p-4 bg-white/5 rounded-lg"
               >
                 <div className="relative w-12 h-12 rounded-full overflow-hidden bg-blue-600/20">

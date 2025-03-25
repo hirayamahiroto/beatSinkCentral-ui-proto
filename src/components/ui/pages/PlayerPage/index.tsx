@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { Code, Music, Mic, Youtube, Twitter, Instagram } from "lucide-react";
-import Image from "next/image";
-import Header from "./../../components/header";
+import { Image as AtomImage } from "../../atoms/Image";
+import Header from "../../../../components/header";
 
-const PlayerProfile = () => {
+const PlayerPage = () => {
   const [activeTab, setActiveTab] = useState("profile");
 
   const renderTabContent = () => {
@@ -17,10 +17,9 @@ const PlayerProfile = () => {
               <div className="max-w-4xl mx-auto bg-white/5 rounded-xl p-8 backdrop-blur-sm">
                 <div className="flex flex-col md:flex-row gap-8 items-center">
                   <div className="relative w-48 h-48">
-                    <Image
+                    <AtomImage
                       src="/image1.jpeg"
                       alt="Hiroto Profile"
-                      fill
                       className="object-cover rounded-full border-4 border-purple-500/30"
                     />
                   </div>
@@ -119,10 +118,9 @@ const PlayerProfile = () => {
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto px-2 sm:px-4">
                 <div className="group relative overflow-hidden rounded-xl aspect-[4/3] sm:aspect-video bg-white/5 backdrop-blur-sm">
-                  <Image
+                  <AtomImage
                     src="/image1.jpeg"
                     alt="Latest Performance"
-                    fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover group-hover:scale-110 transition-transform duration-300"
                   />
@@ -137,10 +135,9 @@ const PlayerProfile = () => {
                 </div>
 
                 <div className="group relative overflow-hidden rounded-xl aspect-[4/3] sm:aspect-video bg-white/5 backdrop-blur-sm">
-                  <Image
+                  <AtomImage
                     src="/image2.jpeg"
                     alt="Latest Music"
-                    fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover group-hover:scale-110 transition-transform duration-300"
                   />
@@ -155,10 +152,9 @@ const PlayerProfile = () => {
                 </div>
 
                 <div className="group relative overflow-hidden rounded-xl aspect-[4/3] sm:aspect-video bg-white/5 backdrop-blur-sm">
-                  <Image
+                  <AtomImage
                     src="/image3.jpeg"
                     alt="Latest App"
-                    fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover group-hover:scale-110 transition-transform duration-300"
                   />
@@ -226,7 +222,7 @@ const PlayerProfile = () => {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-pink-900/20 mix-blend-overlay" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.5)_100%)] bg-black opacity-50" />
-          <Image
+          <AtomImage
             src="/image1.jpeg"
             alt="Background"
             width={1920}
@@ -316,4 +312,4 @@ const PlayerProfile = () => {
   );
 };
 
-export default PlayerProfile;
+export default PlayerPage;
