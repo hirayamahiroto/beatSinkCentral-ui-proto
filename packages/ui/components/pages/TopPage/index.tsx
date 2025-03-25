@@ -140,7 +140,7 @@ const TopPage = () => {
           </p>
           <div className="flex gap-4">
             <AtomLink
-              href="/prayers"
+              href="/players"
               className="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-full font-medium transition-all"
             >
               プレイヤーを探す
