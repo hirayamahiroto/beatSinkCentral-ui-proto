@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Image as AtomImage } from "../../../../components/ui/atoms/Image";
 import {
   Mic,

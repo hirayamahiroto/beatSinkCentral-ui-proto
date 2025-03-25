@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import AboutPage from "./index";
+import TopPage from "./index";
 
 const meta = {
-  title: "pages/AboutPage",
-  component: AboutPage,
-} satisfies Meta<typeof AboutPage>;
+  title: "pages/TopPage",
+  component: TopPage,
+} satisfies Meta<typeof TopPage>;
 
 export default meta;
 
