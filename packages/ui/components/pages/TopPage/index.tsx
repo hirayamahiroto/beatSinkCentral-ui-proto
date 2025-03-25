@@ -1,6 +1,7 @@
 "use client";
 
-import Image from "next/image";
+import React, { useState } from "react";
+import { Image as AtomImage } from "../../atoms/Image";
 import {
   Mic,
   Calendar,
@@ -13,9 +14,8 @@ import {
   Check,
   XCircle,
 } from "lucide-react";
-import Link from "next/link";
-import Header from "../../packages/ui/header";
-import { useState } from "react";
+import { Link as AtomLink } from "../../atoms/Link";
+import Header from "../../../header";
 
 // エントリーボタンコンポーネント
 const EntryButton = ({
@@ -68,7 +68,7 @@ const EntryButton = ({
   );
 };
 
-export default function Home() {
+const TopPage = () => {
   const [events, setEvents] = useState([
     {
       id: 1,
@@ -128,7 +128,7 @@ export default function Home() {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-pink-900/20 mix-blend-overlay" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.5)_100%)]" />
-          <Image src="/mv.webp" alt="Hero" fill className="object-cover" />
+          <AtomImage src="/mv.webp" alt="Hero" className="object-cover" />
         </div>
 
         <div className="relative h-full flex flex-col items-center justify-center px-4">
@@ -139,18 +139,18 @@ export default function Home() {
             世界中のビートボクサーとイベントをつなぐプラットフォーム
           </p>
           <div className="flex gap-4">
-            <Link
+            <AtomLink
               href="/prayers"
               className="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-full font-medium transition-all"
             >
               プレイヤーを探す
-            </Link>
-            <Link
+            </AtomLink>
+            <AtomLink
               href="/event"
               className="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-full font-medium transition-all"
             >
               イベントを見る
-            </Link>
+            </AtomLink>
           </div>
         </div>
       </section>
@@ -209,7 +209,7 @@ export default function Home() {
                 className="backdrop-blur-md bg-white/5 rounded-2xl overflow-hidden"
               >
                 <div className="relative h-48">
-                  <Image src={event.image} alt={event.title} fill className="object-cover" />
+                  <AtomImage src={event.image} alt={event.title} className="object-cover" />
                 </div>
                 <div className="p-6">
                   <span className="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm mb-4">
@@ -235,12 +235,12 @@ export default function Home() {
                       entries={event.entries}
                       onEntry={() => handleEntry(event.id)}
                     />
-                    <Link
+                    <AtomLink
                       href={`/eventDetail?id=${event.id}`}
                       className="block w-full px-6 py-3 bg-white/10 hover:bg-white/20 rounded-full font-medium text-center transition-all"
                     >
                       詳細を見る
-                    </Link>
+                    </AtomLink>
                   </div>
                 </div>
               </div>
@@ -254,7 +254,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-20">主な機能</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <Link
+            <AtomLink
               href="/playerList"
               className="group backdrop-blur-md bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition-all"
             >
@@ -264,9 +264,9 @@ export default function Home() {
                 プロフィール、実績、スキルなど、プレイヤーの詳細情報を確認できます
               </p>
               <ArrowRight className="w-5 h-5 text-blue-400" />
-            </Link>
+            </AtomLink>
 
-            <Link
+            <AtomLink
               href="/event"
               className="group backdrop-blur-md bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition-all"
             >
@@ -279,9 +279,9 @@ export default function Home() {
                 オーガナイザー向けには、イベントの作成や管理も可能です。
               </p>
               <ArrowRight className="w-5 h-5 text-purple-400" />
-            </Link>
+            </AtomLink>
 
-            <Link
+            <AtomLink
               href="/playerList"
               className="group backdrop-blur-md bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition-all"
             >
@@ -291,7 +291,7 @@ export default function Home() {
                 プレイヤー一覧からブッキングしたいプレイヤーを選択し、ブッキングを行えます。
               </p>
               <ArrowRight className="w-5 h-5 text-pink-400" />
-            </Link>
+            </AtomLink>
           </div>
         </div>
       </section>
@@ -320,4 +320,6 @@ export default function Home() {
       </footer>
     </div>
   );
-}
+};
+
+export default TopPage;

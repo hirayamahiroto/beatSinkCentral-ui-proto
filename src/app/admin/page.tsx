@@ -1,4 +1,4 @@
-import AdminDashboardPage from "@/components/ui/pages/AdminDashboardPage";
+import AdminDashboardPage from "../../../packages/ui/components/pages/AdminDashboardPage";
 
 export default function Admin() {
   return <AdminDashboardPage />;

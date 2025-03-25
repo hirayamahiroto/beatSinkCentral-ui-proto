@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { Calendar, MapPin, Users, Clock, Share2, Trophy, Check, XCircle } from "lucide-react";
-import Header from "./../../components/header";
+import Header from "../../../packages/ui/header";
 import { useState } from "react";
-import { players } from "@/data/players";
+import { players } from "../../../packages/data/players";
 import Link from "next/link";
 
 const EVENT_DATA = {
