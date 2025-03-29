@@ -10,9 +10,7 @@ on:
     types: [created]
 
 concurrency:
-  group: ${{ github.repository }}-${{ github.event.number || github.head_ref ||
-    github.sha }}-${{ github.workflow }}-${{ github.event_name ==
-    'pull_request_review_comment' && 'pr_comment' || 'pr' }}
+  group: ${{ github.repository }}-${{ github.event.number || github.head_ref || github.sha }}-${{ github.workflow }}-${{ github.event_name == 'pull_request_review_comment' && 'pr_comment' || 'pr' }}
   cancel-in-progress: ${{ github.event_name != 'pull_request_review_comment' }}
 
 jobs:
@@ -24,6 +22,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         with:
-          debug: false
-          review_simple_changes: false
-          review_comment_lgtm: false
+          language: ja
+          review_simple_changes: true
+          review_comment_lgtm: true
+          skip_review_when_approved: true
