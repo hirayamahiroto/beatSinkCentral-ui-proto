@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Link as AtomLink } from "./components/atoms/Link";
+import { Link as AtomLink } from "./design-system/components/atoms/Link";
 import { usePathname } from "next/navigation";
 import { cn } from "./utils";
 import { LayoutDashboard, CalendarPlus, List, Calendar } from "lucide-react";
