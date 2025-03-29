@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Calendar, MapPin, Users, Clock, Share2, Trophy, Check, XCircle } from "lucide-react";
-import Header from "../../../packages/ui/header";
+import Header from "../../../packages/ui/src/design-system/components/molecules/header";
 import { useState } from "react";
 import { players } from "../../../packages/data/players";
 import Link from "next/link";

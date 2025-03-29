@@ -8,51 +8,27 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook": "cd packages/ui && storybook dev -p 6006",
+    "build-storybook": "cd packages/ui && storybook build"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.0.15",
-    "class-variance-authority": "^0.7.1",
     "fullcalendar": "^6.1.15",
     "justd-icons": "^1.10.25",
-    "lucide-react": "^0.474.0",
-    "next": "15.1.6",
+    "next": "^15.2.4",
     "react": "^19.0.0",
     "react-aria-components": "^1.7.1",
     "react-dom": "^19.0.0",
-    "react-lazy-load-image-component": "^1.6.3",
     "tailwindcss-react-aria-components": "^2.0.0"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^3.2.4",
     "@eslint/eslintrc": "^3",
-    "@radix-ui/react-progress": "^1.1.0",
-    "@radix-ui/react-tabs": "^1.1.1",
-    "@storybook/addon-essentials": "^8.5.6",
-    "@storybook/addon-interactions": "^8.5.6",
-    "@storybook/addon-onboarding": "^8.5.6",
-    "@storybook/blocks": "^8.5.6",
-    "@storybook/builder-vite": "^8.6.8",
-    "@storybook/react": "^8.5.6",
-    "@storybook/react-vite": "^8.5.6",
-    "@storybook/test": "^8.5.6",
     "@types/node": "^20",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19",
-    "@types/react-lazy-load-image-component": "^1.6.4",
-    "chromatic": "^11.25.2",
-    "clsx": "^2.1.1",
-    "eslint": "^9",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
     "eslint-config-next": "15.1.6",
-    "eslint-plugin-storybook": "^0.11.3",
-    "next-themes": "^0.4.6",
-    "postcss": "^8.5.3",
     "recharts": "^2.11.0",
-    "storybook": "^8.5.6",
-    "tailwind-merge": "^2.6.0",
-    "tailwind-variants": "^1.0.0",
-    "tailwindcss": "^4.0.15",
     "tw-animate-css": "^1.2.4",
     "typescript": "^5"
   },
@@ -60,5 +36,8 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
