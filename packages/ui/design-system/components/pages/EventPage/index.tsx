@@ -4,7 +4,7 @@ import React from "react";
 import { Image as AtomImage } from "../../atoms/Image";
 import { MapPin, Users, ArrowRight, Search, Filter, ArrowUpDown } from "lucide-react";
 import { Link as AtomLink } from "../../atoms/Link";
-import Header from "../../../header";
+import Header from "../../../../header";
 import { useState } from "react";
 import { events } from "../../../../data/events";
 
