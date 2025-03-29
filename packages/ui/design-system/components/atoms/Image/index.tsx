@@ -2,7 +2,7 @@ import React from "react";
 import { LazyLoadImage as BaseImage } from "react-lazy-load-image-component";
 import { VariantProps } from "tailwind-variants";
 import { imageVariants } from "./index.variants";
-import { cn } from "../../../../utils";
+import { cn } from "../../../utils";
 
 type ImageProps = React.ComponentProps<typeof BaseImage> &
   VariantProps<typeof imageVariants> & {

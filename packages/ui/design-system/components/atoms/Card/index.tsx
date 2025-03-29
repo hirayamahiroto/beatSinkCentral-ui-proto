@@ -2,7 +2,7 @@ import React from "react";
 import { Card as BaseCard } from "../../../primitives/card";
 import { VariantProps } from "tailwind-variants";
 import { cardVariants } from "./index.variants";
-import { cn } from "../../..//../utils";
+import { cn } from "../../../utils";
 
 type CardProps = React.ComponentProps<typeof BaseCard> & VariantProps<typeof cardVariants>;
 
