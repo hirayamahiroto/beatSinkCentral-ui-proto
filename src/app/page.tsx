@@ -14,7 +14,7 @@ import {
   XCircle,
 } from "lucide-react";
 import Link from "next/link";
-import Header from "../../packages/ui/src/header";
+import Header from "../../packages/ui/src/design-system/components/molecules/header";
 import { useState } from "react";
 
 // エントリーボタンコンポーネント

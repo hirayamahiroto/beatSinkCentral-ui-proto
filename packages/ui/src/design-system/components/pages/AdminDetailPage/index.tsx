@@ -4,7 +4,7 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as ProgressPrimitive from "@radix-ui/react-progress";
 import { Users, Calendar, Clock, MapPin, Search, Check } from "lucide-react";
 import { cn } from "../../../utils";
-import AdminHeader from "../../../../AdminHeader";
+import AdminHeader from "../../molecules/AdminHeader";
 
 // Button Component
 const Button = React.forwardRef<

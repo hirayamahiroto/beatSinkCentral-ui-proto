@@ -2,7 +2,7 @@
 
 import React from "react";
 import { cn } from "../../../utils";
-import AdminHeader from "../../../../AdminHeader";
+import AdminHeader from "../../molecules/AdminHeader";
 
 // Button Component
 const Button = React.forwardRef<

@@ -15,7 +15,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { Link as AtomLink } from "../../atoms/Link";
-import Header from "../../../../header";
+import Header from "../../molecules/header";
 
 // エントリーボタンコンポーネント
 const EntryButton = ({
