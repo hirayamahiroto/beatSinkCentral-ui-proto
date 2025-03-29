@@ -1,37 +1,303 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BeatSinkCentral
 
-## Getting Started
+日本のビートボックスコミュニティの健全化と持続可能な発展を目指す総合プラットフォーム
 
-First, run the development server:
+<div align="center">
+  <img src="https://raw.githubusercontent.com/hirayamahiroto/beatSinkCentral-ui-proto/refs/heads/main/public/mv.webp" alt="BeatboxCentral"/>
+</div>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🌟 プロジェクトビジョン
+
+BeatSinkCentralは、日本のビートボックス業界のプロフェッショナル化と持続可能な構造の構築を目指しています。このプラットフォームは、プレイヤー、イベント主催者、観客を繋ぐ中心的なハブとして機能し、コミュニティ内の透明性、安全性、成長を促進します。
+
+
+
+## 🚀 MVP - 現在の開発状況
+
+現在、プロジェクトはMVP（Minimum Viable Product）段階で、**プレイヤー紹介機能**の開発に焦点を当てています：
+
+- プレイヤーのプロフィール登録と管理
+- スキルや経験の詳細表示
+- 活動実績の記録と表示
+- 検索・フィルター機能の実装
+- レスポンシブなプレイヤー紹介ページ
+
+この基盤を確立した後、イベント管理やコミュニティ機能など、より広範な機能へと拡張していきます。
+
+## 🎯 主な目標
+
+- ビートボックスプレイヤーとコミュニティのための持続可能な収益モデルの創出
+- プレイヤーの専門的な基準と認定制度の確立
+- イベントの安全性と責任体制の向上
+- 才能ある知名度の低いプレイヤーの可視性向上
+- イベント運営と参加者管理の効率化
+- プレイヤーと潜在的なクライアント/主催者間の信頼関係の構築
+- コミュニティの健全な発展と安全な環境の提供
+
+## 🏗️ プラットフォーム構造
+
+プラットフォームは3つの主要ドメインに分かれています：
+
+### 1. パブリックドメイン（一般観客向け）
+- イベント情報の閲覧
+- プレイヤープロフィールと情報
+- ビートボックスガイドと教育コンテンツ
+
+### 2. プレイヤードメイン（メンバー）
+- アカウント管理
+- イベント登録
+- プロフィール管理
+- パフォーマンス記録
+- スキル認定
+
+### 3. オーガナイザードメイン（メンバー）
+- イベント管理
+- プレイヤー評価システム
+- 運営サポート
+- 安全ガイドラインと実施
+
+## 📊 ドメイン構造図
+
+```mermaid
+graph TB
+    subgraph Public["パブリックドメイン"]
+        A["観客向けドメイン"]
+        style A fill:#f9f,stroke:#333,stroke-width:2px
+    end
+
+    subgraph Members["メンバードメイン"]
+        B["プレイヤー向けドメイン"]
+        style B fill:#bbf,stroke:#333,stroke-width:2px
+        C["オーガナイザー向けドメイン"]
+        style C fill:#bfb,stroke:#333,stroke-width:2px
+    end
+
+    subgraph AudienceDomain["観客機能"]
+        A1["イベント情報閲覧"]
+        A2["プレイヤー情報閲覧"]
+        A3["基本情報・ガイド"]
+    end
+
+    subgraph PlayerDomain["プレイヤー機能"]
+        B1["アカウント管理"]
+        B2["イベントエントリー"]
+        B3["プロフィール管理"]
+        B4["実績管理"]
+    end
+
+    subgraph OrganizerDomain["オーガナイザー機能"]
+        C1["イベント管理"]
+        C2["プレイヤー評価"]
+        C3["運営管理"]
+        C4["安全管理"]
+    end
+
+    %% 関連性
+    A --> A1 & A2 & A3
+    B --> B1 & B2 & B3 & B4
+    C --> C1 & C2 & C3 & C4
+
+    %% ドメイン間の相互作用
+    B2 --> C1
+    B3 --> A2
+    C1 --> A1
+    C2 --> B4
+
+    %% 共通機能
+    CommonFeatures["共通機能"]
+    style CommonFeatures fill:#ddd,stroke:#333,stroke-width:2px
+    CommonFeatures --> |"通知"| A & B & C
+    CommonFeatures --> |"メッセージ"| B & C
+    CommonFeatures --> |"ヘルプデスク"| A & B & C
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔄 開発フェーズ
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### フェーズ1: MVP - プレイヤー紹介
+- 基本プロフィール登録
+- 公開情報表示
+- 活動/パフォーマンス記録
+- **現在の開発焦点**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### フェーズ1+: 基本的なエンゲージメント機能
+- イベント参加登録
+- 活動記録投稿
+- プレイヤー間ネットワーキング
+- 基本的な予約管理
 
-## Learn More
+### フェーズ2: 収益基盤
+- チケット販売システム統合
+- プレミアムメンバーシッププログラム
+- 広告プラットフォーム
 
-To learn more about Next.js, take a look at the following resources:
+### フェーズ3: サービス拡張
+- プレイヤー向けマーケットプレイス
+- プロモーションサービス
+- データ分析サービス
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### フェーズ4: ビジネス展開
+- 企業クライアントマッチング
+- スポンサーシップ機会
+- 業界分析レポート
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📈 フェーズ展開と収益構造
 
-## Deploy on Vercel
+```mermaid
+graph TB
+    subgraph Phase1["フェーズ1: 基盤構築"]
+        A1["メンバーシップ制度"]
+        A2["イベント掲載基本機能"]
+        A3["プロフィール登録機能"]
+    end
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    subgraph Phase2["フェーズ2: 収益化基盤"]
+        B1["チケット販売システム"]
+        B2["プレミアム会員制度"]
+        B3["広告枠展開"]
+    end
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# beatSinkCentral-ui-proto
+    subgraph Phase3["フェーズ3: サービス拡張"]
+        C1["マーケットプレイス"]
+        C2["プロモーションサービス"]
+        C3["データ分析サービス"]
+    end
+
+    subgraph Phase4["フェーズ4: ビジネス展開"]
+        D1["企業向けマッチング"]
+        D2["スポンサーシップ展開"]
+        D3["業界分析レポート"]
+    end
+
+    %% フェーズ間の依存関係
+    A1 --> B2
+    A2 --> B1
+    A3 --> B2
+    B1 --> C2
+    B2 --> C1
+    B3 --> C2
+    C1 --> D1
+    C2 --> D2
+    C3 --> D3
+
+    %% 収益性表示
+    style A1 fill:#e6ffe6
+    style A2 fill:#e6ffe6
+    style A3 fill:#e6ffe6
+    style B1 fill:#ccffcc
+    style B2 fill:#ccffcc
+    style B3 fill:#ccffcc
+    style C1 fill:#99ff99
+    style C2 fill:#99ff99
+    style C3 fill:#99ff99
+    style D1 fill:#66ff66
+    style D2 fill:#66ff66
+    style D3 fill:#66ff66
+```
+
+## 💹 収益構造
+
+```mermaid
+mindmap
+  root((収益構造の構築))
+    (メンバーシップ収益)
+        [プロ会員費]
+            (年会費)
+            (特典利用料)
+        [認定料]
+            (初回認定)
+            (更新料)
+    (イベント関連収益)
+        [掲載料]
+            (プレミアム掲載)
+            (優先表示)
+        [チケット収入]
+            (販売手数料)
+            (決済手数料)
+    (広告収益)
+        [バナー広告]
+            (トップページ)
+            (イベントページ)
+        [スポンサード]
+            (コンテンツ)
+            (プレイヤー紹介)
+    (マーケットプレイス)
+        [商品販売]
+            (オリジナルグッズ)
+            (練習教材)
+        [手数料収入]
+            (出品手数料)
+            (決済手数料)
+    (プロモーション)
+        [プレイヤー向け]
+            (プロフィール制作)
+            (PR支援)
+        [イベント向け]
+            (告知支援)
+            (集客支援)
+    (データ活用)
+        [分析レポート]
+            (イベント分析)
+            (トレンド分析)
+        [インサイト提供]
+            (マーケティング)
+            (戦略立案)
+    (企業向けサービス)
+        [タレントマッチング]
+            (イベント出演)
+            (広告出演)
+        [スポンサーシップ]
+            (イベント協賛)
+            (プレイヤー支援)
+```
+
+## 🎮 ユーザー体験
+
+ユーザーは受動的な観客から、サポーター（ファン）へと自然に変化していく状態を目指す体験を提供します：
+
+- **Discover（知る）** → **Understand（活動内容理解する）** → **Support（応援する）**
+- プレイヤーとの出会いから、その魅力を理解し、応援者へと自然に導かれる体験
+- プレイヤーの個性や表現に出会い、その活動や実績を通じて深く理解し、共感から応援へとつながるフロー
+
+## 📱 UI/UX設計
+
+### プレイヤー一覧ページ
+- **受動的ユーザー向け**：
+  - プレイヤーのピックアップ表示
+  - 新規登録プレイヤー
+  - ランダム表示
+- **能動的ユーザー向け**：
+  - 活動区域検索
+  - スタイルのジャンル検索
+  - プレイヤー名検索
+  - 並び替え機能
+
+### プレイヤー詳細ページ
+- **モバイル版**：タブUIによる情報整理
+- **デスクトップ版**：一覧表示による効率的な情報閲覧
+
+## 🔍 現在の焦点
+
+現在プロジェクトはフェーズ1にあり、以下の要素を含む堅牢なプレイヤー紹介システムの構築に焦点を当てています：
+
+- 詳細なプレイヤープロフィール
+- スキルと経験のドキュメント化
+- メディアショーケース
+- 検索とフィルター機能
+- モバイルとデスクトップに対応したインターフェース
+
+## 💻 技術アーキテクチャ
+
+プラットフォームは以下を活用しています：
+- Reactベースのフロントエンドとレスポンシブデザイン
+- 動的なプレイヤープロフィールをサポートするデータベース構造
+- 異なるユーザーロールを管理する認証と権限システム
+- イベント管理システムとの統合機能
+
+## 🔮 将来的な影響
+
+BeatSinkCentralは以下を目指しています：
+1. ビートボックスコミュニティの専門的な地位の向上
+2. プレイヤーのための持続可能な収入機会の創出
+3. イベントとパフォーマンスの業界標準の確立
+4. すべてのコミュニティメンバーのための安全な環境の提供
+5. ビートボックスアーティストと商業的機会の間のギャップを埋める
