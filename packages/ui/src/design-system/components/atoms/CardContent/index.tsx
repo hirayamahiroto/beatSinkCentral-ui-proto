@@ -1,5 +1,5 @@
 import React from "react";
-import { CardContent as BaseCardContent } from "./../../../primitives/card";
+import { CardContent as BaseCardContent } from "../../../primitives/card";
 import { VariantProps } from "tailwind-variants";
 import { cardVariants } from "./index.variants";
 import { cn } from "../../../utils";

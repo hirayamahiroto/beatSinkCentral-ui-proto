@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Search, Filter, ArrowUpDown, Star, TrendingUp, Shuffle } from "lucide-react";
 import { Link as AtomLink } from "../../atoms/Link";
 import Header from "../../../../header";
-import { players as playerData } from "../../../../../data/players";
+import { players as playerData } from "../../../../../../data/players";
 import { Image as AtomImage } from "../../atoms/Image";
 
 const Card = ({ className = "", ...props }) => {

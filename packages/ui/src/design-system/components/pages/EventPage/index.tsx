@@ -6,7 +6,7 @@ import { MapPin, Users, ArrowRight, Search, Filter, ArrowUpDown } from "lucide-r
 import { Link as AtomLink } from "../../atoms/Link";
 import Header from "../../../../header";
 import { useState } from "react";
-import { events } from "../../../../../data/events";
+import { events } from "../../../../../../data/events";
 
 const EventPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
