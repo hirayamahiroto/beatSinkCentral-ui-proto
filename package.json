@@ -18,15 +18,15 @@
     "react": "^19.0.0",
     "react-aria-components": "^1.7.1",
     "react-dom": "^19.0.0",
-    "tailwindcss-react-aria-components": "^2.0.0",
-    "vite": "^6.2.3"
+    "tailwindcss-react-aria-components": "^2.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19",
-    "eslint": "^9",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
     "eslint-config-next": "15.1.6",
     "recharts": "^2.11.0",
     "tw-animate-css": "^1.2.4",
@@ -36,5 +36,8 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
