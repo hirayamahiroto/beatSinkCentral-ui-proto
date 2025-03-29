@@ -2,7 +2,7 @@
 import React from "react";
 import { Link as AtomLink } from "../atoms/Link";
 import { usePathname } from "next/navigation";
-import { cn } from "../../utils";
+import { cn } from "../../../shared/utils/mergeClassNames";
 import { LayoutDashboard, CalendarPlus, List, Calendar } from "lucide-react";
 
 const AdminHeader = () => {

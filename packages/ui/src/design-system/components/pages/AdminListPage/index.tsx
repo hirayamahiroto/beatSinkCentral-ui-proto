@@ -3,7 +3,7 @@
 import React from "react";
 import { Calendar, Users, ArrowRight } from "lucide-react";
 import { Link as AtomLink } from "../../atoms/Link";
-import { cn } from "../../../utils";
+import { cn } from "../../../../shared/utils/mergeClassNames";
 import AdminHeader from "../../molecules/AdminHeader";
 
 // Card Component
