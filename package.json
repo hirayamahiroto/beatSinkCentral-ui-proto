@@ -8,8 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook": "cd packages/ui && storybook dev -p 6006",
+    "build-storybook": "cd packages/ui && storybook build"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.15",
