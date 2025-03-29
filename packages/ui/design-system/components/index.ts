@@ -1,1 +1,1 @@
-export * from "./justd/primitive";
+export * from "./../primitives/primitive";
