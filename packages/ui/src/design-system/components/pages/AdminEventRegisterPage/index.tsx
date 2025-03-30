@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { cn } from "../../../../shared/utils/mergeClassNames";
-import AdminHeader from "../../molecules/AdminHeader";
+import { cn } from "@ui/shared/utils/mergeClassNames";
+import AdminHeader from "@ui/design-system/components/molecules/AdminHeader";
 
 // Button Component
 const Button = React.forwardRef<

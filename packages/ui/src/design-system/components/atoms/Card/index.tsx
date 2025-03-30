@@ -1,8 +1,8 @@
 import React from "react";
-import { Card as BaseCard } from "../../../primitives/card";
+import { Card as BaseCard } from "@ui/design-system/primitives/card";
 import { VariantProps } from "tailwind-variants";
-import { cardVariants } from "./index.variants";
-import { cn } from "../../../../shared/utils/mergeClassNames";
+import { cardVariants } from "@ui/design-system/components/atoms/Card/index.variants";
+import { cn } from "@ui/shared/utils/mergeClassNames";
 
 type CardProps = React.ComponentProps<typeof BaseCard> & VariantProps<typeof cardVariants>;
 

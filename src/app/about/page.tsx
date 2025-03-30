@@ -1,4 +1,4 @@
-import AboutPage from "../../../packages/ui/src/design-system/components/pages/AboutPage";
+import AboutPage from "@ui/design-system/components/pages/AboutPage";
 
 export default function About() {
   return <AboutPage />;

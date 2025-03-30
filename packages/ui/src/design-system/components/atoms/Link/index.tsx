@@ -1,7 +1,7 @@
 import React from "react";
 import { VariantProps } from "tailwind-variants";
-import { linkVariants } from "./index.variants";
-import { cn } from "../../../../shared/utils/mergeClassNames";
+import { linkVariants } from "@ui/design-system/components/atoms/Link/index.variants";
+import { cn } from "@ui/shared/utils/mergeClassNames";
 
 type LinkProps = VariantProps<typeof linkVariants> & {
   className?: string;

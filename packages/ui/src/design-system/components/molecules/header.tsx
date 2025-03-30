@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { X, Menu } from "lucide-react";
-import { Link as AtomLink } from "../atoms/Link";
+import { Link as AtomLink } from "@ui/design-system/components/atoms/Link";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

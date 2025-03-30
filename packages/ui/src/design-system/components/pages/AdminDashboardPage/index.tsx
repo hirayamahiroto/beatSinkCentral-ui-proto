@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { Link as AtomLink } from "../../atoms/Link";
+import { Link as AtomLink } from "@ui/design-system/components/atoms/Link";
 import { Calendar, Users, ArrowRight, Clock, ListTodo } from "lucide-react";
-import { cn } from "../../../../shared/utils/mergeClassNames";
-import AdminHeader from "../../molecules/AdminHeader";
+import { cn } from "@ui/shared/utils/mergeClassNames";
+import AdminHeader from "@ui/design-system/components/molecules/AdminHeader";
 
 // Card Component
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(

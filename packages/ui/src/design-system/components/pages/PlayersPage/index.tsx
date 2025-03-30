@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import { Search, Filter, ArrowUpDown, Star, TrendingUp, Shuffle } from "lucide-react";
-import { Link as AtomLink } from "../../atoms/Link";
-import Header from "../../molecules/header";
+import { Link as AtomLink } from "@ui/design-system/components/atoms/Link";
+import Header from "@ui/design-system/components/molecules/header";
 import { players as playerData } from "../../../../../../data/players";
-import { Image as AtomImage } from "../../atoms/Image";
+import { Image as AtomImage } from "@ui/design-system/components/atoms/Image";
 
 const Card = ({ className = "", ...props }) => {
   return <div className={`rounded-lg shadow-lg overflow-hidden ${className}`} {...props}></div>;
