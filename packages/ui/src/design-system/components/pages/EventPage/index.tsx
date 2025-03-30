@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { Image as AtomImage } from "../../atoms/Image";
+import { Image as AtomImage } from "@ui/design-system/components/atoms/Image";
 import { MapPin, Users, ArrowRight, Search, Filter, ArrowUpDown } from "lucide-react";
-import { Link as AtomLink } from "../../atoms/Link";
-import Header from "../../molecules/header";
+import { Link as AtomLink } from "@ui/design-system/components/atoms/Link";
+import Header from "@ui/design-system/components/molecules/header";
 import { useState } from "react";
 import { events } from "../../../../../../data/events";
 

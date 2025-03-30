@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Image as AtomImage } from "../../atoms/Image";
+import { Image as AtomImage } from "@ui/design-system/components/atoms/Image";
 import {
   Mic,
   Calendar,
@@ -14,8 +14,8 @@ import {
   Check,
   XCircle,
 } from "lucide-react";
-import { Link as AtomLink } from "../../atoms/Link";
-import Header from "../../molecules/header";
+import { Link as AtomLink } from "@ui/design-system/components/atoms/Link";
+import Header from "@ui/design-system/components/molecules/header";
 
 // エントリーボタンコンポーネント
 const EntryButton = ({

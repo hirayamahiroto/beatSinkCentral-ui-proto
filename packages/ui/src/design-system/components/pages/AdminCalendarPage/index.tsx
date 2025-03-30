@@ -5,8 +5,8 @@ import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import jaLocale from "@fullcalendar/core/locales/ja";
 import interactionPlugin from "@fullcalendar/interaction";
-import AdminHeader from "../../molecules/AdminHeader";
-import { cn } from "../../../../shared/utils/mergeClassNames";
+import AdminHeader from "@ui/design-system/components/molecules/AdminHeader";
+import { cn } from "@ui/shared/utils/mergeClassNames";
 
 // イベントの型定義
 interface CalendarEvent {

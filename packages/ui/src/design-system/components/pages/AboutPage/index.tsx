@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Header from "../../molecules/header";
+import Header from "@ui/design-system/components/molecules/header";
 
 const AboutPage = () => {
   return (
