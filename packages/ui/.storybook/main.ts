@@ -1,5 +1,5 @@
 import type { StorybookConfig } from "@storybook/react-vite";
-
+import path from "path";
 const config: StorybookConfig = {
   stories: ["./../src/design-system/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   addons: [
@@ -19,7 +19,8 @@ const config: StorybookConfig = {
     return mergeConfig(config, {
       resolve: {
         alias: {
-          // 必要に応じてエイリアスを追加
+          "@ui": path.resolve(__dirname, "../src"),
+          "@": path.resolve(__dirname, "../../../src"),
         },
       },
       define: {
