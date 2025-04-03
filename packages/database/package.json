@@ -14,7 +14,7 @@
     "postgres": "^3.4.5"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.21.4",
+    "drizzle-kit": "^0.30.6",
     "tsx": "^3.14.0"
   }
 }
