@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "ビートシンクUIコンポーネントライブラリ",
   "type": "module",
+  "main": "index.ts",
   "scripts": {
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "lint": "eslint \"**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.15",
@@ -14,26 +16,31 @@
     "lucide-react": "^0.474.0",
     "react-lazy-load-image-component": "^1.6.3",
     "tailwind-merge": "^2.6.0",
-    "tailwind-variants": "^1.0.0"
+    "tailwind-variants": "^1.0.0",
+    "@radix-ui/react-progress": "^1.1.0",
+    "@radix-ui/react-tabs": "^1.1.1",
+    "next-themes": "^0.4.6",
+    "justd-icons": "^1.10.25"
   },
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@radix-ui/react-progress": "^1.1.0",
-    "@radix-ui/react-tabs": "^1.1.1",
     "@storybook/addon-essentials": "^8.5.6",
     "@storybook/addon-interactions": "^8.5.6",
     "@storybook/addon-links": "^8.5.6",
     "@storybook/react": "^8.5.6",
     "@storybook/react-vite": "^8.5.6",
     "@types/react-lazy-load-image-component": "^1.6.4",
-    "next-themes": "^0.4.6",
     "postcss": "^8.5.3",
     "storybook": "^8.5.6",
     "tailwindcss": "^4.0.15",
-    "vite": "^6.2.4"
+    "vite": "^6.2.4",
+    "eslint": "^8.57.1",
+    "typescript": "^5",
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19"
   },
   "keywords": [],
   "author": "",

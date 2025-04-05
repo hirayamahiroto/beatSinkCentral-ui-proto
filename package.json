@@ -4,38 +4,18 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "storybook": "cd packages/ui && storybook dev -p 6006",
-    "build-storybook": "cd packages/ui && storybook build"
-  },
-  "dependencies": {
-    "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.41.0",
-    "fullcalendar": "^6.1.15",
-    "justd-icons": "^1.10.25",
-    "next": "^15.2.4",
-    "postgres": "^3.4.5",
-    "react": "^19.0.0",
-    "react-aria-components": "^1.7.1",
-    "react-dom": "^19.0.0",
-    "tailwindcss-react-aria-components": "^2.0.0"
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "storybook": "turbo run storybook",
+    "build-storybook": "turbo run build-storybook"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
-    "@types/react": "^19.0.12",
-    "@types/react-dom": "^19",
-    "@typescript-eslint/parser": "^5.62.0",
-    "drizzle-kit": "^0.30.6",
+    "turbo": "^1.13.0",
+    "typescript": "^5",
     "eslint": "^8.57.1",
-    "eslint-config-next": "15.1.6",
-    "recharts": "^2.11.0",
-    "tsx": "^4.19.3",
-    "tw-animate-css": "^1.2.4",
-    "typescript": "^5"
+    "@eslint/eslintrc": "^3"
   },
   "eslintConfig": {
     "extends": [
@@ -43,7 +23,7 @@
     ]
   },
   "workspaces": [
-    "packages/*",
-    "packages/database"
+    "apps/*",
+    "packages/*"
   ]
 }
