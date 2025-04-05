@@ -44,6 +44,7 @@
   },
   "workspaces": [
     "packages/*",
-    "packages/database"
+    "packages/database",
+    "packages/backend"
   ]
 }
