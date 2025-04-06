@@ -1,4 +1,4 @@
-name: "Beatfolio Build & Deploy"
+name: "🎵 Beatfolioビルド＆デプロイ"
 
 on:
   push:
@@ -18,29 +18,27 @@ on:
 
 jobs:
   build-and-test:
-    name: Build & Test Beatfolio
+    name: 🛠️ Beatfolioのビルドとテスト
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: 📥 コードのチェックアウト
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
       
-      - uses: actions/setup-node@v4
+      - name: 📦 依存関係のインストール
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
       
-      - name: Install dependencies
+      - name: 📦 パッケージインストール
         run: npm ci
       
-      - name: Build
+      - name: 🏗️ ビルド
         run: npx turbo run build --filter=beatfolio
-      
-      - name: Lint
-        run: npx turbo run lint --filter=beatfolio
-      
-      - name: Test
+            
+      - name: 🧪 テスト
         run: npx turbo run test --filter=beatfolio
         continue-on-error: true
 

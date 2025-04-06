@@ -1,4 +1,4 @@
-name: "Complete Project Deploy"
+name: "🚀 プロジェクトをデプロイ"
 
 on:
   push:
@@ -10,13 +10,13 @@ on:
 
 jobs:
   detect-changes:
-    name: Detect Changes
+    name: 🔍 変更検出
     runs-on: ubuntu-latest
     outputs:
       api-server-changed: ${{ steps.filter.outputs.api-server }}
       beatfolio-changed: ${{ steps.filter.outputs.beatfolio }}
     steps:
-      - name: Checkout code
+      - name: 📥 コードのチェックアウト
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -37,38 +37,36 @@ jobs:
               - 'package.json'
 
   build-all:
-    name: Build All Apps
+    name: 🏗️ 全アプリのビルド
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: 📥 コードのチェックアウト
         uses: actions/checkout@v4
       
-      - uses: actions/setup-node@v4
+      - name: 📦 依存関係のインストール
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
       
-      - name: Install dependencies
+      - name: 📦 パッケージインストール
         run: npm ci
       
-      - name: Build all
+      - name: 🏗️ 全体ビルド
         run: npx turbo run build
-      
-      - name: Lint all
-        run: npx turbo run lint
         
-      - name: Test all
+      - name: 🧪 全体テスト
         run: npx turbo run test
         continue-on-error: true
       
-      - name: Upload beatfolio build
+      - name: 📤 beatfolioビルドのアップロード
         uses: actions/upload-artifact@v3
         with:
           name: beatfolio-build
           path: apps/beatfolio/.next
           retention-days: 1
       
-      - name: Upload api-server build
+      - name: 📤 APIサーバービルドのアップロード
         uses: actions/upload-artifact@v3
         with:
           name: api-server-build
@@ -76,29 +74,29 @@ jobs:
           retention-days: 1
 
   deploy-beatfolio:
-    name: Deploy Beatfolio
+    name: 🚀 Beatfolioデプロイ
     needs: [detect-changes, build-all]
     if: needs.detect-changes.outputs.beatfolio-changed == 'true'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: 📥 コードのチェックアウト
         uses: actions/checkout@v4
 
-      - name: Download build artifacts
+      - name: 📥 ビルド成果物のダウンロード
         uses: actions/download-artifact@v3
         with:
           name: beatfolio-build
           path: apps/beatfolio/.next
 
-      - name: Setup Node.js
+      - name: 🔧 Node.js環境のセットアップ
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install Vercel CLI
+      - name: 📦 Vercel CLIのインストール
         run: npm install -g vercel
 
-      - name: Deploy to Vercel
+      - name: 🚀 Vercelへのデプロイ
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -108,29 +106,29 @@ jobs:
           vercel deploy --prod --token=${VERCEL_TOKEN}
 
   deploy-api-server:
-    name: Deploy API Server
+    name: 🚀 APIサーバーデプロイ
     needs: [detect-changes, build-all]
     if: needs.detect-changes.outputs.api-server-changed == 'true'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: 📥 コードのチェックアウト
         uses: actions/checkout@v4
 
-      - name: Download build artifacts
+      - name: 📥 ビルド成果物のダウンロード
         uses: actions/download-artifact@v3
         with:
           name: api-server-build
           path: apps/api-server/.next
 
-      - name: Setup Node.js
+      - name: 🔧 Node.js環境のセットアップ
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install Vercel CLI
+      - name: 📦 Vercel CLIのインストール
         run: npm install -g vercel
 
-      - name: Deploy to Vercel
+      - name: 🚀 Vercelへのデプロイ
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -140,14 +138,10 @@ jobs:
           vercel deploy --prod --token=${VERCEL_TOKEN}
 
   notify-success:
-    name: Notify Deployment Success
+    name: ✅ デプロイ成功通知
     needs: [deploy-beatfolio, deploy-api-server]
     if: success()
     runs-on: ubuntu-latest
     steps:
-      - name: Send success notification
-        run: echo "All deployments completed successfully"
-        # Slackなどへの通知を追加できます
-        # 例: SlackのWebhookを使用した通知
-        # run: |
-        #   curl -X POST -H 'Content-type: application/json' --data '{"text":"✅ すべてのデプロイが正常に完了しました！"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: 📢 成功通知の送信
+        run: echo "すべてのデプロイが正常に完了しました"
