@@ -42,7 +42,8 @@ jobs:
       - name: 🔍 Beatfolio環境変数の設定
         run: |
           vercel env rm DEBUG_URL preview --yes --token=${{ secrets.VERCEL_TOKEN }} || true
-          echo "vercel env add DEBUG_URL preview --token=${{ secrets.VERCEL_TOKEN }}"
+          # 以下の行を修正（実際に環境変数を設定したい場合はアンコメント）
+          # echo "${{ secrets.TEST_DEBUG_URL }}" | vercel env add DEBUG_URL preview --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_BEATFOLIO_PROJECT_ID }}
@@ -69,7 +70,6 @@ jobs:
       - name: 🔍 APIサーバー環境変数の設定
         run: |
           vercel env rm DEBUG_URL preview --yes --token=${{ secrets.VERCEL_TOKEN }} || true
-          echo "vercel env add DEBUG_URL preview --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_API_SERVER_PROJECT_ID }}
