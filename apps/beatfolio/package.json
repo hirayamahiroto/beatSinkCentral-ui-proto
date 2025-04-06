@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.4.3",
     "data": "*",
     "database": "*",
     "fullcalendar": "^6.1.15",
