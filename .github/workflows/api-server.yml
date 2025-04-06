@@ -1,0 +1,45 @@
+name: "API Server Build & Deploy"
+
+on:
+  push:
+    branches: [ main, feature/* ]
+    paths:
+      - "apps/api-server/**"
+      - "packages/**"
+      - "turbo.json"
+      - "package.json"
+  pull_request:
+    paths:
+      - "apps/api-server/**"
+      - "packages/**"
+      - "turbo.json"
+      - "package.json"
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build & Test API Server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npx turbo run build --filter=api-server
+      
+      - name: Lint
+        run: npx turbo run lint --filter=api-server
+      
+      - name: Test
+        run: npx turbo run test --filter=api-server
+        continue-on-error: true

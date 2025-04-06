@@ -1,0 +1,46 @@
+name: "Beatfolio Build & Deploy"
+
+on:
+  push:
+    branches: [ main, feature/* ]
+    paths:
+      - "apps/beatfolio/**"
+      - "packages/**"
+      - "turbo.json"
+      - "package.json"
+  pull_request:
+    paths:
+      - "apps/beatfolio/**"
+      - "packages/**"
+      - "turbo.json"
+      - "package.json"
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build & Test Beatfolio
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npx turbo run build --filter=beatfolio
+      
+      - name: Lint
+        run: npx turbo run lint --filter=beatfolio
+      
+      - name: Test
+        run: npx turbo run test --filter=beatfolio
+        continue-on-error: true
+

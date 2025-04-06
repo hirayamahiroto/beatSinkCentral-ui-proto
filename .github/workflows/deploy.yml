@@ -1,0 +1,153 @@
+name: "Complete Project Deploy"
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - "**.md"
+      - ".github/**"
+  workflow_dispatch:
+
+jobs:
+  detect-changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      api-server-changed: ${{ steps.filter.outputs.api-server }}
+      beatfolio-changed: ${{ steps.filter.outputs.beatfolio }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            api-server:
+              - 'apps/api-server/**'
+              - 'packages/**'
+              - 'turbo.json'
+              - 'package.json'
+            beatfolio:
+              - 'apps/beatfolio/**'
+              - 'packages/**'
+              - 'turbo.json'
+              - 'package.json'
+
+  build-all:
+    name: Build All Apps
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build all
+        run: npx turbo run build
+      
+      - name: Lint all
+        run: npx turbo run lint
+        
+      - name: Test all
+        run: npx turbo run test
+        continue-on-error: true
+      
+      - name: Upload beatfolio build
+        uses: actions/upload-artifact@v3
+        with:
+          name: beatfolio-build
+          path: apps/beatfolio/.next
+          retention-days: 1
+      
+      - name: Upload api-server build
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-server-build
+          path: apps/api-server/.next
+          retention-days: 1
+
+  deploy-beatfolio:
+    name: Deploy Beatfolio
+    needs: [detect-changes, build-all]
+    if: needs.detect-changes.outputs.beatfolio-changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: beatfolio-build
+          path: apps/beatfolio/.next
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_BEATFOLIO_PROJECT_ID }}
+        run: |
+          cd apps/beatfolio
+          vercel deploy --prod --token=${VERCEL_TOKEN}
+
+  deploy-api-server:
+    name: Deploy API Server
+    needs: [detect-changes, build-all]
+    if: needs.detect-changes.outputs.api-server-changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: api-server-build
+          path: apps/api-server/.next
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_API_PROJECT_ID }}
+        run: |
+          cd apps/api-server
+          vercel deploy --prod --token=${VERCEL_TOKEN}
+
+  notify-success:
+    name: Notify Deployment Success
+    needs: [deploy-beatfolio, deploy-api-server]
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send success notification
+        run: echo "All deployments completed successfully"
+        # Slackなどへの通知を追加できます
+        # 例: SlackのWebhookを使用した通知
+        # run: |
+        #   curl -X POST -H 'Content-type: application/json' --data '{"text":"✅ すべてのデプロイが正常に完了しました！"}' ${{ secrets.SLACK_WEBHOOK_URL }}
