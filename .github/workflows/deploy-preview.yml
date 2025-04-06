@@ -31,8 +31,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_BEATFOLIO_PROJECT_ID }}
         run: |
-          cd apps/beatfolio
-          npx vercel deploy --token=${VERCEL_TOKEN}
+          npx vercel deploy --token=${VERCEL_TOKEN} --cwd=apps/beatfolio
 
       - name: 🚀 APIサーバーのプレビューデプロイ
         env:
@@ -40,5 +39,4 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_API_SERVER_PROJECT_ID }}
         run: |
-          cd apps/api-server
-          npx vercel deploy --token=${VERCEL_TOKEN}
+          npx vercel deploy --token=${VERCEL_TOKEN} --cwd=apps/api-server
