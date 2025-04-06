@@ -1,147 +1,95 @@
-name: "🚀 プロジェクトをデプロイ"
+name: "🚀 プロジェクトをデプロイ (デバッグ)"
 
 on:
-  push:
-    branches: [ main ]
-    paths-ignore:
-      - "**.md"
-      - ".github/**"
-  workflow_dispatch:
+  workflow_dispatch: # 手動実行のみ
 
 jobs:
-  detect-changes:
-    name: 🔍 変更検出
+  debug-build-artifacts:
+    name: 🔍 ビルド成果物デバッグ
     runs-on: ubuntu-latest
-    outputs:
-      api-server-changed: ${{ steps.filter.outputs.api-server }}
-      beatfolio-changed: ${{ steps.filter.outputs.beatfolio }}
     steps:
       - name: 📥 コードのチェックアウト
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            api-server:
-              - 'apps/api-server/**'
-              - 'packages/**'
-              - 'turbo.json'
-              - 'package.json'
-            beatfolio:
-              - 'apps/beatfolio/**'
-              - 'packages/**'
-              - 'turbo.json'
-              - 'package.json'
 
-  build-all:
-    name: 🏗️ 全アプリのビルド
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 コードのチェックアウト
-        uses: actions/checkout@v4
-      
       - name: 📦 依存関係のインストール
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
-      
+          cache: "npm"
+
       - name: 📦 パッケージインストール
         run: npm ci
-      
+
       - name: 🏗️ 全体ビルド
         run: npx turbo run build
-        
-      - name: 🧪 全体テスト
-        run: npx turbo run test
-        continue-on-error: true
-      
-      - name: 📤 beatfolioビルドのアップロード
-        uses: actions/upload-artifact@v3
-        with:
-          name: beatfolio-build
-          path: apps/beatfolio/.next
-          retention-days: 1
-      
-      - name: 📤 APIサーバービルドのアップロード
-        uses: actions/upload-artifact@v3
-        with:
-          name: api-server-build
-          path: apps/api-server/.next
-          retention-days: 1
 
-  deploy-beatfolio:
-    name: 🚀 Beatfolioデプロイ
-    needs: [detect-changes, build-all]
-    if: needs.detect-changes.outputs.beatfolio-changed == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 コードのチェックアウト
-        uses: actions/checkout@v4
-
-      - name: 📥 ビルド成果物のダウンロード
-        uses: actions/download-artifact@v3
-        with:
-          name: beatfolio-build
-          path: apps/beatfolio/.next
-
-      - name: 🔧 Node.js環境のセットアップ
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: 📦 Vercel CLIのインストール
-        run: npm install -g vercel
-
-      - name: 🚀 Vercelへのデプロイ
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_BEATFOLIO_PROJECT_ID }}
+      # プロジェクト構造の確認
+      - name: 📂 プロジェクト構造を確認
         run: |
+          echo "==== プロジェクトのルートディレクトリ構造 ===="
+          ls -la
+
+          echo "==== apps ディレクトリの構造 ===="
+          ls -la apps/
+
+          echo "==== beatfolio ディレクトリの構造 ===="
+          ls -la apps/beatfolio/
+
+          echo "==== api-server ディレクトリの構造 ===="
+          ls -la apps/api-server/
+
+      # ビルド成果物の確認
+      - name: 📂 ビルド成果物の場所を検索
+        run: |
+          echo "==== beatfolio の .next ディレクトリを探す ===="
+          find apps/beatfolio -name ".next" -type d | xargs -I{} ls -la {}
+
+          echo "==== api-server の .next ディレクトリを探す ===="
+          find apps/api-server -name ".next" -type d | xargs -I{} ls -la {}
+
+          echo "==== Next.js の出力ディレクトリを検索 ===="
+          find apps -name "out" -type d | xargs -I{} ls -la {}
+
+          echo "==== package.json 内の build スクリプトを確認 ===="
+          cat apps/beatfolio/package.json | grep "\"build\""
+          cat apps/api-server/package.json | grep "\"build\""
+
+      # ビルドログの詳細確認
+      - name: 🔍 詳細なビルドログ
+        run: |
+          echo "==== Beatfolio の詳細ビルド ===="
           cd apps/beatfolio
-          vercel deploy --prod --token=${VERCEL_TOKEN}
+          npm run build -- --verbose
 
-  deploy-api-server:
-    name: 🚀 APIサーバーデプロイ
-    needs: [detect-changes, build-all]
-    if: needs.detect-changes.outputs.api-server-changed == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 コードのチェックアウト
-        uses: actions/checkout@v4
+          echo "==== API Server の詳細ビルド ===="
+          cd ../api-server
+          npm run build -- --verbose
 
-      - name: 📥 ビルド成果物のダウンロード
-        uses: actions/download-artifact@v3
-        with:
-          name: api-server-build
-          path: apps/api-server/.next
-
-      - name: 🔧 Node.js環境のセットアップ
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: 📦 Vercel CLIのインストール
-        run: npm install -g vercel
-
-      - name: 🚀 Vercelへのデプロイ
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_API_PROJECT_ID }}
+      # turbo.json の確認
+      - name: 📄 turbo.json の内容確認
         run: |
-          cd apps/api-server
-          vercel deploy --prod --token=${VERCEL_TOKEN}
+          echo "==== turbo.json の内容 ===="
+          cat turbo.json
 
-  notify-success:
-    name: ✅ デプロイ成功通知
-    needs: [deploy-beatfolio, deploy-api-server]
-    if: success()
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📢 成功通知の送信
-        run: echo "すべてのデプロイが正常に完了しました"
+      # アーティファクトのアップロード
+      - name: 📤 beatfolioビルドのアップロード確認
+        run: |
+          if [ -d "apps/beatfolio/.next" ]; then
+            echo "✅ apps/beatfolio/.next ディレクトリが存在します"
+            echo "==== ディレクトリの内容 ===="
+            ls -la apps/beatfolio/.next
+          else
+            echo "❌ apps/beatfolio/.next ディレクトリが見つかりません"
+            echo "ビルド出力の場所を確認してください"
+          fi
+
+      - name: 📤 APIサーバービルドのアップロード確認
+        run: |
+          if [ -d "apps/api-server/.next" ]; then
+            echo "✅ apps/api-server/.next ディレクトリが存在します"
+            echo "==== ディレクトリの内容 ===="
+            ls -la apps/api-server/.next
+          else
+            echo "❌ apps/api-server/.next ディレクトリが見つかりません"
+            echo "ビルド出力の場所を確認してください"
+          fi
