@@ -9,9 +9,11 @@ const messageSchema = z.object({
 
 const app = new Hono().get("/", async (c) => {
   const client = createApiServerClient();
-  const res = await client.api.test.$get();
 
-  return c.json({ message: "Hello World" });
+  const res = await client.api.test.$get();
+  const json = await res.json();
+
+  return c.json({ bffMessage: " bff test", apiMessage: json.message });
 });
 
 export default app;
