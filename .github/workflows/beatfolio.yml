@@ -1,4 +1,4 @@
-name: "🎵 Beatfolioビルド＆デプロイ"
+name: "🎵 beatfolio"
 
 on:
   push:
