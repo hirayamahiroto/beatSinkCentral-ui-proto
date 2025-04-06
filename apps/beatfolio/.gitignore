@@ -5,7 +5,7 @@ out/
 # ローカル環境変数
 .env*.local
 
-.node_modules/
+node_modules/
 
 # TypeScript
 *.tsbuildinfo

@@ -24,7 +24,9 @@ const PlayerPage = () => {
                     />
                   </div>
                   <div className="flex-1 text-center md:text-left">
-                    <h2 className="text-4xl font-bold text-white mb-4">HIROTO</h2>
+                    <h2 className="text-4xl font-bold text-white mb-4">
+                      HIROTO
+                    </h2>
                     <p className="text-xl text-gray-300 mb-6">
                       世界チャンピオンビートボクサー / エンジニア / クリエイター
                     </p>
@@ -46,17 +48,27 @@ const PlayerPage = () => {
 
             {/* Skills Section */}
             <div id="skills" className="container mx-auto px-4 pb-20">
-              <h2 className="text-3xl font-bold text-white text-center mb-12">スキル & 経験</h2>
+              <h2 className="text-3xl font-bold text-white text-center mb-12">
+                スキル & 経験
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 <div className="group">
                   <div className="relative overflow-hidden rounded-xl backdrop-blur-md bg-white/5 p-6 transition-all duration-500 hover:bg-white/10">
                     <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-500/30 transition-all duration-500" />
                     <Mic className="w-8 h-8 text-blue-400 mb-4" />
-                    <h3 className="text-xl font-bold text-white mb-2">Beatboxer</h3>
-                    <p className="text-gray-400">Multiple championship titles</p>
+                    <h3 className="text-xl font-bold text-white mb-2">
+                      Beatboxer
+                    </h3>
+                    <p className="text-gray-400">
+                      Multiple championship titles
+                    </p>
                     <ul className="mt-4 space-y-2">
-                      <li className="text-sm text-gray-500">• Grand Beatbox Battle Champion</li>
-                      <li className="text-sm text-gray-500">• Asia Beatbox Championship</li>
+                      <li className="text-sm text-gray-500">
+                        • Grand Beatbox Battle Champion
+                      </li>
+                      <li className="text-sm text-gray-500">
+                        • Asia Beatbox Championship
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -65,11 +77,17 @@ const PlayerPage = () => {
                   <div className="relative overflow-hidden rounded-xl backdrop-blur-md bg-white/5 p-6 transition-all duration-500 hover:bg-white/10">
                     <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl group-hover:bg-purple-500/30 transition-all duration-500" />
                     <Code className="w-8 h-8 text-purple-400 mb-4" />
-                    <h3 className="text-xl font-bold text-white mb-2">Engineer</h3>
+                    <h3 className="text-xl font-bold text-white mb-2">
+                      Engineer
+                    </h3>
                     <p className="text-gray-400">Full-stack developer</p>
                     <ul className="mt-4 space-y-2">
-                      <li className="text-sm text-gray-500">• Web Application Development</li>
-                      <li className="text-sm text-gray-500">• Audio Processing</li>
+                      <li className="text-sm text-gray-500">
+                        • Web Application Development
+                      </li>
+                      <li className="text-sm text-gray-500">
+                        • Audio Processing
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -78,11 +96,17 @@ const PlayerPage = () => {
                   <div className="relative overflow-hidden rounded-xl backdrop-blur-md bg-white/5 p-6 transition-all duration-500 hover:bg-white/10">
                     <div className="absolute -top-20 -right-20 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl group-hover:bg-pink-500/30 transition-all duration-500" />
                     <Music className="w-8 h-8 text-pink-400 mb-4" />
-                    <h3 className="text-xl font-bold text-white mb-2">Producer</h3>
+                    <h3 className="text-xl font-bold text-white mb-2">
+                      Producer
+                    </h3>
                     <p className="text-gray-400">Music & Video Creation</p>
                     <ul className="mt-4 space-y-2">
-                      <li className="text-sm text-gray-500">• Original Music Production</li>
-                      <li className="text-sm text-gray-500">• Video Content Creation</li>
+                      <li className="text-sm text-gray-500">
+                        • Original Music Production
+                      </li>
+                      <li className="text-sm text-gray-500">
+                        • Video Content Creation
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -93,19 +117,27 @@ const PlayerPage = () => {
             <div className="container mx-auto px-4 pb-20">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
                 <div className="bg-white/5 rounded-xl p-6 text-center backdrop-blur-sm">
-                  <div className="text-4xl font-bold text-blue-400 mb-2">10+</div>
+                  <div className="text-4xl font-bold text-blue-400 mb-2">
+                    10+
+                  </div>
                   <div className="text-gray-400">大会優勝</div>
                 </div>
                 <div className="bg-white/5 rounded-xl p-6 text-center backdrop-blur-sm">
-                  <div className="text-4xl font-bold text-purple-400 mb-2">50+</div>
+                  <div className="text-4xl font-bold text-purple-400 mb-2">
+                    50+
+                  </div>
                   <div className="text-gray-400">制作楽曲</div>
                 </div>
                 <div className="bg-white/5 rounded-xl p-6 text-center backdrop-blur-sm">
-                  <div className="text-4xl font-bold text-pink-400 mb-2">100K+</div>
+                  <div className="text-4xl font-bold text-pink-400 mb-2">
+                    100K+
+                  </div>
                   <div className="text-gray-400">総視聴回数</div>
                 </div>
                 <div className="bg-white/5 rounded-xl p-6 text-center backdrop-blur-sm">
-                  <div className="text-4xl font-bold text-green-400 mb-2">5+</div>
+                  <div className="text-4xl font-bold text-green-400 mb-2">
+                    5+
+                  </div>
                   <div className="text-gray-400">開発アプリ</div>
                 </div>
               </div>
@@ -129,7 +161,9 @@ const PlayerPage = () => {
                       <h3 className="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">
                         最新パフォーマンス
                       </h3>
-                      <p className="text-sm sm:text-base text-gray-300">GBB 2023 世界大会優勝</p>
+                      <p className="text-sm sm:text-base text-gray-300">
+                        GBB 2023 世界大会優勝
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -146,7 +180,9 @@ const PlayerPage = () => {
                       <h3 className="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">
                         最新楽曲
                       </h3>
-                      <p className="text-sm sm:text-base text-gray-300">オリジナル楽曲「FLOW」</p>
+                      <p className="text-sm sm:text-base text-gray-300">
+                        オリジナル楽曲「FLOW」
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -163,7 +199,9 @@ const PlayerPage = () => {
                       <h3 className="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">
                         最新アプリ
                       </h3>
-                      <p className="text-sm sm:text-base text-gray-300">ビートボックス練習アプリ</p>
+                      <p className="text-sm sm:text-base text-gray-300">
+                        ビートボックス練習アプリ
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -174,13 +212,19 @@ const PlayerPage = () => {
       case "Records":
         return (
           <div className="container mx-auto px-4 py-20">
-            <h2 className="text-3xl font-bold text-white text-center mb-12">戦績</h2>
+            <h2 className="text-3xl font-bold text-white text-center mb-12">
+              戦績
+            </h2>
             <div className="max-w-4xl mx-auto space-y-6">
               <div className="bg-white/5 rounded-xl p-6">
                 <h3 className="text-xl font-bold text-white mb-4">2023</h3>
                 <ul className="space-y-3">
-                  <li className="text-gray-300">• Grand Beatbox Battle World Champion</li>
-                  <li className="text-gray-300">• Asia Beatbox Championship Winner</li>
+                  <li className="text-gray-300">
+                    • Grand Beatbox Battle World Champion
+                  </li>
+                  <li className="text-gray-300">
+                    • Asia Beatbox Championship Winner
+                  </li>
                 </ul>
               </div>
               {/* 他の年の戦績も同様に追加可能 */}
@@ -190,16 +234,24 @@ const PlayerPage = () => {
       case "contact":
         return (
           <div className="container mx-auto px-4 py-20">
-            <h2 className="text-3xl font-bold text-white text-center mb-12">Contact</h2>
+            <h2 className="text-3xl font-bold text-white text-center mb-12">
+              Contact
+            </h2>
             <div className="max-w-2xl mx-auto bg-white/5 rounded-xl p-8">
               <form className="space-y-6">
                 <div>
                   <label className="block text-gray-300 mb-2">Name</label>
-                  <input type="text" className="w-full bg-white/10 rounded-lg p-3 text-white" />
+                  <input
+                    type="text"
+                    className="w-full bg-white/10 rounded-lg p-3 text-white"
+                  />
                 </div>
                 <div>
                   <label className="block text-gray-300 mb-2">Email</label>
-                  <input type="email" className="w-full bg-white/10 rounded-lg p-3 text-white" />
+                  <input
+                    type="email"
+                    className="w-full bg-white/10 rounded-lg p-3 text-white"
+                  />
                 </div>
                 <div>
                   <label className="block text-gray-300 mb-2">Message</label>

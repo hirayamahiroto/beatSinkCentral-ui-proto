@@ -7,18 +7,19 @@ import { cn } from "@ui/shared/utils/mergeClassNames";
 import AdminHeader from "@ui/design-system/components/molecules/AdminHeader";
 
 // Card Component
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        "rounded-xl border border-white/10 bg-white/5 text-card-foreground shadow-sm backdrop-blur-sm",
-        className
-      )}
-      {...props}
-    />
-  )
-);
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-xl border border-white/10 bg-white/5 text-card-foreground shadow-sm backdrop-blur-sm",
+      className
+    )}
+    {...props}
+  />
+));
 Card.displayName = "Card";
 
 const AdminDashboardPage = () => {
@@ -63,7 +64,9 @@ const AdminDashboardPage = () => {
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold">ダッシュボード</h1>
             <div className="flex items-center gap-4">
-              <span className="text-gray-400">{new Date().toLocaleDateString()}</span>
+              <span className="text-gray-400">
+                {new Date().toLocaleDateString()}
+              </span>
             </div>
           </div>
 
@@ -76,7 +79,9 @@ const AdminDashboardPage = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-400">イベント総数</p>
-                  <p className="text-2xl font-bold text-white">{stats.totalEvents}</p>
+                  <p className="text-2xl font-bold text-white">
+                    {stats.totalEvents}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -88,7 +93,9 @@ const AdminDashboardPage = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-400">現在開催中</p>
-                  <p className="text-2xl font-bold text-white">{stats.activeEvents}</p>
+                  <p className="text-2xl font-bold text-white">
+                    {stats.activeEvents}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -100,7 +107,9 @@ const AdminDashboardPage = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-400">合計参加者</p>
-                  <p className="text-2xl font-bold text-white">{stats.totalParticipants}</p>
+                  <p className="text-2xl font-bold text-white">
+                    {stats.totalParticipants}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -112,7 +121,9 @@ const AdminDashboardPage = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-400">開催予定</p>
-                  <p className="text-2xl font-bold text-white">{stats.upcomingEvents}</p>
+                  <p className="text-2xl font-bold text-white">
+                    {stats.upcomingEvents}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -124,7 +135,9 @@ const AdminDashboardPage = () => {
               <Card className="p-6 hover:bg-white/10 transition-colors group cursor-pointer">
                 <div className="flex items-center justify-between">
                   <div className="space-y-2">
-                    <h3 className="text-xl font-bold text-white">新規イベント作成</h3>
+                    <h3 className="text-xl font-bold text-white">
+                      新規イベント作成
+                    </h3>
                     <p className="text-gray-400">
                       新しいイベントを作成し、エントリー受付を開始します
                     </p>
@@ -149,7 +162,10 @@ const AdminDashboardPage = () => {
               </div>
               <div className="space-y-4">
                 {recentEvents.map((event) => (
-                  <AtomLink href={`/admin/detail?id=${event.id}`} key={event.id}>
+                  <AtomLink
+                    href={`/admin/detail?id=${event.id}`}
+                    key={event.id}
+                  >
                     <div className="group flex items-center justify-between p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
                       <div>
                         <p className="font-medium text-white">{event.name}</p>

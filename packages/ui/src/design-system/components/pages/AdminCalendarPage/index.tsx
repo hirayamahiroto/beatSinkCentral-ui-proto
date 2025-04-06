@@ -21,7 +21,13 @@ interface CalendarEvent {
 }
 
 // イベント詳細モーダル
-const EventDetailModal = ({ event, onClose }: { event: CalendarEvent; onClose: () => void }) => {
+const EventDetailModal = ({
+  event,
+  onClose,
+}: {
+  event: CalendarEvent;
+  onClose: () => void;
+}) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-gray-900 rounded-xl p-6 max-w-md w-full mx-4">
@@ -49,7 +55,8 @@ const EventDetailModal = ({ event, onClose }: { event: CalendarEvent; onClose: (
                 className={cn(
                   "px-2 py-1 rounded-full text-sm",
                   event.status === "upcoming" && "bg-blue-500/20 text-blue-300",
-                  event.status === "ongoing" && "bg-green-500/20 text-green-300",
+                  event.status === "ongoing" &&
+                    "bg-green-500/20 text-green-300",
                   event.status === "completed" && "bg-gray-500/20 text-gray-300"
                 )}
               >
@@ -69,7 +76,9 @@ const EventDetailModal = ({ event, onClose }: { event: CalendarEvent; onClose: (
             </button>
             {event.type === "own" && (
               <button
-                onClick={() => (window.location.href = `/admin/detail?id=${event.id}`)}
+                onClick={() =>
+                  (window.location.href = `/admin/detail?id=${event.id}`)
+                }
                 className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-white rounded-lg transition-colors"
               >
                 詳細を見る
@@ -83,7 +92,9 @@ const EventDetailModal = ({ event, onClose }: { event: CalendarEvent; onClose: (
 };
 
 const CalendarView = () => {
-  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
+    null
+  );
 
   // サンプルイベントデータをuseMemoでラップ
   const events = React.useMemo<CalendarEvent[]>(
@@ -163,14 +174,19 @@ const CalendarView = () => {
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-purple-500/50"></div>
-              <span className="text-gray-400">他のオーガナイザーのイベント</span>
+              <span className="text-gray-400">
+                他のオーガナイザーのイベント
+              </span>
             </div>
           </div>
         </div>
       </div>
 
       {selectedEvent && (
-        <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+        <EventDetailModal
+          event={selectedEvent}
+          onClose={() => setSelectedEvent(null)}
+        />
       )}
     </div>
   );

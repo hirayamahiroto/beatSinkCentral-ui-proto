@@ -3,15 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@ui/*": [
-        "../../packages/ui/src/*"
-      ],
-      "@data/*": [
-        "../../packages/data/src/*"
-      ]
+      "@/*": ["./src/*"],
+      "@ui/*": ["../../packages/ui/src/*"],
+      "@data/*": ["../../packages/data/src/*"]
     }
   },
   "include": [

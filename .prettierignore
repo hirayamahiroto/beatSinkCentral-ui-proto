@@ -1,0 +1,18 @@
+# ビルド関連
+.next
+dist
+node_modules
+build
+.turbo
+
+# パッケージマネージャーファイル
+package-lock.json
+
+# ログファイル
+*.log
+
+# ドキュメント
+README.md
+
+# 生成されたファイル
+next-env.d.ts 
