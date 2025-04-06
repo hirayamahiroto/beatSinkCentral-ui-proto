@@ -1,0 +1,44 @@
+name: "🚀 プレビュー環境へデプロイ"
+
+on:
+  push:
+    branches:
+      - develop
+      - feature/*
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  deploy-preview:
+    name: 🔮 プレビューデプロイ
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 コードのチェックアウト
+        uses: actions/checkout@v4
+
+      - name: 📦 依存関係のインストール
+        uses: ./.github/actions/install-dependencies
+        with:
+          node-version: "20"
+
+      - name: 🏗️ アプリケーションのビルド
+        run: npx turbo run build
+
+      - name: 🚀 Beatfolioのプレビューデプロイ
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_BEATFOLIO_PROJECT_ID }}
+        run: |
+          cd apps/beatfolio
+          npx vercel deploy --token=${VERCEL_TOKEN}
+
+      - name: 🚀 APIサーバーのプレビューデプロイ
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_API_SERVER_PROJECT_ID }}
+        run: |
+          cd apps/api-server
+          npx vercel deploy --token=${VERCEL_TOKEN}
