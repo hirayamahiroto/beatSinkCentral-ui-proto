@@ -12,10 +12,10 @@
     "build-storybook": "turbo run build-storybook"
   },
   "devDependencies": {
-    "turbo": "^1.13.0",
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
     "eslint": "^8.57.1",
-    "@eslint/eslintrc": "^3"
+    "turbo": "^2.5.0",
+    "typescript": "^5"
   },
   "eslintConfig": {
     "extends": [
