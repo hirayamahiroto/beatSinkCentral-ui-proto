@@ -59,13 +59,13 @@ jobs:
       # ビルドログの詳細確認
       - name: 🔍 詳細なビルドログ
         run: |
-          echo "==== Beatfolio の詳細ビルド ===="
+          echo "==== Beatfolio のビルド ===="
           cd apps/beatfolio
-          npm run build -- --verbose
+          npm run build
 
-          echo "==== API Server の詳細ビルド ===="
+          echo "==== API Server のビルド ===="
           cd ../api-server
-          npm run build -- --verbose
+          npm run build
 
       # turbo.json の確認
       - name: 📄 turbo.json の内容確認
