@@ -1,11 +1,11 @@
 import { hc } from "hono/client";
 import type { AppType } from "../../app/api/[[...route]]/route";
-import { apiServerConfig } from "../config";
+import { bffServerConfig } from "../config";
 
-export const createApiServerClient = () => {
-  if (!apiServerConfig.baseUrl) {
-    throw new Error("API_SERVER_BASE_URL is not set");
+export const createBffServerClient = () => {
+  if (!bffServerConfig.baseUrl) {
+    throw new Error("BFF_SERVER_BASE_URL is not set");
   }
 
-  return hc<AppType>(apiServerConfig.baseUrl);
+  return hc<AppType>(bffServerConfig.baseUrl);
 };
