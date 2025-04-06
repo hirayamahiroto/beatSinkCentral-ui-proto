@@ -1,6 +1,6 @@
 import { hc } from "hono/client";
 import type { AppType } from "../../app/api/[[...route]]/route";
-import { apiServerConfig } from "../config/incdx";
+import { apiServerConfig } from "../config";
 
 export const createApiServerClient = () => {
   if (!apiServerConfig.baseUrl) {
