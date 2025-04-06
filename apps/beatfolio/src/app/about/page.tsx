@@ -1,5 +1,5 @@
-import AboutPage from "@ui/design-system/components/pages/AboutPage";
+
 
 export default function About() {
-  return <AboutPage />;
+  return <h1>About</h1>;
 }
