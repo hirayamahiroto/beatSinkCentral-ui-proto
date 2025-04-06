@@ -38,7 +38,6 @@ jobs:
           echo "==== api-server ディレクトリの構造 ===="
           ls -la apps/api-server/
 
-      # ビルド成果物の確認
       - name: 📂 ビルド成果物の場所を検索
         run: |
           echo "==== beatfolio の .next ディレクトリを探す ===="
