@@ -7,15 +7,19 @@ import { cn } from "../../../../shared/utils/mergeClassNames";
 import AdminHeader from "../../molecules/AdminHeader";
 
 // Card Component
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)}
-      {...props}
-    />
-  )
-);
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      className
+    )}
+    {...props}
+  />
+));
 Card.displayName = "Card";
 
 // Types
@@ -128,7 +132,9 @@ const AdminListPage = () => {
                   <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-500/30 transition-all duration-500" />
                   <div className="relative p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-2xl font-bold text-white">{event.name}</h2>
+                      <h2 className="text-2xl font-bold text-white">
+                        {event.name}
+                      </h2>
                       <span
                         className={cn(
                           "px-3 py-1 rounded-full text-sm font-medium",

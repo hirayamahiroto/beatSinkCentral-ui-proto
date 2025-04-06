@@ -40,7 +40,8 @@ export const events: Event[] = [
     type: "ワークショップ",
     location: "大阪",
     participants: 20,
-    description: "初心者から中級者向けのワークショップ。基礎テクニックを学びます。",
+    description:
+      "初心者から中級者向けのワークショップ。基礎テクニックを学びます。",
     image: "/image3.jpeg",
   },
   {
@@ -81,7 +82,8 @@ export const events: Event[] = [
     type: "大会",
     location: "神戸",
     participants: 64,
-    description: "アンダーグラウンドシーンで注目の新進気鋭のビートボクサーたちによる熱い戦い。",
+    description:
+      "アンダーグラウンドシーンで注目の新進気鋭のビートボクサーたちによる熱い戦い。",
     image: "/image7.jpeg",
   },
 ];

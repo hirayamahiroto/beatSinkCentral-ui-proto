@@ -22,7 +22,7 @@
       "@/*": ["./src/*"],
       "@ui/*": ["./packages/ui/src/*"],
       "@database/*": ["./packages/database/src/*"],
-      "@backend/*": ["./packages/backend/src/*"],
+      "@backend/*": ["./packages/backend/src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

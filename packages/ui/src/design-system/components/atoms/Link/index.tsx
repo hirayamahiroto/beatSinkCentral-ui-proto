@@ -13,7 +13,14 @@ type LinkProps = VariantProps<typeof linkVariants> & {
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
-const Link = ({ className, variant, href, children, disabled = false, ...props }: LinkProps) => {
+const Link = ({
+  className,
+  variant,
+  href,
+  children,
+  disabled = false,
+  ...props
+}: LinkProps) => {
   const linkClasses = cn(
     linkVariants({ variant }),
     disabled && "pointer-events-none opacity-50",
@@ -21,7 +28,12 @@ const Link = ({ className, variant, href, children, disabled = false, ...props }
   );
 
   return (
-    <a className={linkClasses} href={disabled ? "#" : href} aria-disabled={disabled} {...props}>
+    <a
+      className={linkClasses}
+      href={disabled ? "#" : href}
+      aria-disabled={disabled}
+      {...props}
+    >
       {children}
     </a>
   );

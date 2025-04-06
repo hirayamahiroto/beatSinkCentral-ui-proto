@@ -1,7 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { Calendar, MapPin, Users, Clock, Share2, Trophy, Check, XCircle } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Users,
+  Clock,
+  Share2,
+  Trophy,
+  Check,
+  XCircle,
+} from "lucide-react";
 import Header from "@ui/design-system/components/molecules/header";
 import { useState } from "react";
 import { players } from "../../../../../packages/data/players";
@@ -57,7 +66,9 @@ const EntryModal = ({
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
       <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl max-w-md w-full mx-4">
         <h3 className="text-2xl font-bold mb-4 text-white">エントリー確認</h3>
-        <p className="text-gray-300 mb-6">「{eventTitle}」にエントリーしますか？</p>
+        <p className="text-gray-300 mb-6">
+          「{eventTitle}」にエントリーしますか？
+        </p>
         <div className="flex gap-4">
           <button
             onClick={onConfirm}
@@ -96,7 +107,9 @@ const CancelModal = ({
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
       <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl max-w-md w-full mx-4">
         <h3 className="text-2xl font-bold mb-4 text-white">キャンセル確認</h3>
-        <p className="text-gray-300 mb-6">「{eventTitle}」のエントリーをキャンセルしますか？</p>
+        <p className="text-gray-300 mb-6">
+          「{eventTitle}」のエントリーをキャンセルしますか？
+        </p>
         <div className="flex gap-4">
           <button
             onClick={onConfirm}
@@ -328,7 +341,12 @@ export default function EventDetail() {
       <Header />
 
       <section className="relative h-[60vh]">
-        <Image src={eventData.image} alt={eventData.title} fill className="object-cover" />
+        <Image
+          src={eventData.image}
+          alt={eventData.title}
+          fill
+          className="object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-8">
           <div className="container mx-auto">
@@ -336,7 +354,9 @@ export default function EventDetail() {
               <span className="inline-block px-3 py-1 bg-blue-500 rounded-full text-sm mb-4">
                 {eventData.type}
               </span>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">{eventData.title}</h1>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                {eventData.title}
+              </h1>
               <div className="flex flex-wrap gap-6 text-gray-300">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-5 h-5" />
@@ -368,7 +388,9 @@ export default function EventDetail() {
             {/* Description */}
             <section>
               <h2 className="text-2xl font-bold mb-4">イベント詳細</h2>
-              <p className="text-gray-300 leading-relaxed">{eventData.description}</p>
+              <p className="text-gray-300 leading-relaxed">
+                {eventData.description}
+              </p>
             </section>
 
             {/* Schedule */}
@@ -376,7 +398,10 @@ export default function EventDetail() {
               <h2 className="text-2xl font-bold mb-4">タイムスケジュール</h2>
               <div className="space-y-4">
                 {eventData.schedule.map((item, index) => (
-                  <div key={index} className="flex gap-6 items-start p-4 bg-white/5 rounded-lg">
+                  <div
+                    key={index}
+                    className="flex gap-6 items-start p-4 bg-white/5 rounded-lg"
+                  >
                     <span className="text-blue-400 font-mono">{item.time}</span>
                     <span className="text-gray-300">{item.content}</span>
                   </div>
@@ -410,7 +435,12 @@ export default function EventDetail() {
                   >
                     <div className="relative w-12 h-12 rounded-full overflow-hidden bg-blue-600/20">
                       {player.image.startsWith("/") ? (
-                        <Image src={player.image} alt={player.name} fill className="object-cover" />
+                        <Image
+                          src={player.image}
+                          alt={player.name}
+                          fill
+                          className="object-cover"
+                        />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-lg">
                           {player.name.charAt(0)}
@@ -433,8 +463,12 @@ export default function EventDetail() {
             <div className="sticky top-24 space-y-6">
               <div className="p-6 bg-white/5 rounded-xl">
                 <h3 className="text-xl font-bold mb-4">エントリー</h3>
-                <p className="text-2xl font-bold text-blue-400 mb-4">{eventData.price}</p>
-                <p className="text-gray-400 text-sm mb-4">{eventData.entryMemo}</p>
+                <p className="text-2xl font-bold text-blue-400 mb-4">
+                  {eventData.price}
+                </p>
+                <p className="text-gray-400 text-sm mb-4">
+                  {eventData.entryMemo}
+                </p>
                 <EntryButton
                   capacity={eventData.capacity}
                   entries={eventData.participants}
@@ -446,8 +480,12 @@ export default function EventDetail() {
 
               <div className="p-6 bg-white/5 rounded-xl">
                 <h3 className="text-xl font-bold mb-4">観戦チケット</h3>
-                <p className="text-2xl font-bold text-blue-400 mb-4">{eventData.ticketPrice}</p>
-                <p className="text-gray-400 text-sm mb-4">{eventData.ticketMemo}</p>
+                <p className="text-2xl font-bold text-blue-400 mb-4">
+                  {eventData.ticketPrice}
+                </p>
+                <p className="text-gray-400 text-sm mb-4">
+                  {eventData.ticketMemo}
+                </p>
                 {eventData.hasTicket ? (
                   <div className="w-full py-3 bg-green-600/20 text-green-400 rounded-full flex items-center justify-center gap-2">
                     <Check className="w-5 h-5" />
@@ -491,7 +529,12 @@ export default function EventDetail() {
               >
                 <div className="relative w-12 h-12 rounded-full overflow-hidden bg-blue-600/20">
                   {player.image.startsWith("/") ? (
-                    <Image src={player.image} alt={player.name} fill className="object-cover" />
+                    <Image
+                      src={player.image}
+                      alt={player.name}
+                      fill
+                      className="object-cover"
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-lg">
                       {player.name.charAt(0)}

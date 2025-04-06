@@ -8,7 +8,12 @@ type CardContentProps = React.ComponentProps<typeof BaseCardContent> &
   VariantProps<typeof cardVariants>;
 
 const CardContent = ({ className, variant, ...props }: CardContentProps) => {
-  return <BaseCardContent className={cn(cardVariants({ variant }), className)} {...props} />;
+  return (
+    <BaseCardContent
+      className={cn(cardVariants({ variant }), className)}
+      {...props}
+    />
+  );
 };
 
 export { CardContent, type CardContentProps };

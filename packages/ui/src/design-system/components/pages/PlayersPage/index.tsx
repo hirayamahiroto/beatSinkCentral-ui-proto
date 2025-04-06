@@ -1,21 +1,35 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Filter, ArrowUpDown, Star, TrendingUp, Shuffle } from "lucide-react";
+import {
+  Search,
+  Filter,
+  ArrowUpDown,
+  Star,
+  TrendingUp,
+  Shuffle,
+} from "lucide-react";
 import { Link as AtomLink } from "@ui/design-system/components/atoms/Link";
 import Header from "@ui/design-system/components/molecules/header";
 import { players as playerData } from "../../../../../../data/players";
 import { Image as AtomImage } from "@ui/design-system/components/atoms/Image";
 
 const Card = ({ className = "", ...props }) => {
-  return <div className={`rounded-lg shadow-lg overflow-hidden ${className}`} {...props}></div>;
+  return (
+    <div
+      className={`rounded-lg shadow-lg overflow-hidden ${className}`}
+      {...props}
+    ></div>
+  );
 };
 
 const PlayersPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filterSpeciality, setFilterSpeciality] = useState<string | null>(null);
-  const [activeSection, setActiveSection] = useState<"discover" | "search">("discover");
+  const [activeSection, setActiveSection] = useState<"discover" | "search">(
+    "discover"
+  );
   const [randomPlayers, setRandomPlayers] = useState(playerData.slice(0, 4));
 
   const processedPlayers = playerData
@@ -26,7 +40,8 @@ const PlayersPage = () => {
         player.realName.toLowerCase().includes(searchLower) ||
         player.team.toLowerCase().includes(searchLower);
 
-      const matchesSpeciality = !filterSpeciality || player.speciality === filterSpeciality;
+      const matchesSpeciality =
+        !filterSpeciality || player.speciality === filterSpeciality;
       return matchesSearch && matchesSpeciality;
     })
     .sort((a, b) => {
@@ -42,12 +57,16 @@ const PlayersPage = () => {
     const specialities = ["Aggressive", "Tactical"];
     const currentIndex = specialities.indexOf(filterSpeciality || "");
     setFilterSpeciality(
-      currentIndex === specialities.length - 1 ? null : specialities[currentIndex + 1]
+      currentIndex === specialities.length - 1
+        ? null
+        : specialities[currentIndex + 1]
     );
   };
 
   const handleShuffle = () => {
-    const shuffled = [...playerData].sort(() => Math.random() - 0.5).slice(0, 4);
+    const shuffled = [...playerData]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 4);
     setRandomPlayers(shuffled);
   };
 
@@ -62,7 +81,8 @@ const PlayersPage = () => {
             Discover Beatbox Artists
           </h1>
           <p className="text-gray-400 text-lg md:text-xl max-w-2xl">
-            From rising stars to established champions - explore the diverse world of beatbox
+            From rising stars to established champions - explore the diverse
+            world of beatbox
           </p>
         </div>
 
@@ -131,8 +151,12 @@ const PlayersPage = () => {
                                 {player.speciality}
                               </span>
                             </div>
-                            <h2 className="text-4xl font-bold text-white">{player.name}</h2>
-                            <p className="text-gray-300/90">{player.realName}</p>
+                            <h2 className="text-4xl font-bold text-white">
+                              {player.name}
+                            </h2>
+                            <p className="text-gray-300/90">
+                              {player.realName}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -178,8 +202,12 @@ const PlayersPage = () => {
                                 {player.speciality}
                               </span>
                             </div>
-                            <h2 className="text-4xl font-bold text-white">{player.name}</h2>
-                            <p className="text-gray-300/90">{player.realName}</p>
+                            <h2 className="text-4xl font-bold text-white">
+                              {player.name}
+                            </h2>
+                            <p className="text-gray-300/90">
+                              {player.realName}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -232,8 +260,12 @@ const PlayersPage = () => {
                                 {player.speciality}
                               </span>
                             </div>
-                            <h2 className="text-4xl font-bold text-white">{player.name}</h2>
-                            <p className="text-gray-300/90">{player.realName}</p>
+                            <h2 className="text-4xl font-bold text-white">
+                              {player.name}
+                            </h2>
+                            <p className="text-gray-300/90">
+                              {player.realName}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -322,7 +354,9 @@ const PlayersPage = () => {
                               {player.speciality}
                             </span>
                           </div>
-                          <h2 className="text-4xl font-bold text-white">{player.name}</h2>
+                          <h2 className="text-4xl font-bold text-white">
+                            {player.name}
+                          </h2>
                           <p className="text-gray-300/90">{player.realName}</p>
                         </div>
                       </div>

@@ -17,8 +17,10 @@ const Button = React.forwardRef<
       className={cn(
         "inline-flex items-center justify-center rounded-md font-medium transition-colors",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-        variant === "default" && "bg-blue-500/20 hover:bg-blue-500/30 text-white",
-        variant === "outline" && "bg-white/5 hover:bg-white/10 text-white border border-white/10",
+        variant === "default" &&
+          "bg-blue-500/20 hover:bg-blue-500/30 text-white",
+        variant === "outline" &&
+          "bg-white/5 hover:bg-white/10 text-white border border-white/10",
         size === "default" && "h-10 px-4 py-2",
         size === "sm" && "h-8 px-3 text-sm",
         className
@@ -31,24 +33,25 @@ const Button = React.forwardRef<
 Button.displayName = "Button";
 
 // Input Component
-const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
-  ({ className, type, ...props }, ref) => {
-    return (
-      <input
-        type={type}
-        className={cn(
-          "flex h-10 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm",
-          "text-white placeholder:text-gray-400",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50",
-          "disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
+const Input = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement>
+>(({ className, type, ...props }, ref) => {
+  return (
+    <input
+      type={type}
+      className={cn(
+        "flex h-10 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm",
+        "text-white placeholder:text-gray-400",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50",
+        "disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )}
+      ref={ref}
+      {...props}
+    />
+  );
+});
 Input.displayName = "Input";
 
 // Textarea Component
@@ -73,44 +76,59 @@ const Textarea = React.forwardRef<
 Textarea.displayName = "Textarea";
 
 // Label Component
-const Label = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttributes<HTMLLabelElement>>(
-  ({ className, ...props }, ref) => (
-    <label ref={ref} className={cn("text-sm font-medium text-gray-300", className)} {...props} />
-  )
-);
+const Label = React.forwardRef<
+  HTMLLabelElement,
+  React.LabelHTMLAttributes<HTMLLabelElement>
+>(({ className, ...props }, ref) => (
+  <label
+    ref={ref}
+    className={cn("text-sm font-medium text-gray-300", className)}
+    {...props}
+  />
+));
 Label.displayName = "Label";
 
 // Card Components
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        "rounded-xl border border-white/10 bg-white/5 text-card-foreground shadow-sm backdrop-blur-sm",
-        className
-      )}
-      {...props}
-    />
-  )
-);
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-xl border border-white/10 bg-white/5 text-card-foreground shadow-sm backdrop-blur-sm",
+      className
+    )}
+    {...props}
+  />
+));
 Card.displayName = "Card";
 
-const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
-  )
-);
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+));
 CardHeader.displayName = "CardHeader";
 
-const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
-  ({ className, ...props }, ref) => (
-    <h3
-      ref={ref}
-      className={cn("text-2xl font-semibold leading-none tracking-tight text-white", className)}
-      {...props}
-    />
-  )
-);
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      "text-2xl font-semibold leading-none tracking-tight text-white",
+      className
+    )}
+    {...props}
+  />
+));
 CardTitle.displayName = "CardTitle";
 
 const CardDescription = React.forwardRef<
@@ -121,11 +139,12 @@ const CardDescription = React.forwardRef<
 ));
 CardDescription.displayName = "CardDescription";
 
-const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-  )
-);
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+));
 CardContent.displayName = "CardContent";
 
 const AdminEventRegisterPage = () => {
@@ -192,7 +211,10 @@ const AdminEventRegisterPage = () => {
 
               <div className="grid gap-2">
                 <Label htmlFor="access">アクセス</Label>
-                <Textarea id="access" placeholder="最寄り駅からのアクセスなど" />
+                <Textarea
+                  id="access"
+                  placeholder="最寄り駅からのアクセスなど"
+                />
               </div>
             </div>
 
@@ -202,12 +224,20 @@ const AdminEventRegisterPage = () => {
 
               <div className="grid gap-2">
                 <Label htmlFor="description">イベント説明</Label>
-                <Textarea id="description" placeholder="イベントの説明を入力" className="h-32" />
+                <Textarea
+                  id="description"
+                  placeholder="イベントの説明を入力"
+                  className="h-32"
+                />
               </div>
 
               <div className="grid gap-2">
                 <Label htmlFor="rules">ルール・注意事項</Label>
-                <Textarea id="rules" placeholder="参加ルールや注意事項を入力" className="h-32" />
+                <Textarea
+                  id="rules"
+                  placeholder="参加ルールや注意事項を入力"
+                  className="h-32"
+                />
               </div>
             </div>
 

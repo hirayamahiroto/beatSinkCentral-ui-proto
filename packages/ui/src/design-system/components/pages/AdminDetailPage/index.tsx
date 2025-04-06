@@ -19,8 +19,10 @@ const Button = React.forwardRef<
       className={cn(
         "inline-flex items-center justify-center rounded-md font-medium transition-colors",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-        variant === "default" && "bg-blue-500/20 hover:bg-blue-500/30 text-white",
-        variant === "destructive" && "bg-red-500/20 hover:bg-red-500/30 text-white",
+        variant === "default" &&
+          "bg-blue-500/20 hover:bg-blue-500/30 text-white",
+        variant === "destructive" &&
+          "bg-red-500/20 hover:bg-red-500/30 text-white",
         size === "default" && "h-10 px-4 py-2",
         size === "sm" && "h-8 px-3 text-sm",
         className
@@ -33,48 +35,66 @@ const Button = React.forwardRef<
 Button.displayName = "Button";
 
 // Card Components
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("rounded-lg border border-white/10 text-card-foreground", className)}
-      {...props}
-    />
-  )
-);
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-lg border border-white/10 text-card-foreground",
+      className
+    )}
+    {...props}
+  />
+));
 Card.displayName = "Card";
 
-const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
-  )
-);
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+));
 CardHeader.displayName = "CardHeader";
 
-const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
-  ({ className, ...props }, ref) => (
-    <h3
-      ref={ref}
-      className={cn("text-2xl font-semibold leading-none tracking-tight", className)}
-      {...props}
-    />
-  )
-);
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      "text-2xl font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  />
+));
 CardTitle.displayName = "CardTitle";
 
 const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <p ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
+  <p
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
 ));
 CardDescription.displayName = "CardDescription";
 
-const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-  )
-);
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+));
 CardContent.displayName = "CardContent";
 
 // Tabs Components
@@ -132,7 +152,10 @@ const Progress = React.forwardRef<
 >(({ className, value, ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
-    className={cn("relative h-4 w-full overflow-hidden rounded-full bg-secondary", className)}
+    className={cn(
+      "relative h-4 w-full overflow-hidden rounded-full bg-secondary",
+      className
+    )}
     {...props}
   >
     <ProgressPrimitive.Indicator
@@ -249,7 +272,8 @@ const ParticipantList = ({
                     確定する
                   </button>
                 )}
-                {(!participant.isCheckedIn || participant.status === "waiting") && (
+                {(!participant.isCheckedIn ||
+                  participant.status === "waiting") && (
                   <button
                     onClick={() => onStatusChange(participant.id, "cancelled")}
                     className="px-4 py-2 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-full transition-all"
@@ -281,7 +305,9 @@ const AdminDetailPage = () => {
   });
 
   // 参加確定者のサンプルデータ
-  const [confirmedParticipants, setConfirmedParticipants] = useState<Participant[]>(
+  const [confirmedParticipants, setConfirmedParticipants] = useState<
+    Participant[]
+  >(
     Array.from({ length: 20 }, (_, i) => ({
       id: i + 1,
       name: `参加者${i + 1}`,
@@ -293,7 +319,9 @@ const AdminDetailPage = () => {
   );
 
   // キャンセル待ちのサンプルデータ
-  const [waitlistParticipants, setWaitlistParticipants] = useState<Participant[]>(
+  const [waitlistParticipants, setWaitlistParticipants] = useState<
+    Participant[]
+  >(
     Array.from({ length: 10 }, (_, i) => ({
       id: 100 + i + 1,
       name: `キャンセル待ち${i + 1}`,
@@ -311,7 +339,10 @@ const AdminDetailPage = () => {
       p.id === participantId ? { ...p, isCheckedIn: true } : p
     );
 
-    if (JSON.stringify(updatedConfirmedParticipants) !== JSON.stringify(confirmedParticipants)) {
+    if (
+      JSON.stringify(updatedConfirmedParticipants) !==
+      JSON.stringify(confirmedParticipants)
+    ) {
       setConfirmedParticipants(updatedConfirmedParticipants);
       return;
     }
@@ -325,7 +356,10 @@ const AdminDetailPage = () => {
   };
 
   // 参加者ステータス変更処理
-  const handleStatusChange = (participantId: number, newStatus: ParticipantStatus) => {
+  const handleStatusChange = (
+    participantId: number,
+    newStatus: ParticipantStatus
+  ) => {
     try {
       if (newStatus === "cancelled") {
         // 参加確定者のキャンセル処理
@@ -342,7 +376,9 @@ const AdminDetailPage = () => {
         const updatedWaitlistParticipants = waitlistParticipants.filter(
           (p) => p.id !== participantId
         );
-        if (waitlistParticipants.length !== updatedWaitlistParticipants.length) {
+        if (
+          waitlistParticipants.length !== updatedWaitlistParticipants.length
+        ) {
           setWaitlistParticipants(updatedWaitlistParticipants);
           setEventData((prev) => ({
             ...prev,
@@ -351,7 +387,9 @@ const AdminDetailPage = () => {
         }
       } else if (newStatus === "confirmed") {
         // キャンセル待ちから確定へ
-        const participant = waitlistParticipants.find((p) => p.id === participantId);
+        const participant = waitlistParticipants.find(
+          (p) => p.id === participantId
+        );
         if (participant) {
           // キャンセル待ちリストから削除
           const updatedWaitlistParticipants = waitlistParticipants.filter(
@@ -379,7 +417,9 @@ const AdminDetailPage = () => {
   };
 
   // チェックイン済みの人数を計算
-  const checkedInCount = confirmedParticipants.filter((p) => p.isCheckedIn).length;
+  const checkedInCount = confirmedParticipants.filter(
+    (p) => p.isCheckedIn
+  ).length;
 
   return (
     <div className="min-h-screen relative bg-black">
@@ -431,16 +471,22 @@ const AdminDetailPage = () => {
                 <div className="space-y-4">
                   <div>
                     <p className="text-sm text-gray-400 mb-2">参加登録状況</p>
-                    <Progress value={(eventData.entries / eventData.capacity) * 100} />
+                    <Progress
+                      value={(eventData.entries / eventData.capacity) * 100}
+                    />
                   </div>
                   <div className="flex gap-4">
                     <div className="bg-white/5 rounded-lg p-4 flex-1">
                       <p className="text-sm text-gray-400">参加確定</p>
-                      <p className="text-2xl font-bold">{eventData.entries}名</p>
+                      <p className="text-2xl font-bold">
+                        {eventData.entries}名
+                      </p>
                     </div>
                     <div className="bg-white/5 rounded-lg p-4 flex-1">
                       <p className="text-sm text-gray-400">キャンセル待ち</p>
-                      <p className="text-2xl font-bold">{eventData.waitlist}名</p>
+                      <p className="text-2xl font-bold">
+                        {eventData.waitlist}名
+                      </p>
                     </div>
                     <div className="bg-white/5 rounded-lg p-4 flex-1">
                       <p className="text-sm text-gray-400">チェックイン済み</p>

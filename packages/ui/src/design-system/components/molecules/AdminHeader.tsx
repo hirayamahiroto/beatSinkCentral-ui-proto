@@ -36,7 +36,10 @@ const AdminHeader = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
-            <AtomLink href="/admin/list" className="text-xl font-bold text-white">
+            <AtomLink
+              href="/admin/list"
+              className="text-xl font-bold text-white"
+            >
               Event Admin
             </AtomLink>
             <nav className="flex items-center space-x-4">

@@ -192,7 +192,9 @@ const TopPage = () => {
                 <Star className="w-8 h-8 text-pink-400" />
               </div>
               <h3 className="text-xl font-bold mb-4">コミュニティ</h3>
-              <p className="text-gray-400">ビートボックスを愛する人々が集まり、文化を育てる場所</p>
+              <p className="text-gray-400">
+                ビートボックスを愛する人々が集まり、文化を育てる場所
+              </p>
             </div>
           </div>
         </div>
@@ -209,7 +211,11 @@ const TopPage = () => {
                 className="backdrop-blur-md bg-white/5 rounded-2xl overflow-hidden"
               >
                 <div className="relative h-48">
-                  <AtomImage src={event.image} alt={event.title} className="object-cover" />
+                  <AtomImage
+                    src={event.image}
+                    alt={event.title}
+                    className="object-cover"
+                  />
                 </div>
                 <div className="p-6">
                   <span className="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm mb-4">
@@ -228,7 +234,9 @@ const TopPage = () => {
                       </span>
                     </div>
                   </div>
-                  <p className="text-gray-400 mb-6 line-clamp-2">{event.description}</p>
+                  <p className="text-gray-400 mb-6 line-clamp-2">
+                    {event.description}
+                  </p>
                   <div className="space-y-3">
                     <EntryButton
                       capacity={event.capacity}
@@ -286,7 +294,9 @@ const TopPage = () => {
               className="group backdrop-blur-md bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition-all"
             >
               <Play className="w-10 h-10 text-pink-400 mb-4" />
-              <h3 className="text-xl font-bold mb-2">パフォーマーのブッキング</h3>
+              <h3 className="text-xl font-bold mb-2">
+                パフォーマーのブッキング
+              </h3>
               <p className="text-gray-400 mb-4">
                 プレイヤー一覧からブッキングしたいプレイヤーを選択し、ブッキングを行えます。
               </p>
@@ -300,18 +310,32 @@ const TopPage = () => {
       <footer className="bg-black/50 backdrop-blur-sm py-8 border-t border-white/10">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400">© 2024 Beat Sink Central. All rights reserved.</p>
+            <p className="text-gray-400">
+              © 2024 Beat Sink Central. All rights reserved.
+            </p>
             <div className="flex gap-6">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a
+                href="#"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
                 About
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a
+                href="#"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
                 Contact
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a
+                href="#"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
                 Privacy
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a
+                href="#"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
                 Terms
               </a>
             </div>

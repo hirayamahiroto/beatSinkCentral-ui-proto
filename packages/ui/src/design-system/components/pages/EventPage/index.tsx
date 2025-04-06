@@ -2,7 +2,14 @@
 
 import React from "react";
 import { Image as AtomImage } from "@ui/design-system/components/atoms/Image";
-import { MapPin, Users, ArrowRight, Search, Filter, ArrowUpDown } from "lucide-react";
+import {
+  MapPin,
+  Users,
+  ArrowRight,
+  Search,
+  Filter,
+  ArrowUpDown,
+} from "lucide-react";
 import { Link as AtomLink } from "@ui/design-system/components/atoms/Link";
 import Header from "@ui/design-system/components/molecules/header";
 import { useState } from "react";
@@ -38,7 +45,8 @@ const EventPage = () => {
       return matchesSearch && matchesType;
     })
     .sort((a, b) => {
-      const comparison = new Date(a.date).getTime() - new Date(b.date).getTime();
+      const comparison =
+        new Date(a.date).getTime() - new Date(b.date).getTime();
       return sortOrder === "asc" ? comparison : -comparison;
     });
 
@@ -49,7 +57,9 @@ const EventPage = () => {
   const handleFilter = () => {
     const types = ["大会", "ワークショップ", "セミナー", "ショーケース"];
     const currentIndex = types.indexOf(filterType || "");
-    setFilterType(currentIndex === types.length - 1 ? null : types[currentIndex + 1]);
+    setFilterType(
+      currentIndex === types.length - 1 ? null : types[currentIndex + 1]
+    );
   };
 
   return (
@@ -111,10 +121,16 @@ const EventPage = () => {
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <div className="max-w-3xl">
                     <div className="flex items-center gap-4 mb-4">
-                      <span className="px-3 py-1 bg-blue-500 rounded-full text-sm">Featured</span>
-                      <span className="text-gray-300">{featuredEvent.date}</span>
+                      <span className="px-3 py-1 bg-blue-500 rounded-full text-sm">
+                        Featured
+                      </span>
+                      <span className="text-gray-300">
+                        {featuredEvent.date}
+                      </span>
                     </div>
-                    <h2 className="text-3xl font-bold mb-4">{featuredEvent.title}</h2>
+                    <h2 className="text-3xl font-bold mb-4">
+                      {featuredEvent.title}
+                    </h2>
                     <div className="flex items-center gap-6 text-gray-300">
                       <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4" />
@@ -184,8 +200,12 @@ const EventPage = () => {
                           </span>
                           <span className="text-gray-400">{event.date}</span>
                         </div>
-                        <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                        <p className="text-gray-400 mb-4">{event.description}</p>
+                        <h3 className="text-xl font-bold mb-2">
+                          {event.title}
+                        </h3>
+                        <p className="text-gray-400 mb-4">
+                          {event.description}
+                        </p>
                         <div className="flex items-center gap-4 text-sm text-gray-400">
                           <div className="flex items-center gap-1">
                             <MapPin className="w-4 h-4" />
