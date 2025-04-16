@@ -9,7 +9,7 @@ import { usersTable } from "./users";
 
 export const playerProfilesTable = pgTable("player_profiles", {
   id: uuid("id").primaryKey().defaultRandom(),
-  playerId: uuid("player_id")
+  userId: uuid("user_id")
     .notNull()
     .references(() => usersTable.id, { onDelete: "cascade" }),
   displayName: varchar("display_name", { length: 255 }),
@@ -24,7 +24,7 @@ export const playerProfilesRelations = relations(
   playerProfilesTable,
   ({ one }) => ({
     user: one(usersTable, {
-      fields: [playerProfilesTable.playerId],
+      fields: [playerProfilesTable.userId],
       references: [usersTable.id],
     }),
   })

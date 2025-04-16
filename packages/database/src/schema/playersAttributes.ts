@@ -36,7 +36,7 @@ export const playersRelations = relations(playersTable, ({ one, many }) => ({
   }),
   profile: one(playerProfilesTable, {
     fields: [playersTable.id],
-    references: [playerProfilesTable.playerId],
+    references: [playerProfilesTable.userId],
   }),
   mediaLinks: many(playerMediaLinksTable),
   stories: many(playerStoriesTable),
