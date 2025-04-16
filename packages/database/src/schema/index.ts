@@ -1,5 +1,4 @@
 export * from "./users";
-export * from "./players";
 export * from "./playerProfiles";
 export * from "./playerMediaLinks";
 export * from "./playerStories";

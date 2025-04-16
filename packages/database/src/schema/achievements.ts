@@ -14,13 +14,13 @@ import {
   createSelectSchema,
   createUpdateSchema,
 } from "drizzle-zod";
-import { playersTable } from "./players";
+import { usersTable } from "./users";
 
 export const achievementsTable = pgTable("achievements", {
   id: uuid("id").primaryKey().defaultRandom(),
-  playerId: uuid("player_id")
+  userId: uuid("user_id")
     .notNull()
-    .references(() => playersTable.id, { onDelete: "cascade" }),
+    .references(() => usersTable.id, { onDelete: "cascade" }),
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description"),
   link: varchar("link", { length: 500 }),
@@ -31,10 +31,10 @@ export const achievementsTable = pgTable("achievements", {
 
 export const achievementsRelations = relations(
   achievementsTable,
-  ({ one, many }) => ({
-    player: one(playersTable, {
-      fields: [achievementsTable.playerId],
-      references: [playersTable.id],
+  ({ one }) => ({
+    user: one(usersTable, {
+      fields: [achievementsTable.userId],
+      references: [usersTable.id],
     }),
   })
 );

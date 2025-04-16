@@ -5,13 +5,13 @@ import {
   createSelectSchema,
   createUpdateSchema,
 } from "drizzle-zod";
-import { playersTable } from "./players";
+import { usersTable } from "./users";
 
 export const playerProfilesTable = pgTable("player_profiles", {
   id: uuid("id").primaryKey().defaultRandom(),
   playerId: uuid("player_id")
     .notNull()
-    .references(() => playersTable.id, { onDelete: "cascade" }),
+    .references(() => usersTable.id, { onDelete: "cascade" }),
   displayName: varchar("display_name", { length: 255 }),
   profileImageUrl: varchar("profile_image_url", { length: 500 }),
   coverPhotoUrl: varchar("cover_photo_url", { length: 500 }),
@@ -23,9 +23,9 @@ export const playerProfilesTable = pgTable("player_profiles", {
 export const playerProfilesRelations = relations(
   playerProfilesTable,
   ({ one }) => ({
-    player: one(playersTable, {
+    user: one(usersTable, {
       fields: [playerProfilesTable.playerId],
-      references: [playersTable.id],
+      references: [usersTable.id],
     }),
   })
 );
