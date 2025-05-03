@@ -1,1 +1,13 @@
-{"version":"5","dialect":"pg","entries":[]}
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1746251521258,
+      "tag": "0000_nostalgic_human_torch",
+      "breakpoints": true
+    }
+  ]
+}
