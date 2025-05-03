@@ -5,7 +5,6 @@ import {
   createSelectSchema,
   createUpdateSchema,
 } from "drizzle-zod";
-import { playersTable } from "./players";
 import { userRolesTable } from "./userRoles";
 
 export const usersTable = pgTable("users", {
@@ -17,10 +16,6 @@ export const usersTable = pgTable("users", {
 });
 
 export const usersRelations = relations(usersTable, ({ one }) => ({
-  player: one(playersTable, {
-    fields: [usersTable.id],
-    references: [playersTable.userId],
-  }),
   role: one(userRolesTable, {
     fields: [usersTable.roleId],
     references: [userRolesTable.id],
