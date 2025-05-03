@@ -1,6 +1,6 @@
 {
-  "id": "eb09d1cc-3214-4dc9-8f64-cd2238425940",
-  "prevId": "a5976bf1-83cc-4044-823a-e16148fa6404",
+  "id": "c989a440-712d-4ef0-8937-52b84e5a8b45",
+  "prevId": "eb09d1cc-3214-4dc9-8f64-cd2238425940",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -18,6 +18,24 @@
         "role_id": {
           "name": "role_id",
           "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
@@ -53,7 +71,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
