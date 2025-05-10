@@ -151,6 +151,10 @@ export default function Home() {
             >
               イベントを見る
             </Link>
+
+            <button className="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-full font-medium transition-all">
+              <a href="/auth/login">ログイン</a>
+            </button>
           </div>
         </div>
       </section>
