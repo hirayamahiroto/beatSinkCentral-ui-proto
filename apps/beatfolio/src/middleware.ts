@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { authenticationMiddleware } from "./middleware/authentication";
 
 export const config = {
-  matcher: ["/admin", "/admin/:path*"],
+  matcher: ["/", "/admin", "/admin/:path*"],
 };
 
 export async function middleware(req: NextRequest) {
+  console.log("middleware");
   // Basic認証の処理
   if (process.env.ENABLE_BASIC_AUTH === "true") {
     if (

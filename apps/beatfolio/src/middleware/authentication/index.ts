@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server";
 import { auth0 } from "./../../utils/auth0";
 
 export async function authenticationMiddleware(request: NextRequest) {
+  console.log("authenticationMiddleware");
+  console.log(request);
   return await auth0.middleware(request);
 }
 
