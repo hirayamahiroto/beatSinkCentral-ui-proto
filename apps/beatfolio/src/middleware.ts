@@ -6,7 +6,6 @@ export const config = {
 };
 
 export async function middleware(req: NextRequest) {
-  console.log("middleware");
   // Basic認証の処理
   if (process.env.ENABLE_BASIC_AUTH === "true") {
     if (

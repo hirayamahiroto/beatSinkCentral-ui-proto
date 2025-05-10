@@ -9,7 +9,6 @@ export const auth0 = new Auth0Client({
   },
 
   async onCallback(error, context, session) {
-    console.log("onCallback-----------------------");
     // redirect the user to a custom error page
     if (error || !session?.user) {
       return NextResponse.redirect(
