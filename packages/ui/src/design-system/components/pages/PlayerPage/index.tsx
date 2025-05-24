@@ -1,367 +1,350 @@
 "use client";
-import React, { useState } from "react";
-import { Code, Music, Mic, Youtube, Twitter, Instagram } from "lucide-react";
-import { Image as AtomImage } from "@ui/design-system/components/atoms/Image";
-import Header from "@ui/design-system/components/molecules/header";
 
-const PlayerPage = () => {
-  const [activeTab, setActiveTab] = useState("profile");
+import React, { useState, useEffect } from "react";
+import {
+  Play,
+  Users,
+  Music,
+  Code,
+  Trophy,
+  Calendar,
+  ExternalLink,
+} from "lucide-react";
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case "profile":
-        return (
-          <>
-            {/* Introduction Section */}
-            <div className="container mx-auto px-4 py-20">
-              <div className="max-w-4xl mx-auto bg-white/5 rounded-xl p-8 backdrop-blur-sm">
-                <div className="flex flex-col md:flex-row gap-8 items-center">
-                  <div className="relative w-48 h-48">
-                    <AtomImage
-                      src="/image1.jpeg"
-                      alt="Hiroto Profile"
-                      className="object-cover rounded-full border-4 border-purple-500/30"
-                    />
-                  </div>
-                  <div className="flex-1 text-center md:text-left">
-                    <h2 className="text-4xl font-bold text-white mb-4">
-                      HIROTO
-                    </h2>
-                    <p className="text-xl text-gray-300 mb-6">
-                      世界チャンピオンビートボクサー / エンジニア / クリエイター
-                    </p>
-                    <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                      <span className="px-4 py-2 rounded-full bg-blue-500/20 text-blue-300 text-sm">
-                        Beatbox
-                      </span>
-                      <span className="px-4 py-2 rounded-full bg-purple-500/20 text-purple-300 text-sm">
-                        Programming
-                      </span>
-                      <span className="px-4 py-2 rounded-full bg-pink-500/20 text-pink-300 text-sm">
-                        Music Production
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+type PlayerDetailProps = {
+  playerData: {
+    image: string;
+    name: string;
+    tagline: string;
+    badges: { text: string; primary: boolean; icon: string }[];
+    stats: { value: string; label: string }[];
+    story: string;
+    skills: { name: string; description: string }[];
+    performance: {
+      title: string;
+      views: string;
+      duration: string;
+      image: string;
+    }[];
+    activities: {
+      date: string;
+      title: string;
+      description: string;
+    }[];
+  };
+};
 
-            {/* Skills Section */}
-            <div id="skills" className="container mx-auto px-4 pb-20">
-              <h2 className="text-3xl font-bold text-white text-center mb-12">
-                スキル & 経験
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div className="group">
-                  <div className="relative overflow-hidden rounded-xl backdrop-blur-md bg-white/5 p-6 transition-all duration-500 hover:bg-white/10">
-                    <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-500/30 transition-all duration-500" />
-                    <Mic className="w-8 h-8 text-blue-400 mb-4" />
-                    <h3 className="text-xl font-bold text-white mb-2">
-                      Beatboxer
-                    </h3>
-                    <p className="text-gray-400">
-                      Multiple championship titles
-                    </p>
-                    <ul className="mt-4 space-y-2">
-                      <li className="text-sm text-gray-500">
-                        • Grand Beatbox Battle Champion
-                      </li>
-                      <li className="text-sm text-gray-500">
-                        • Asia Beatbox Championship
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+function PlayerPage({ playerData }: PlayerDetailProps) {
+  const [activeTab, setActiveTab] = useState("story");
+  const [isFollowing, setIsFollowing] = useState(false);
 
-                <div className="group">
-                  <div className="relative overflow-hidden rounded-xl backdrop-blur-md bg-white/5 p-6 transition-all duration-500 hover:bg-white/10">
-                    <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl group-hover:bg-purple-500/30 transition-all duration-500" />
-                    <Code className="w-8 h-8 text-purple-400 mb-4" />
-                    <h3 className="text-xl font-bold text-white mb-2">
-                      Engineer
-                    </h3>
-                    <p className="text-gray-400">Full-stack developer</p>
-                    <ul className="mt-4 space-y-2">
-                      <li className="text-sm text-gray-500">
-                        • Web Application Development
-                      </li>
-                      <li className="text-sm text-gray-500">
-                        • Audio Processing
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentSound, setCurrentSound] = useState(0);
 
-                <div className="group">
-                  <div className="relative overflow-hidden rounded-xl backdrop-blur-md bg-white/5 p-6 transition-all duration-500 hover:bg-white/10">
-                    <div className="absolute -top-20 -right-20 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl group-hover:bg-pink-500/30 transition-all duration-500" />
-                    <Music className="w-8 h-8 text-pink-400 mb-4" />
-                    <h3 className="text-xl font-bold text-white mb-2">
-                      Producer
-                    </h3>
-                    <p className="text-gray-400">Music & Video Creation</p>
-                    <ul className="mt-4 space-y-2">
-                      <li className="text-sm text-gray-500">
-                        • Original Music Production
-                      </li>
-                      <li className="text-sm text-gray-500">
-                        • Video Content Creation
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
+  const soundSamples = [
+    {
+      title: "シグネチャーサウンド",
+      description: "HIROTOのトレードマークテクニック",
+    },
+    { title: "ドラムンベース", description: "高速リズムパターン" },
+    { title: "メロディック", description: "歌声とビートの融合" },
+  ];
 
-            {/* Statistics Section */}
-            <div className="container mx-auto px-4 pb-20">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-                <div className="bg-white/5 rounded-xl p-6 text-center backdrop-blur-sm">
-                  <div className="text-4xl font-bold text-blue-400 mb-2">
-                    10+
-                  </div>
-                  <div className="text-gray-400">大会優勝</div>
-                </div>
-                <div className="bg-white/5 rounded-xl p-6 text-center backdrop-blur-sm">
-                  <div className="text-4xl font-bold text-purple-400 mb-2">
-                    50+
-                  </div>
-                  <div className="text-gray-400">制作楽曲</div>
-                </div>
-                <div className="bg-white/5 rounded-xl p-6 text-center backdrop-blur-sm">
-                  <div className="text-4xl font-bold text-pink-400 mb-2">
-                    100K+
-                  </div>
-                  <div className="text-gray-400">総視聴回数</div>
-                </div>
-                <div className="bg-white/5 rounded-xl p-6 text-center backdrop-blur-sm">
-                  <div className="text-4xl font-bold text-green-400 mb-2">
-                    5+
-                  </div>
-                  <div className="text-gray-400">開発アプリ</div>
-                </div>
-              </div>
-            </div>
+  const tabs = [
+    { id: "story", label: "ストーリー" },
+    { id: "skills", label: "スキル" },
+    { id: "performance", label: "パフォーマンス" },
+    { id: "activities", label: "活動＆実績" },
+  ];
 
-            {/* Latest Projects */}
-            <div className="container mx-auto px-4 pb-20">
-              <h2 className="text-3xl font-bold text-white text-center mb-8 sm:mb-12">
-                最新プロジェクト
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto px-2 sm:px-4">
-                <div className="group relative overflow-hidden rounded-xl aspect-[4/3] sm:aspect-video bg-white/5 backdrop-blur-sm">
-                  <AtomImage
-                    src="/image1.jpeg"
-                    alt="Latest Performance"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4 sm:p-6">
-                    <div>
-                      <h3 className="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">
-                        最新パフォーマンス
-                      </h3>
-                      <p className="text-sm sm:text-base text-gray-300">
-                        GBB 2023 世界大会優勝
-                      </p>
-                    </div>
-                  </div>
-                </div>
+  const getIconForBadge = (iconName: string) => {
+    const iconMap: { [key: string]: React.ReactNode } = {
+      trophy: <Trophy className="w-4 h-4" />,
+      code: <Code className="w-4 h-4" />,
+      music: <Music className="w-4 h-4" />,
+      users: <Users className="w-4 h-4" />,
+    };
+    return iconMap[iconName] || <Trophy className="w-4 h-4" />;
+  };
 
-                <div className="group relative overflow-hidden rounded-xl aspect-[4/3] sm:aspect-video bg-white/5 backdrop-blur-sm">
-                  <AtomImage
-                    src="/image2.jpeg"
-                    alt="Latest Music"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4 sm:p-6">
-                    <div>
-                      <h3 className="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">
-                        最新楽曲
-                      </h3>
-                      <p className="text-sm sm:text-base text-gray-300">
-                        オリジナル楽曲「FLOW」
-                      </p>
-                    </div>
-                  </div>
-                </div>
+  const WaveBar = ({ delay }: { delay: number }) => (
+    <div
+      className={`bg-purple-500 w-1 rounded-full ${isPlaying ? "animate-pulse" : ""}`}
+      style={{
+        height: isPlaying ? `${Math.random() * 60 + 20}%` : "10%",
+        animationDelay: `${delay}s`,
+        transition: "height 0.3s ease",
+      }}
+    />
+  );
 
-                <div className="group relative overflow-hidden rounded-xl aspect-[4/3] sm:aspect-video bg-white/5 backdrop-blur-sm">
-                  <AtomImage
-                    src="/image3.jpeg"
-                    alt="Latest App"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4 sm:p-6">
-                    <div>
-                      <h3 className="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">
-                        最新アプリ
-                      </h3>
-                      <p className="text-sm sm:text-base text-gray-300">
-                        ビートボックス練習アプリ
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        );
-      case "Records":
-        return (
-          <div className="container mx-auto px-4 py-20">
-            <h2 className="text-3xl font-bold text-white text-center mb-12">
-              戦績
-            </h2>
-            <div className="max-w-4xl mx-auto space-y-6">
-              <div className="bg-white/5 rounded-xl p-6">
-                <h3 className="text-xl font-bold text-white mb-4">2023</h3>
-                <ul className="space-y-3">
-                  <li className="text-gray-300">
-                    • Grand Beatbox Battle World Champion
-                  </li>
-                  <li className="text-gray-300">
-                    • Asia Beatbox Championship Winner
-                  </li>
-                </ul>
-              </div>
-              {/* 他の年の戦績も同様に追加可能 */}
-            </div>
-          </div>
-        );
-      case "contact":
-        return (
-          <div className="container mx-auto px-4 py-20">
-            <h2 className="text-3xl font-bold text-white text-center mb-12">
-              Contact
-            </h2>
-            <div className="max-w-2xl mx-auto bg-white/5 rounded-xl p-8">
-              <form className="space-y-6">
-                <div>
-                  <label className="block text-gray-300 mb-2">Name</label>
-                  <input
-                    type="text"
-                    className="w-full bg-white/10 rounded-lg p-3 text-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-300 mb-2">Email</label>
-                  <input
-                    type="email"
-                    className="w-full bg-white/10 rounded-lg p-3 text-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-300 mb-2">Message</label>
-                  <textarea className="w-full bg-white/10 rounded-lg p-3 text-white h-32"></textarea>
-                </div>
-                <button className="w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white py-3 rounded-lg">
-                  Send Message
-                </button>
-              </form>
-            </div>
-          </div>
-        );
-    }
+  const playSound = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const nextSound = () => {
+    setCurrentSound((prev) => (prev + 1) % soundSamples.length);
+  };
+
+  const prevSound = () => {
+    setCurrentSound(
+      (prev) => (prev - 1 + soundSamples.length) % soundSamples.length
+    );
   };
 
   return (
-    <div className="min-h-screen relative bg-black">
-      <Header />
-      <section className="h-screen relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-pink-900/20 mix-blend-overlay" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.5)_100%)] bg-black opacity-50" />
-          <AtomImage
-            src="/image1.jpeg"
-            alt="Background"
-            width={1920}
-            height={1080}
+    <div className="min-h-screen bg-gray-900 text-white">
+      <header className="fixed top-0 w-full bg-black/70 backdrop-blur-md z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="text-2xl font-bold text-purple-500">
+              BeatboxCentral
+            </div>
+            <nav className="hidden md:flex space-x-8">
+              <a
+                href="#"
+                className="text-white hover:text-purple-500 transition-colors"
+              >
+                ホーム
+              </a>
+              <a
+                href="#"
+                className="text-white hover:text-purple-500 transition-colors"
+              >
+                プレイヤー
+              </a>
+              <a
+                href="#"
+                className="text-white hover:text-purple-500 transition-colors"
+              >
+                イベント
+              </a>
+              <a
+                href="#"
+                className="text-white hover:text-purple-500 transition-colors"
+              >
+                コミュニティ
+              </a>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <div className="relative h-[80vh] overflow-hidden flex items-end">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/80">
+          <img
+            src={playerData.image}
+            alt="Hero Background"
             className="w-full h-full object-cover"
           />
         </div>
 
-        <div className="relative h-full flex flex-col items-center justify-center px-4">
-          <div className="absolute bottom-32 right-8 flex flex-col items-end">
-            <div className="flex gap-4 mb-4">
-              <a
-                href="https://youtube.com/@your-channel"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#FF0000] hover:text-[#FF0000]/80 transition-colors"
-              >
-                <Youtube className="w-5 h-5" />
-              </a>
-              <a
-                href="https://twitter.com/@your-handle"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#1DA1F2] hover:text-[#1DA1F2]/80 transition-colors"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a
-                href="https://instagram.com/@your-handle"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#E4405F] hover:text-[#E4405F]/80 transition-colors"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+          <div className="flex flex-col lg:flex-row items-end gap-8 items-center">
+            <div className="flex-1 text-center lg:text-left">
+              <h1 className="text-4xl md:text-5xl font-bold mb-2">
+                {playerData.name}
+              </h1>
+              <p className="text-lg text-gray-300 mb-4">{playerData.tagline}</p>
+
+              <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-4">
+                {playerData.badges.map((badge, index) => (
+                  <span
+                    key={index}
+                    className={`px-4 py-1 rounded-full text-sm flex items-center gap-2 ${
+                      badge.primary
+                        ? "bg-purple-500 text-white"
+                        : "bg-gray-700 text-gray-300"
+                    }`}
+                  >
+                    {getIconForBadge(badge.icon)}
+                    {badge.text}
+                  </span>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                {playerData.stats.map((stat, index) => (
+                  <div key={index} className="text-center">
+                    <div className="text-2xl font-bold text-purple-500">
+                      {stat.value}
+                    </div>
+                    <div className="text-sm text-gray-400">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <h1 className="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
-              HIROTO
-            </h1>
-            <span className="text-xl text-gray-300 tracking-wide mt-2">
-              Beatboxer / Engineer / Creator
-            </span>
-          </div>
-          <button className="animate-bounce cursor-pointer bg-transparent border border-white/20 rounded-full p-3 hover:bg-white/10 transition-colors duration-300">
-            <svg
-              className="w-6 h-6 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black to-transparent" />
-      </section>
-
-      {/* Tab Navigation */}
-      <div className="sticky top-0 bg-black/80 backdrop-blur-sm border-b border-white/10 z-10">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-center space-x-8">
-            {["profile", "Records", "contact"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`py-4 px-6 text-lg transition-colors ${
-                  activeTab === tab
-                    ? "text-white border-b-2 border-blue-500"
-                    : "text-gray-400 hover:text-white"
-                }`}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
           </div>
         </div>
       </div>
 
-      {renderTabContent()}
+      <div className="relative -mt-6 mx-auto max-w-5xl px-4">
+        <div className="bg-gray-800 rounded-xl p-4 flex items-center gap-4 shadow-2xl">
+          <button
+            onClick={playSound}
+            className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors flex-shrink-0"
+          >
+            <Play className="w-5 h-5 text-white ml-0.5" />
+          </button>
+
+          <div className="flex-1">
+            <div className="font-semibold">
+              {soundSamples[currentSound].title}
+            </div>
+            <div className="text-sm text-gray-400">
+              {soundSamples[currentSound].description}
+            </div>
+          </div>
+
+          <div className="hidden md:flex items-center gap-1 h-10 px-4">
+            <div className=" md:flex items-center gap-1 h-10 px-4">
+              {[...Array(20)].map((_, i) => (
+                <WaveBar key={i} delay={i * 0.1} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="sticky top-20 bg-gray-900 py-4 mb-8 z-40">
+          <div className="flex space-x-6 border-b border-gray-700 pb-2 overflow-x-auto">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2 whitespace-nowrap font-medium relative transition-colors ${
+                  activeTab === tab.id
+                    ? "text-purple-500"
+                    : "text-gray-400 hover:text-white"
+                }`}
+              >
+                {tab.label}
+                {activeTab === tab.id && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-500" />
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {activeTab === "story" && (
+          <section className="mb-16">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+              <Calendar className="w-6 h-6 text-purple-500" />
+              ビートボクサーとしての旅
+            </h2>
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="flex-1 bg-gray-800 rounded-xl p-6">
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>{playerData.story}</p>
+                </div>
+              </div>
+              <div className="w-full lg:w-80 h-96 rounded-xl overflow-hidden flex-shrink-0">
+                <img
+                  src={playerData.image}
+                  alt={`${playerData.name} at competition`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          </section>
+        )}
+
+        {activeTab === "skills" && (
+          <section className="mb-16">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+              <Code className="w-6 h-6 text-purple-500" />
+              スキル
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {playerData.skills.map((skill, index) => (
+                <div key={index} className="bg-gray-800 rounded-xl p-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center text-purple-500">
+                      <Music className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold">{skill.name}</h3>
+                      <p className="text-sm text-gray-400">
+                        {skill.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {activeTab === "performance" && (
+          <section className="mb-16">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+              <Play className="w-6 h-6 text-purple-500" />
+              パフォーマンス
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {playerData.performance.map((performance, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-800 rounded-xl overflow-hidden group cursor-pointer"
+                >
+                  <div className="relative h-48 bg-gray-700 overflow-hidden">
+                    <img
+                      src={performance.image}
+                      alt={performance.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-colors">
+                      <div className="w-16 h-16 bg-purple-500/80 rounded-full flex items-center justify-center group-hover:bg-purple-500 transition-colors">
+                        <Play className="w-8 h-8 text-white ml-1" />
+                      </div>
+                    </div>
+                    <div className="absolute bottom-2 right-2 bg-black/70 text-white text-sm px-2 py-1 rounded">
+                      {performance.duration}
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-bold text-lg mb-2">
+                      {performance.title}
+                    </h3>
+                    <div className="flex justify-between items-center text-gray-400 text-sm">
+                      <span>{performance.views} views</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {activeTab === "activities" && (
+          <section className="mb-16">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+              <Trophy className="w-6 h-6 text-purple-500" />
+              活動＆実績
+            </h2>
+            <div className="relative pl-8">
+              <div className="absolute left-1 top-0 bottom-0 w-0.5 bg-gray-700" />
+              {playerData.activities.map((activity, index) => (
+                <div key={index} className="relative mb-8 last:mb-0">
+                  <div className="absolute -left-7 w-3 h-3 bg-purple-500 rounded-full top-1.5" />
+                  <div className="bg-gray-800 rounded-xl p-6">
+                    <div className="text-sm text-gray-400 mb-2">
+                      {activity.date}
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">{activity.title}</h3>
+                    <p className="text-gray-300">{activity.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
     </div>
   );
-};
+}
 
-export default PlayerPage;
+export { PlayerPage };
