@@ -7,6 +7,7 @@ export interface Player {
   rank: string;
   speciality: string;
   image: string;
+  audioFile?: string;
 }
 
 export const players: Player[] = [
