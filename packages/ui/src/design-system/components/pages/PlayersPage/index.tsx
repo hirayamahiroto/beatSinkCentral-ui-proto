@@ -284,7 +284,7 @@ function PlayersPage({ players }: PlayersPageProps) {
             Discover Beatbox Artists
           </h1>
           <p className="text-gray-400 text-lg md:text-xl max-w-2xl">
-            新たな可能性を秘めたBeatboxerを発掘して、よりBeatboxの世界を広げていこう
+            発見が歴史を創り、未来を共創する。 次世代が、今始動する
           </p>
         </div>
 
