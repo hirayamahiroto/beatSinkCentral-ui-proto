@@ -1,4 +1,3 @@
-import React from "react";
 import { Badge } from "@ui/design-system/components/atoms/Badge";
 import { Button } from "@ui/design-system/components/atoms/Button";
 import { Card } from "@ui/design-system/components/atoms/Card";
@@ -38,18 +37,12 @@ type AudienceSupportLink = {
 
 type OfferClickPosition = "hero" | "after-story";
 
-type StoryScrollDepth = 25 | 50 | 75 | 100;
-
-const STORY_SCROLL_DEPTHS: readonly StoryScrollDepth[] = [25, 50, 75, 100];
-
-const ABOVE_VIEWPORT_BOTTOM_ROOT_MARGIN = "100000px 0px 0px 0px";
-
-const reachedStoryScrollDepths = (
-  readChapterCount: number,
-  chapterCount: number,
-): StoryScrollDepth[] => {
-  const readPercent = Math.floor((readChapterCount * 100) / chapterCount);
-  return STORY_SCROLL_DEPTHS.filter((depth) => depth <= readPercent);
+const getVisibleAudienceStoryChapters = (
+  chapters: AudienceStoryChapter[],
+  expanded: boolean,
+): AudienceStoryChapter[] => {
+  const [firstChapter] = chapters;
+  return expanded || firstChapter === undefined ? chapters : [firstChapter];
 };
 
 export type {
@@ -60,6 +53,7 @@ export type {
   AudienceSupportLink,
   OfferClickPosition,
 };
+export { getVisibleAudienceStoryChapters };
 
 type AudienceArtistProfileProps = {
   name: string;
@@ -67,15 +61,19 @@ type AudienceArtistProfileProps = {
   imageUrl: string | null;
   genres: string[];
   storyChapters: AudienceStoryChapter[];
+  storyExpanded: boolean;
+  onExpandStory: () => void;
+  onChapterEndRef: (index: number, element: HTMLDivElement | null) => void;
   translation: string | null;
   listeningPoint: AudienceListeningPoint | null;
   offer: AudienceOffer | null;
   supportLinks: AudienceSupportLink[];
-  onStoryExpand: () => void;
-  onStoryScroll: (depth: StoryScrollDepth) => void;
   onOfferClick: (position: OfferClickPosition) => void;
   onSupportClick: (label: string) => void;
-  onNotifySubscribe: (email: string) => void;
+  email: string;
+  onEmailChange: (email: string) => void;
+  subscribed: boolean;
+  onSubmitSubscription: () => void;
 };
 
 export const AudienceArtistProfile = ({
@@ -84,71 +82,25 @@ export const AudienceArtistProfile = ({
   imageUrl,
   genres,
   storyChapters,
+  storyExpanded,
+  onExpandStory,
+  onChapterEndRef,
   translation,
   listeningPoint,
   offer,
   supportLinks,
-  onStoryExpand,
-  onStoryScroll,
   onOfferClick,
   onSupportClick,
-  onNotifySubscribe,
+  email,
+  onEmailChange,
+  subscribed,
+  onSubmitSubscription,
 }: AudienceArtistProfileProps) => {
-  const [storyExpanded, setStoryExpanded] = React.useState(false);
-  const [email, setEmail] = React.useState("");
-  const [subscribed, setSubscribed] = React.useState(false);
-
-  const [firstChapter, ...restChapters] = storyChapters;
-  const visibleChapters =
-    storyExpanded || firstChapter === undefined
-      ? storyChapters
-      : [firstChapter];
-
-  const chapterEndRefs = React.useRef<(HTMLDivElement | null)[]>([]);
-  const firedDepthsRef = React.useRef<Set<StoryScrollDepth>>(new Set());
-
-  React.useEffect(() => {
-    if (typeof IntersectionObserver === "undefined") return;
-    const chapterCount = storyChapters.length;
-    if (chapterCount === 0) return;
-
-    const indexByElement = new Map<Element, number>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const index = indexByElement.get(entry.target);
-          if (!entry.isIntersecting || index === undefined) return;
-          reachedStoryScrollDepths(index + 1, chapterCount).forEach((depth) => {
-            if (firedDepthsRef.current.has(depth)) return;
-            firedDepthsRef.current.add(depth);
-            onStoryScroll(depth);
-          });
-        });
-      },
-      { rootMargin: ABOVE_VIEWPORT_BOTTOM_ROOT_MARGIN },
-    );
-
-    chapterEndRefs.current
-      .slice(0, visibleChapters.length)
-      .forEach((element, index) => {
-        if (element === null) return;
-        indexByElement.set(element, index);
-        observer.observe(element);
-      });
-
-    return () => observer.disconnect();
-  }, [onStoryScroll, storyChapters.length, visibleChapters.length]);
-
-  const expandStory = () => {
-    setStoryExpanded(true);
-    onStoryExpand();
-  };
-
-  const submitSubscription = () => {
-    onNotifySubscribe(email);
-    setEmail("");
-    setSubscribed(true);
-  };
+  const visibleChapters = getVisibleAudienceStoryChapters(
+    storyChapters,
+    storyExpanded,
+  );
+  const restChapterCount = storyChapters.length - visibleChapters.length;
 
   return (
     <div className="relative">
@@ -215,16 +167,14 @@ export const AudienceArtistProfile = ({
                     <Typography variant="p">{chapter.body}</Typography>
                   </Stack>
                   <div
-                    ref={(element) => {
-                      chapterEndRefs.current[index] = element;
-                    }}
+                    ref={(element) => onChapterEndRef(index, element)}
                     aria-hidden="true"
                   />
                 </div>
               ))}
-              {!storyExpanded && restChapters.length > 0 && (
+              {!storyExpanded && restChapterCount > 0 && (
                 <div>
-                  <Button variant="outline" onClick={expandStory}>
+                  <Button variant="outline" onClick={onExpandStory}>
                     続きを読む
                   </Button>
                 </div>
@@ -318,10 +268,10 @@ export const AudienceArtistProfile = ({
                   type="email"
                   value={email}
                   placeholder="メールアドレス"
-                  onChange={(event) => setEmail(event.target.value)}
+                  onChange={(event) => onEmailChange(event.target.value)}
                   className="max-w-xs"
                 />
-                <Button disabled={email === ""} onClick={submitSubscription}>
+                <Button disabled={email === ""} onClick={onSubmitSubscription}>
                   受け取る
                 </Button>
               </div>
