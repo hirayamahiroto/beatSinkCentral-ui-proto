@@ -16,7 +16,7 @@ const player = {
   tagline: "口ひとつで、フロアを揺らす。",
   imageUrl: "https://example.com/saku.jpg",
   genres: ["Beatbox"],
-  storyChapters: [{ question: "Story", body: "始めたきっかけ。" }],
+  storyChapters: [{ question: "始まりの話", body: "始めたきっかけ。" }],
   translation: null,
   listeningPoint: null,
   offer: null,

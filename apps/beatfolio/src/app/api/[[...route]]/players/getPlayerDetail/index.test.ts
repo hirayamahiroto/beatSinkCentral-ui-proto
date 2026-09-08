@@ -6,11 +6,13 @@ import { handleBffError } from "../../../../../errorMap";
 
 const profileGet = vi.fn();
 const linkTypesGet = vi.fn();
+const storyQuestionsGet = vi.fn();
 
 const apiClient = {
   api: {
     artists: { ":handle": { $get: profileGet } },
     "link-types": { $get: linkTypesGet },
+    "story-questions": { $get: storyQuestionsGet },
   },
 };
 
@@ -64,13 +66,20 @@ const linkTypes = [
   { type: "other", label: "その他" },
 ];
 
+const storyQuestions = [
+  { code: "beginning", label: "始まりの話", required: true },
+  { code: "turning_point", label: "転機になったこと", required: false },
+  { code: "concept", label: "何を表現したいのか", required: false },
+];
+
 describe("GET /players/:handle", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     linkTypesGet.mockResolvedValue(jsonResponse({ linkTypes }));
+    storyQuestionsGet.mockResolvedValue(jsonResponse({ storyQuestions }));
   });
 
-  it("handle を api-server へ渡し、§5-2 契約（AudienceArtistProfile props）へ整形して返す（章は暫定で1本のテキストに結合）", async () => {
+  it("handle を api-server へ渡し、§5-2 契約（AudienceArtistProfile props）へ整形して返す（章の問いは問いマスタのラベルへ解決）", async () => {
     profileGet.mockResolvedValue(jsonResponse(publishedProfile));
 
     const res = await createApp().request("/saku", { method: "GET" });
@@ -84,7 +93,8 @@ describe("GET /players/:handle", () => {
       imageUrl: "https://example.com/saku.jpg",
       genres: ["Beatbox"],
       storyChapters: [
-        { question: "Story", body: "始めたきっかけ。\n\n表現したいこと。" },
+        { question: "始まりの話", body: "始めたきっかけ。" },
+        { question: "何を表現したいのか", body: "表現したいこと。" },
       ],
       translation: null,
       listeningPoint: null,
@@ -125,6 +135,17 @@ describe("GET /players/:handle", () => {
 
   it("api-server が 5xx で失敗したら 502 を返す", async () => {
     profileGet.mockResolvedValue(
+      jsonResponse({ error: "Internal" }, { ok: false, status: 500 }),
+    );
+
+    const res = await createApp().request("/saku", { method: "GET" });
+
+    expect(res.status).toBe(502);
+  });
+
+  it("問いマスタの取得が失敗したら 502 を返す", async () => {
+    profileGet.mockResolvedValue(jsonResponse(publishedProfile));
+    storyQuestionsGet.mockResolvedValue(
       jsonResponse({ error: "Internal" }, { ok: false, status: 500 }),
     );
 
