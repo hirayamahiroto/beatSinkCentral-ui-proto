@@ -4,8 +4,7 @@ import type {
   CreateProfileLinkError,
   ProfileLinkInput,
 } from "../../../domain/artistProfiles/valueObjects/profileLink";
-import type { ArtistWriteCapabilities } from "../../capabilities";
-import { loadOrDraftMyProfile } from "../loadOrDraftMyProfile";
+import type { ArtistProfileWriteCapabilities } from "../../capabilities";
 import { persistMyProfile } from "../persistMyProfile";
 import { type Result, ok } from "../../../utils/result";
 
@@ -20,8 +19,8 @@ export type ReplaceMyLinksOutput = {
 export type ReplaceMyLinksError = CreateProfileLinkError;
 
 type ReplaceMyLinksCaps = Pick<
-  ArtistWriteCapabilities,
-  "actor" | "artistProfiles"
+  ArtistProfileWriteCapabilities,
+  "profile" | "artistProfiles"
 >;
 
 export const replaceMyLinks = async (
@@ -31,8 +30,10 @@ export const replaceMyLinks = async (
   const links = createProfileLinks(input.links);
   if (!links.ok) return links;
 
-  const profile = await loadOrDraftMyProfile(caps);
-  const saved = await persistMyProfile(caps, profile.replaceLinks(links.value));
+  const saved = await persistMyProfile(
+    caps,
+    caps.profile.replaceLinks(links.value),
+  );
 
   return ok({ links: saved.getLinks() });
 };

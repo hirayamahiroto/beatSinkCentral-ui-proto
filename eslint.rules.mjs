@@ -479,10 +479,43 @@ const usecaseCapabilityParameterRule = {
   },
 };
 
+const USECASE_SUBJECT_NOT_FOUND_MESSAGE =
+  "主体（User / Artist / ArtistProfile 等）の NotFound エラーは usecases/authorization/resolution だけが生成する。" +
+  "usecase は主体の有無を判定せず、経路モジュールが解決済みの主体を権能で受け取る。";
+
+// `create*NotFoundError` の import 元。型（`import type` / inline `type`）の参照は
+// 経路モジュールの Error 型合成に必要なので許し、値の import（= 生成）だけを見る。
+const SUBJECT_NOT_FOUND_ERROR_SOURCE = /(^|\/)errors\/[A-Za-z]*NotFound$/;
+
+const isSubjectNotFoundErrorSource = (source) =>
+  typeof source === "string" && SUBJECT_NOT_FOUND_ERROR_SOURCE.test(source);
+
+const hasValueSpecifier = (node) =>
+  node.importKind !== "type" &&
+  node.specifiers.some((specifier) => specifier.importKind !== "type");
+
+const usecaseSubjectNotFoundRule = {
+  meta: {
+    type: "problem",
+    docs: { description: USECASE_SUBJECT_NOT_FOUND_MESSAGE },
+    schema: [],
+  },
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        if (!isSubjectNotFoundErrorSource(node.source.value)) return;
+        if (!hasValueSpecifier(node)) return;
+        context.report({ node, message: USECASE_SUBJECT_NOT_FOUND_MESSAGE });
+      },
+    };
+  },
+};
+
 const usecaseCapabilityPlugin = {
   rules: {
     "usecase-capability-boundary": usecaseCapabilityBoundaryRule,
     "usecase-capability-parameter": usecaseCapabilityParameterRule,
+    "usecase-subject-not-found": usecaseSubjectNotFoundRule,
   },
 };
 
@@ -492,6 +525,16 @@ export const usecaseCapabilityRules = (files) => ({
   rules: {
     "local/usecase-capability-boundary": "error",
     "local/usecase-capability-parameter": "error",
+    "local/usecase-subject-not-found": "error",
+  },
+});
+
+// 主体の解決結果を失敗に畳む側（resolution）だけが NotFound を生成する。
+export const usecaseSubjectNotFoundExempt = (files) => ({
+  files,
+  plugins: { local: usecaseCapabilityPlugin },
+  rules: {
+    "local/usecase-subject-not-found": "off",
   },
 });
 
@@ -640,7 +683,10 @@ const hookHasTestRule = {
   },
   create(context) {
     const filename = context.filename;
-    if (basename(filename) !== "index.ts" && basename(filename) !== "index.tsx") {
+    if (
+      basename(filename) !== "index.ts" &&
+      basename(filename) !== "index.tsx"
+    ) {
       return {};
     }
 

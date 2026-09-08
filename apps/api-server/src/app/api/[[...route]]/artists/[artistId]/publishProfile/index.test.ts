@@ -32,10 +32,21 @@ const mockResolveActorState = vi.fn();
 vi.mock("../../../../../../infrastructure/capabilities", () => ({
   getCapabilityDeps: () => ({
     resolveActorState: (subId: string) => mockResolveActorState(subId),
-    runWithArtistWriteCapabilities: (
-      a: unknown,
+    runWithArtistProfileResolutionCapabilities: async (
+      a: { artist: { getArtistId: () => string } },
       work: (caps: unknown) => Promise<unknown>,
-    ) => work({ actor: a, artistProfiles: mockArtistProfiles }),
+    ) => {
+      const profile = await mockArtistProfiles.findByArtistId(
+        a.artist.getArtistId(),
+      );
+      return work({
+        actor: a,
+        profileResolution: profile
+          ? { status: "existing", profile }
+          : { status: "noProfile" },
+        artistProfiles: mockArtistProfiles,
+      });
+    },
   }),
 }));
 

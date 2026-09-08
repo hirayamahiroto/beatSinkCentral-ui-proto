@@ -2,8 +2,7 @@ import {
   createImageUrl,
   type InvalidImageUrlFormatError,
 } from "../../../domain/artistProfiles/valueObjects/imageUrl";
-import type { ArtistWriteCapabilities } from "../../capabilities";
-import { loadOrDraftMyProfile } from "../loadOrDraftMyProfile";
+import type { ArtistProfileWriteCapabilities } from "../../capabilities";
 import { persistMyProfile } from "../persistMyProfile";
 import { type Result, ok } from "../../../utils/result";
 
@@ -18,8 +17,8 @@ export type ChangeMyProfileImageOutput = {
 export type ChangeMyProfileImageError = InvalidImageUrlFormatError;
 
 type ChangeMyProfileImageCaps = Pick<
-  ArtistWriteCapabilities,
-  "actor" | "artistProfiles"
+  ArtistProfileWriteCapabilities,
+  "profile" | "artistProfiles"
 >;
 
 export const changeMyProfileImage = async (
@@ -29,8 +28,7 @@ export const changeMyProfileImage = async (
   const imageUrl = createImageUrl(input.imageUrl);
   if (!imageUrl.ok) return imageUrl;
 
-  const profile = await loadOrDraftMyProfile(caps);
-  await persistMyProfile(caps, profile.changeImage(imageUrl.value));
+  await persistMyProfile(caps, caps.profile.changeImage(imageUrl.value));
 
   return ok({ imageUrl: imageUrl.value.value });
 };

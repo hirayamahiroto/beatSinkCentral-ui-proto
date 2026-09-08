@@ -1,8 +1,11 @@
 import type { ArtistProfile } from "../../../domain/artistProfiles/entities";
 import { enforcePublishInvariant } from "../../../domain/artistProfiles/policies/publishability";
-import type { ArtistWriteCapabilities } from "../../capabilities";
+import type { ArtistProfileWriteCapabilities } from "../../capabilities";
 
-type PersistMyProfileCaps = Pick<ArtistWriteCapabilities, "artistProfiles">;
+type PersistMyProfileCaps = Pick<
+  ArtistProfileWriteCapabilities,
+  "artistProfiles"
+>;
 
 export const persistMyProfile = (
   caps: PersistMyProfileCaps,

@@ -1,13 +1,9 @@
 import {
-  createArtistProfileNotFoundError,
-  type ArtistProfileNotFoundError,
-} from "../../../domain/artistProfiles/errors/artistProfileNotFound";
-import {
   ensurePublishable,
   type ProfileNotPublishableError,
 } from "../../../domain/artistProfiles/policies/publishability";
-import type { ArtistWriteCapabilities } from "../../capabilities";
-import { type Result, ok, err } from "../../../utils/result";
+import type { ArtistProfileWriteCapabilities } from "../../capabilities";
+import { type Result, ok } from "../../../utils/result";
 
 export type PublishMyProfileInput = {
   published: boolean;
@@ -17,31 +13,24 @@ export type PublishMyProfileOutput = {
   published: boolean;
 };
 
-export type PublishMyProfileError =
-  | ArtistProfileNotFoundError
-  | ProfileNotPublishableError;
+export type PublishMyProfileError = ProfileNotPublishableError;
 
 type PublishMyProfileCaps = Pick<
-  ArtistWriteCapabilities,
-  "actor" | "artistProfiles"
+  ArtistProfileWriteCapabilities,
+  "profile" | "artistProfiles"
 >;
 
 export const publishMyProfile = async (
   caps: PublishMyProfileCaps,
   input: PublishMyProfileInput,
 ): Promise<Result<PublishMyProfileOutput, PublishMyProfileError>> => {
-  const artistId = caps.actor.artist.getArtistId();
-
-  const profile = await caps.artistProfiles.findByArtistId(artistId);
-  if (!profile) return err(createArtistProfileNotFoundError());
-
   if (input.published) {
-    const publishable = ensurePublishable(profile);
+    const publishable = ensurePublishable(caps.profile);
     if (!publishable.ok) return publishable;
   }
 
   const saved = await caps.artistProfiles.setPublished({
-    artistId,
+    artistId: caps.profile.getArtistId(),
     published: input.published,
   });
 

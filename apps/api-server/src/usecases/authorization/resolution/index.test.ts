@@ -1,6 +1,15 @@
 import { describe, it, expect } from "vitest";
-import { toAddressedActor, toAddressedUser } from "./index";
-import { testUser as user, testArtist as artist } from "../testDoubles";
+import {
+  toAddressedActor,
+  toAddressedUser,
+  toEditableProfile,
+  toExistingProfile,
+} from "./index";
+import {
+  testUser as user,
+  testArtist as artist,
+  testDraftProfile as profile,
+} from "../testDoubles";
 
 describe("toAddressedActor", () => {
   it("未登録は UserNotFoundError に畳み込む", () => {
@@ -84,5 +93,43 @@ describe("toAddressedUser", () => {
     if (!result.ok) {
       expect(result.error.type).toBe("UserNotFoundError");
     }
+  });
+});
+
+describe("toEditableProfile", () => {
+  it("プロフィールが無ければ指定した artistId の非公開下書きを作る", () => {
+    const editable = toEditableProfile({ status: "noProfile" }, "artist-1");
+
+    expect(editable.getArtistId()).toBe("artist-1");
+    expect(editable.isPublished()).toBe(false);
+    expect(editable.getName()).toBeNull();
+    expect(editable.getChapters()).toEqual([]);
+    expect(editable.getLinks()).toEqual([]);
+  });
+
+  it("既存のプロフィールはそのまま返す", () => {
+    const editable = toEditableProfile(
+      { status: "existing", profile },
+      "artist-1",
+    );
+
+    expect(editable).toBe(profile);
+  });
+});
+
+describe("toExistingProfile", () => {
+  it("プロフィールが無ければ ArtistProfileNotFoundError に畳み込む", () => {
+    const result = toExistingProfile({ status: "noProfile" });
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.type).toBe("ArtistProfileNotFoundError");
+    }
+  });
+
+  it("既存のプロフィールは ok で返す", () => {
+    const result = toExistingProfile({ status: "existing", profile });
+
+    expect(result).toStrictEqual({ ok: true, value: profile });
   });
 });

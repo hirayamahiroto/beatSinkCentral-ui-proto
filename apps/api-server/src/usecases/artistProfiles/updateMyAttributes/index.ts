@@ -4,8 +4,7 @@ import {
   type ArtistProfileAttributesContent,
   type ArtistProfileAttributesError,
 } from "../../../domain/artistProfiles/factories";
-import type { ArtistWriteCapabilities } from "../../capabilities";
-import { loadOrDraftMyProfile } from "../loadOrDraftMyProfile";
+import type { ArtistProfileWriteCapabilities } from "../../capabilities";
 import { persistMyProfile } from "../persistMyProfile";
 import { type Result, ok } from "../../../utils/result";
 
@@ -18,8 +17,8 @@ export type UpdateMyAttributesOutput = {
 export type UpdateMyAttributesError = ArtistProfileAttributesError;
 
 type UpdateMyAttributesCaps = Pick<
-  ArtistWriteCapabilities,
-  "actor" | "artistProfiles"
+  ArtistProfileWriteCapabilities,
+  "profile" | "artistProfiles"
 >;
 
 export const updateMyAttributes = async (
@@ -29,10 +28,9 @@ export const updateMyAttributes = async (
   const attributes = createProfileAttributes(input);
   if (!attributes.ok) return attributes;
 
-  const profile = await loadOrDraftMyProfile(caps);
   const saved = await persistMyProfile(
     caps,
-    profile.reviseAttributes(attributes.value),
+    caps.profile.reviseAttributes(attributes.value),
   );
 
   return ok({ attributes: saved.toView().attributes });

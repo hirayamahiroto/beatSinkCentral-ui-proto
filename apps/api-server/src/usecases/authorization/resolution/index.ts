@@ -1,12 +1,19 @@
 import type {
   Actor,
   ActorResolution,
+  ProfileResolution,
   ResolveActorError,
   ResolveUserError,
 } from "../../capabilities";
 import type { User } from "../../../domain/users/entities";
+import type { ArtistProfile } from "../../../domain/artistProfiles/entities";
+import { createDraftArtistProfile } from "../../../domain/artistProfiles/factories";
 import { createUserNotFoundError } from "../../../domain/users/errors/userNotFound";
 import { createArtistNotFoundError } from "../../../domain/artists/errors/artistNotFound";
+import {
+  createArtistProfileNotFoundError,
+  type ArtistProfileNotFoundError,
+} from "../../../domain/artistProfiles/errors/artistProfileNotFound";
 import { type Result, ok, err } from "../../../utils/result";
 
 const toActor = (
@@ -57,4 +64,27 @@ export const toAddressedUser = (
     return err(createUserNotFoundError());
   }
   return user;
+};
+
+export const toEditableProfile = (
+  resolution: ProfileResolution,
+  artistId: string,
+): ArtistProfile => {
+  switch (resolution.status) {
+    case "noProfile":
+      return createDraftArtistProfile({ artistId });
+    case "existing":
+      return resolution.profile;
+  }
+};
+
+export const toExistingProfile = (
+  resolution: ProfileResolution,
+): Result<ArtistProfile, ArtistProfileNotFoundError> => {
+  switch (resolution.status) {
+    case "noProfile":
+      return err(createArtistProfileNotFoundError());
+    case "existing":
+      return ok(resolution.profile);
+  }
 };

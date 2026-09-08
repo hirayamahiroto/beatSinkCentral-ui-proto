@@ -24,8 +24,12 @@ const USECASE = "src/usecases/artistProfiles/example/index.ts";
 const AUTHORIZATION = "src/usecases/authorization/example/index.ts";
 const USECASE_TEST = "src/usecases/artistProfiles/example/index.test.ts";
 
+const RESOLUTION = "src/usecases/authorization/resolution/index.ts";
+const PUBLIC_PROFILE = "src/usecases/artistProfiles/getPublicProfile/index.ts";
+
 const BOUNDARY = "local/usecase-capability-boundary";
 const PARAMETER = "local/usecase-capability-parameter";
+const SUBJECT_NOT_FOUND = "local/usecase-subject-not-found";
 
 describe("local/usecase-capability-boundary", () => {
   it("infrastructure 層への import を検出する", async () => {
@@ -256,6 +260,73 @@ describe("local/usecase-capability-parameter", () => {
     );
 
     expect(ruleIds).not.toContain(PARAMETER);
+  });
+});
+
+describe("local/usecase-subject-not-found", () => {
+  it("usecase が主体の NotFound エラーを生成するための import を検出する", async () => {
+    const ruleIds = await ruleIdsFor(
+      USECASE,
+      [
+        `import { createArtistProfileNotFoundError } from "../../../domain/artistProfiles/errors/artistProfileNotFound";`,
+        `import type { ArtistProfileWriteCapabilities } from "../../capabilities";`,
+        `export const run = async (caps: ArtistProfileWriteCapabilities) =>`,
+        `  caps.profile ? null : createArtistProfileNotFoundError();`,
+        ``,
+      ].join("\n"),
+    );
+
+    expect(ruleIds).toContain(SUBJECT_NOT_FOUND);
+  });
+
+  it("型としての参照（import type / inline type）は許可する", async () => {
+    const ruleIds = await ruleIdsFor(
+      AUTHORIZATION,
+      [
+        `import type { ArtistProfileNotFoundError } from "../../../domain/artistProfiles/errors/artistProfileNotFound";`,
+        `import { type UserNotFoundError } from "../../../domain/users/errors/userNotFound";`,
+        `export type E = ArtistProfileNotFoundError | UserNotFoundError;`,
+        ``,
+      ].join("\n"),
+    );
+
+    expect(ruleIds).not.toContain(SUBJECT_NOT_FOUND);
+  });
+
+  it("経路モジュール（authorization）でも値の import は検出する", async () => {
+    const ruleIds = await ruleIdsFor(
+      AUTHORIZATION,
+      `import { createUserNotFoundError } from "../../../domain/users/errors/userNotFound";\n`,
+    );
+
+    expect(ruleIds).toContain(SUBJECT_NOT_FOUND);
+  });
+
+  it("解決結果を畳む resolution だけは生成を許可する", async () => {
+    const ruleIds = await ruleIdsFor(
+      RESOLUTION,
+      `import { createUserNotFoundError } from "../../../domain/users/errors/userNotFound";\n`,
+    );
+
+    expect(ruleIds).not.toContain(SUBJECT_NOT_FOUND);
+  });
+
+  it("handle による公開プロフィールの解決は経路が 1 本のため例外として許可する", async () => {
+    const ruleIds = await ruleIdsFor(
+      PUBLIC_PROFILE,
+      `import { createArtistProfileNotFoundError } from "../../../domain/artistProfiles/errors/artistProfileNotFound";\n`,
+    );
+
+    expect(ruleIds).not.toContain(SUBJECT_NOT_FOUND);
+  });
+
+  it("NotFound 以外のドメインエラーの生成は対象外", async () => {
+    const ruleIds = await ruleIdsFor(
+      USECASE,
+      `import { createHandleAlreadyTakenError } from "../../../domain/artists/errors/handleAlreadyTaken";\n`,
+    );
+
+    expect(ruleIds).not.toContain(SUBJECT_NOT_FOUND);
   });
 });
 

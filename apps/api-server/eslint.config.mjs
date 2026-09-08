@@ -7,6 +7,7 @@ import {
   responseValidationPendingWarn,
   usecaseCapabilityRules,
   usecaseCapabilityParameterExempt,
+  usecaseSubjectNotFoundExempt,
   entityBehaviorRules,
 } from "../../eslint.rules.mjs";
 
@@ -51,6 +52,11 @@ const eslintConfig = [
     "src/usecases/capabilities/**/*.ts",
     "src/usecases/**/testDoubles/**/*.ts",
     "src/usecases/**/*.test.ts",
+  ]),
+  usecaseSubjectNotFoundExempt([
+    "src/usecases/authorization/resolution/**/*.ts",
+    // NOTE: handle による公開プロフィールの解決は経路が 1 本のため usecase 内に留めている。2 本目が現れた時点で resolution へ移し、この行を削る
+    "src/usecases/artistProfiles/getPublicProfile/index.ts",
   ]),
   entityBehaviorRules(["src/domain/*/entities/index.ts"]),
 ];

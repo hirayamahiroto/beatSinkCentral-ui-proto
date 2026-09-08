@@ -1,28 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { choosePresentationPattern } from "./index";
-import { reconstructUser } from "../../../domain/users/factories";
-import { reconstructArtist } from "../../../domain/artists/factories";
-import { reconstructArtistProfile } from "../../../domain/artistProfiles/factories";
-import type { ArtistProfilePersistenceData } from "../../../domain/artistProfiles/entities";
+import {
+  createDraftArtistProfile,
+  reconstructArtistProfile,
+} from "../../../domain/artistProfiles/factories";
 import type {
-  IArtistProfileReader,
-  IArtistProfileWriter,
-} from "../../../domain/artistProfiles/repositories";
-import type { Actor, ArtistWriteCapabilities } from "../../capabilities";
-
-const actor: Actor = {
-  user: reconstructUser({
-    id: "user-1",
-    subId: "auth0|123",
-    email: "test@example.com",
-  }),
-  artist: reconstructArtist({
-    artistId: "artist-1",
-    handle: "beatboxer_taro",
-    ownerUserId: "user-1",
-    profile: null,
-  }),
-};
+  ArtistProfile,
+  ArtistProfilePersistenceData,
+} from "../../../domain/artistProfiles/entities";
+import type { IArtistProfileWriter } from "../../../domain/artistProfiles/repositories";
+import type { ArtistProfileWriteCapabilities } from "../../capabilities";
 
 const existingProfile = reconstructArtistProfile({
   id: "profile-existing",
@@ -39,28 +26,24 @@ const existingProfile = reconstructArtistProfile({
 const echoUpsert = async (data: ArtistProfilePersistenceData) =>
   reconstructArtistProfile({ ...data });
 
-const createCaps = () =>
+const createCaps = (
+  profile: ArtistProfile = createDraftArtistProfile({ artistId: "artist-1" }),
+) =>
   ({
-    actor,
+    profile,
     artistProfiles: {
-      findByArtistId: vi.fn<IArtistProfileReader["findByArtistId"]>(
-        async () => null,
-      ),
-      findPublishedByHandle: vi.fn<
-        IArtistProfileReader["findPublishedByHandle"]
-      >(async () => null),
-      listPublishedSummaries: vi.fn<
-        IArtistProfileReader["listPublishedSummaries"]
-      >(async () => []),
       upsert: vi.fn<IArtistProfileWriter["upsert"]>(echoUpsert),
       setPublished: vi.fn<IArtistProfileWriter["setPublished"]>(),
     },
-  }) satisfies Pick<ArtistWriteCapabilities, "actor" | "artistProfiles">;
+  }) satisfies Pick<
+    ArtistProfileWriteCapabilities,
+    "profile" | "artistProfiles"
+  >;
 
 describe("choosePresentationPattern", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("プロフィール未作成なら下書きを作ってパターンを保存し、presentation だけを返す", async () => {
+  it("渡された下書きにパターンを保存し、presentation だけを返す", async () => {
     const caps = createCaps();
 
     const result = await choosePresentationPattern(caps, {
@@ -78,8 +61,7 @@ describe("choosePresentationPattern", () => {
   });
 
   it("既存プロフィールの他の構造には触らずパターンだけを差し替える", async () => {
-    const caps = createCaps();
-    caps.artistProfiles.findByArtistId.mockResolvedValue(existingProfile);
+    const caps = createCaps(existingProfile);
 
     const result = await choosePresentationPattern(caps, {
       patternCode: "spotlight",

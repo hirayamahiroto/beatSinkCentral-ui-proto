@@ -898,15 +898,17 @@ usecase にリポジトリ一式と `subId` を渡す形は取らない。**「�
 
 権能型は**用途（どの経路で呼ばれるか）ごとに 1 つ**定義する。中身は集約ごとの Reader / Writer を必要な分だけ持つ。
 
-| 権能型                           | 主体                 | 境界                    | 用途                                                        |
-| -------------------------------- | -------------------- | ----------------------- | ----------------------------------------------------------- |
-| `PublicReadCapabilities`         | 不要                 | なし                    | 未認証で読める公開データ                                    |
-| `IdentityCapabilities`           | 解決結果             | なし                    | 自分の登録状態そのものを返す                                |
-| `ArtistReadCapabilities`         | Actor（User+Artist） | なし                    | Artist を伴うデータの読み取り                               |
-| `UserWriteCapabilities`          | User                 | トランザクション        | User スコープで完結する更新（例: email）                    |
-| `ArtistWriteCapabilities`        | Actor（User+Artist） | トランザクション        | Artist を伴うデータの更新                                   |
-| `RegistrationCapabilities`       | 不在                 | トランザクション        | 登録（主体が原理的に存在しない書き込み）                    |
-| `ArtistStorageWriteCapabilities` | Actor（User+Artist） | なし（DB 外の外部 I/O） | Artist を伴うストレージへの書き込み（例: プロフィール画像） |
+| 権能型                                | 主体                           | 境界                    | 用途                                                               |
+| ------------------------------------- | ------------------------------ | ----------------------- | ------------------------------------------------------------------ |
+| `PublicReadCapabilities`              | 不要                           | なし                    | 未認証で読める公開データ                                           |
+| `IdentityCapabilities`                | 解決結果                       | なし                    | 自分の登録状態そのものを返す                                       |
+| `ArtistReadCapabilities`              | Actor（User+Artist）           | なし                    | Artist を伴うデータの読み取り                                      |
+| `UserWriteCapabilities`               | User                           | トランザクション        | User スコープで完結する更新（例: email）                           |
+| `ArtistWriteCapabilities`             | Actor（User+Artist）           | トランザクション        | Artist を伴うアカウントデータの更新（handle・履歴）                |
+| `ArtistProfileResolutionCapabilities` | Actor + プロフィールの解決結果 | トランザクション        | 経路モジュールが解決結果を畳むための中間権能。usecase には渡さない |
+| `ArtistProfileWriteCapabilities`      | Actor + 解決済み ArtistProfile | トランザクション        | プロフィールの編集・公開。usecase はプロフィールの有無を判定しない |
+| `RegistrationCapabilities`            | 不在                           | トランザクション        | 登録（主体が原理的に存在しない書き込み）                           |
+| `ArtistStorageWriteCapabilities`      | Actor（User+Artist）           | なし（DB 外の外部 I/O） | Artist を伴うストレージへの書き込み（例: プロフィール画像）        |
 
 DB トランザクションを張らない権能（`ArtistStorageWriteCapabilities`）は、Storage への PUT のような**外部 I/O をトランザクション境界に入れない**ための分離でもある。ストレージ書き込みと DB 更新（URL の保存）は別リクエストに分かれ、原子性は求めない。
 
@@ -917,9 +919,9 @@ DB トランザクションを張らない権能（`ArtistStorageWriteCapabiliti
 集約が増えたときは、対応する用途の権能型にその集約の Reader / Writer を足す。**usecase 側は `Pick` で自分が使う権能だけに絞る**。これにより「渡しすぎ」がシグネチャに現れる。
 
 ```typescript
-type SaveMyProfileCaps = Pick<
-  ArtistWriteCapabilities,
-  "actor" | "artistProfiles"
+type UpdateMyAttributesCaps = Pick<
+  ArtistProfileWriteCapabilities,
+  "profile" | "artistProfiles"
 >;
 type UpdateMyEmailCaps = Pick<UserWriteCapabilities, "user" | "users">;
 type ListLinkTypesCaps = Pick<PublicReadCapabilities, "linkTypes">;
@@ -944,27 +946,46 @@ export type ActorResolution =
 
 「どの状態を失敗に畳むか」は用途ごとの判断であり、解決処理自体には持たせない。畳み込み（`toActor` / `toUser`）は純粋関数として `usecases/authorization/resolution` に置く。
 
-### 経路の入り口は 6 つ
+### 主体の状態も同じ形で解決する（プロフィール）
+
+Actor に限らず、**複数の usecase が同じ前提（主体がどの状態で存在するか）を判定している**なら、その判定は usecase から経路モジュールへ寄せる。usecase は「どの状態から始まるか」を権能型で宣言するだけになり、主体の有無を判定するコードを持たない。
+
+```typescript
+export type ProfileResolution =
+  | { status: "noProfile" }
+  | { status: "existing"; profile: ArtistProfile };
+```
+
+- `resolveProfileState`（`infrastructure/capabilities/resolveProfileState`）が Actor の `artistId` でプロフィールを引き、状態ユニオンにする。トランザクション境界の**中**で解決するため、`runInTransaction` の権能組み立ては非同期を許す
+- 編集系の経路（`withArtistProfileEditCapabilitiesById`）は `toEditableProfile` で `noProfile` を**非公開の下書きに昇格**させ、`ArtistProfileWriteCapabilities.profile` として渡す。属性・章・リンク・表現パターン・画像の各 usecase は `caps.profile` を受け取って振る舞いを呼び、書くだけになる
+- 公開の経路（`withArtistProfilePublishCapabilitiesById`）は `toExistingProfile` で `noProfile` を `ArtistProfileNotFoundError` に畳み、usecase を呼ばずに返す
+- `ArtistProfileWriteCapabilities` には Reader を載せない。usecase がプロフィールの有無を確認しようとしても `findByArtistId` が型に無いため書けない（「渡していないものは呼べない」）
+
+畳み方の違い（下書きに昇格 / 404 に畳む）は経路モジュールの違いとして import パスに現れ、usecase 側には現れない。「主体の状態にあるか」は解決、「その状態からどこへ動かすか」は usecase、「動かした結果が何を守るか」は policy（`enforcePublishInvariant`）、という 3 つの置き場を守る。状態にするのは **2 つ以上の usecase に現れる前提だけ**で、1 つの usecase に閉じる前提はその usecase の `err` に残す。
+
+### 経路の入り口は 8 つ
 
 エントリポイントは権能を自分で組み立てず、`usecases/authorization` の**経路モジュール**を直接 import して通す。import パスにその route が乗る経路が現れる。
 
-| 経路モジュール                              | 入り口                                                                | 主体     |
-| ------------------------------------------- | --------------------------------------------------------------------- | -------- |
-| （`infrastructure/capabilities` を直接）    | `getCapabilityDeps().buildPublicReadCapabilities()`                   | 不要     |
-| `usecases/authorization/identity`           | `withIdentityCapabilities(deps, subId, work)`                         | 解決結果 |
-| `usecases/authorization/artistRead`         | `withArtistReadCapabilitiesById(deps, subId, artistId, work)`         | Actor    |
-| `usecases/authorization/userWrite`          | `withUserWriteCapabilitiesById(deps, subId, userId, work)`            | User     |
-| `usecases/authorization/artistWrite`        | `withArtistWriteCapabilitiesById(deps, subId, artistId, work)`        | Actor    |
-| `usecases/authorization/artistStorageWrite` | `withArtistStorageWriteCapabilitiesById(deps, subId, artistId, work)` | Actor    |
-| `usecases/authorization/registration`       | `withRegistrationCapabilities(deps, work)`                            | 不在     |
+| 経路モジュール                                | 入り口                                                                  | 主体                                     |
+| --------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------- |
+| （`infrastructure/capabilities` を直接）      | `getCapabilityDeps().buildPublicReadCapabilities()`                     | 不要                                     |
+| `usecases/authorization/identity`             | `withIdentityCapabilities(deps, subId, work)`                           | 解決結果                                 |
+| `usecases/authorization/artistRead`           | `withArtistReadCapabilitiesById(deps, subId, artistId, work)`           | Actor                                    |
+| `usecases/authorization/userWrite`            | `withUserWriteCapabilitiesById(deps, subId, userId, work)`              | User                                     |
+| `usecases/authorization/artistWrite`          | `withArtistWriteCapabilitiesById(deps, subId, artistId, work)`          | Actor                                    |
+| `usecases/authorization/artistProfileEdit`    | `withArtistProfileEditCapabilitiesById(deps, subId, artistId, work)`    | Actor + プロフィール（無ければ下書き）   |
+| `usecases/authorization/artistProfilePublish` | `withArtistProfilePublishCapabilitiesById(deps, subId, artistId, work)` | Actor + 既存プロフィール（無ければ 404） |
+| `usecases/authorization/artistStorageWrite`   | `withArtistStorageWriteCapabilitiesById(deps, subId, artistId, work)`   | Actor                                    |
+| `usecases/authorization/registration`         | `withRegistrationCapabilities(deps, work)`                              | 不在                                     |
 
 経路モジュールが共有する部品は 2 つに分けている。
 
-| モジュール                           | 責務                                                                                                                    |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| `usecases/authorization/resolution`  | `toActor` / `toAddressedActor` / `toUser` / `toAddressedUser`（`ActorResolution` の畳み込み。純粋関数）                 |
-| `usecases/authorization/conflict`    | `AlreadyTakenError` と `catchAlreadyTaken`（一意制約違反を `err` に戻す）                                               |
-| `usecases/authorization/testDoubles` | 各経路のテストが共有する `CapabilityDeps` のスタブと Entity フィクスチャ（テスト専用のため `index.test.ts` を持たない） |
+| モジュール                           | 責務                                                                                                                                                                                         |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `usecases/authorization/resolution`  | `toActor` / `toAddressedActor` / `toUser` / `toAddressedUser`（`ActorResolution` の畳み込み）、`toEditableProfile` / `toExistingProfile`（`ProfileResolution` の畳み込み）。いずれも純粋関数 |
+| `usecases/authorization/conflict`    | `AlreadyTakenError` と `catchAlreadyTaken`（一意制約違反を `err` に戻す）                                                                                                                    |
+| `usecases/authorization/testDoubles` | 各経路のテストが共有する `CapabilityDeps` のスタブと Entity フィクスチャ（テスト専用のため `index.test.ts` を持たない）                                                                      |
 
 `index.ts` による再エクスポートは置かない。**どの経路に乗っているかを import パスで示す**ためで、`usecases/authorization` から何でも取れる形にすると経路の選択が見えなくなる。
 
@@ -1015,10 +1036,11 @@ Write 系の権能は**単一操作であっても常に境界を張る**。単�
 
 上の2点（「usecase は渡された権能以外に到達手段を持たない」「権能は第1引数で受け取る」）は規約に留めず、**ESLint のローカルルールで検出する**。ルールの実体は `eslint.rules.mjs`、適用範囲は `apps/api-server/eslint.config.mjs` で決める。
 
-| ルール                               | 検出する形                                                                                                                                                                                                                                           | 適用範囲                                                                            |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `local/usecase-capability-boundary`  | `usecases/` から `infrastructure/`・`database`・`drizzle-orm`・`@supabase/*` への import。あわせて、解決先を静的に確認できない dynamic import（変数・式で組み立てたパス）も禁止する                                                                  | `src/usecases/**`（経路モジュール・テストを含む全体）                               |
-| `local/usecase-capability-parameter` | エクスポート関数（`export { x }` / `export default x` の分離形を含む）の第1引数が権能型でない。権能型は**型名ではなく出所**で判定し、`usecases/capabilities` から import した型と、それを `Pick` / `Omit` 等で包んだ型・ファイル内の別名だけを認める | `src/usecases/**`（`authorization/` `capabilities/` `testDoubles/` とテストは除外） |
+| ルール                               | 検出する形                                                                                                                                                                                                                                           | 適用範囲                                                                                                                                      |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `local/usecase-capability-boundary`  | `usecases/` から `infrastructure/`・`database`・`drizzle-orm`・`@supabase/*` への import。あわせて、解決先を静的に確認できない dynamic import（変数・式で組み立てたパス）も禁止する                                                                  | `src/usecases/**`（経路モジュール・テストを含む全体）                                                                                         |
+| `local/usecase-capability-parameter` | エクスポート関数（`export { x }` / `export default x` の分離形を含む）の第1引数が権能型でない。権能型は**型名ではなく出所**で判定し、`usecases/capabilities` から import した型と、それを `Pick` / `Omit` 等で包んだ型・ファイル内の別名だけを認める | `src/usecases/**`（`authorization/` `capabilities/` `testDoubles/` とテストは除外）                                                           |
+| `local/usecase-subject-not-found`    | `domain/*/errors/*NotFound` からの**値の import**（`create*NotFoundError` の生成）。主体の NotFound は解決結果を畳む `resolution` だけが作る。型の参照（`import type` / inline `type`）は経路モジュールの Error 型合成に必要なため許す               | `src/usecases/**`（`authorization/resolution/` を除外。handle による公開プロフィールの解決は経路が 1 本のため `getPublicProfile` を暫定除外） |
 
 `usecases/authorization`（経路モジュール）は権能を**組み立てる**側で第1引数に `CapabilityDeps` を取り、`resolution` / `conflict` は純粋関数なので、`usecase-capability-parameter` の対象から外す。テストとテストダブルも usecase 本体ではないため同様に外す。一方 `usecase-capability-boundary` は経路モジュールにも効かせる（経路モジュールが知ってよいのは `capabilities` の型までで、DB は `infrastructure/capabilities` の責務）。
 

@@ -2,11 +2,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { persistMyProfile } from "./index";
 import { reconstructArtistProfile } from "../../../domain/artistProfiles/factories";
 import type { ArtistProfilePersistenceData } from "../../../domain/artistProfiles/entities";
-import type {
-  IArtistProfileReader,
-  IArtistProfileWriter,
-} from "../../../domain/artistProfiles/repositories";
-import type { ArtistWriteCapabilities } from "../../capabilities";
+import type { IArtistProfileWriter } from "../../../domain/artistProfiles/repositories";
+import type { ArtistProfileWriteCapabilities } from "../../capabilities";
 
 const publishableContent = {
   id: "profile-1",
@@ -25,19 +22,10 @@ const echoUpsert = async (data: ArtistProfilePersistenceData) =>
 const createCaps = () =>
   ({
     artistProfiles: {
-      findByArtistId: vi.fn<IArtistProfileReader["findByArtistId"]>(
-        async () => null,
-      ),
-      findPublishedByHandle: vi.fn<
-        IArtistProfileReader["findPublishedByHandle"]
-      >(async () => null),
-      listPublishedSummaries: vi.fn<
-        IArtistProfileReader["listPublishedSummaries"]
-      >(async () => []),
       upsert: vi.fn<IArtistProfileWriter["upsert"]>(echoUpsert),
       setPublished: vi.fn<IArtistProfileWriter["setPublished"]>(),
     },
-  }) satisfies Pick<ArtistWriteCapabilities, "artistProfiles">;
+  }) satisfies Pick<ArtistProfileWriteCapabilities, "artistProfiles">;
 
 describe("persistMyProfile", () => {
   beforeEach(() => vi.clearAllMocks());

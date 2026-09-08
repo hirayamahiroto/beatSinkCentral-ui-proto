@@ -1,5 +1,6 @@
 import type { User } from "../../domain/users/entities";
 import type { Artist } from "../../domain/artists/entities";
+import type { ArtistProfile } from "../../domain/artistProfiles/entities";
 import type {
   IArtistProfileReader,
   IArtistProfileWriter,
@@ -30,6 +31,10 @@ export type ActorResolution =
   | { status: "complete"; actor: Actor };
 
 export type ResolveActorError = UserNotFoundError | ArtistNotFoundError;
+
+export type ProfileResolution =
+  | { status: "noProfile" }
+  | { status: "existing"; profile: ArtistProfile };
 
 export type ResolveUserError = UserNotFoundError;
 
@@ -63,7 +68,18 @@ export type ArtistWriteCapabilities = {
   users: IUserReader & IUserWriter;
   artists: IArtistReader & IArtistWriter;
   artistHandleHistories: IArtistHandleHistoryWriter;
-  artistProfiles: IArtistProfileReader & IArtistProfileWriter;
+};
+
+export type ArtistProfileResolutionCapabilities = {
+  actor: Actor;
+  profileResolution: ProfileResolution;
+  artistProfiles: IArtistProfileWriter;
+};
+
+export type ArtistProfileWriteCapabilities = {
+  actor: Actor;
+  profile: ArtistProfile;
+  artistProfiles: IArtistProfileWriter;
 };
 
 export type RegistrationCapabilities = {
@@ -97,6 +113,11 @@ export type CapabilityDeps = {
   runWithArtistWriteCapabilities<T, E>(
     actor: Actor,
     work: (caps: ArtistWriteCapabilities) => Promise<Result<T, E>>,
+  ): Promise<Result<T, E>>;
+
+  runWithArtistProfileResolutionCapabilities<T, E>(
+    actor: Actor,
+    work: (caps: ArtistProfileResolutionCapabilities) => Promise<Result<T, E>>,
   ): Promise<Result<T, E>>;
 
   runWithRegistrationCapabilities<T, E>(

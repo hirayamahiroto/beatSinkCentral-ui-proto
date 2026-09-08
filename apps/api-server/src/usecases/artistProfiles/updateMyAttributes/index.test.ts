@@ -1,28 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { updateMyAttributes } from "./index";
-import { reconstructUser } from "../../../domain/users/factories";
-import { reconstructArtist } from "../../../domain/artists/factories";
-import { reconstructArtistProfile } from "../../../domain/artistProfiles/factories";
-import type { ArtistProfilePersistenceData } from "../../../domain/artistProfiles/entities";
+import {
+  createDraftArtistProfile,
+  reconstructArtistProfile,
+} from "../../../domain/artistProfiles/factories";
 import type {
-  IArtistProfileReader,
-  IArtistProfileWriter,
-} from "../../../domain/artistProfiles/repositories";
-import type { Actor, ArtistWriteCapabilities } from "../../capabilities";
-
-const actor: Actor = {
-  user: reconstructUser({
-    id: "user-1",
-    subId: "auth0|123",
-    email: "test@example.com",
-  }),
-  artist: reconstructArtist({
-    artistId: "artist-1",
-    handle: "beatboxer_taro",
-    ownerUserId: "user-1",
-    profile: null,
-  }),
-};
+  ArtistProfile,
+  ArtistProfilePersistenceData,
+} from "../../../domain/artistProfiles/entities";
+import type { IArtistProfileWriter } from "../../../domain/artistProfiles/repositories";
+import type { ArtistProfileWriteCapabilities } from "../../capabilities";
 
 const publishedContent = {
   id: "profile-existing",
@@ -38,28 +25,24 @@ const publishedContent = {
 const echoUpsert = async (data: ArtistProfilePersistenceData) =>
   reconstructArtistProfile({ ...data });
 
-const createCaps = () =>
+const createCaps = (
+  profile: ArtistProfile = createDraftArtistProfile({ artistId: "artist-1" }),
+) =>
   ({
-    actor,
+    profile,
     artistProfiles: {
-      findByArtistId: vi.fn<IArtistProfileReader["findByArtistId"]>(
-        async () => null,
-      ),
-      findPublishedByHandle: vi.fn<
-        IArtistProfileReader["findPublishedByHandle"]
-      >(async () => null),
-      listPublishedSummaries: vi.fn<
-        IArtistProfileReader["listPublishedSummaries"]
-      >(async () => []),
       upsert: vi.fn<IArtistProfileWriter["upsert"]>(echoUpsert),
       setPublished: vi.fn<IArtistProfileWriter["setPublished"]>(),
     },
-  }) satisfies Pick<ArtistWriteCapabilities, "actor" | "artistProfiles">;
+  }) satisfies Pick<
+    ArtistProfileWriteCapabilities,
+    "profile" | "artistProfiles"
+  >;
 
 describe("updateMyAttributes", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("プロフィール未作成なら下書きを作って属性を保存し、attributes だけを返す", async () => {
+  it("渡された下書きに属性を保存し、attributes だけを返す", async () => {
     const caps = createCaps();
 
     const result = await updateMyAttributes(caps, {
@@ -87,14 +70,9 @@ describe("updateMyAttributes", () => {
   });
 
   it("既存プロフィールがある場合は ID・画像・章・リンク・公開状態を保持して属性だけ更新する", async () => {
-    const caps = createCaps();
-    caps.artistProfiles.findByArtistId.mockResolvedValue(
-      reconstructArtistProfile(publishedContent),
-    );
+    const caps = createCaps(reconstructArtistProfile(publishedContent));
 
     await updateMyAttributes(caps, { name: "New Name", genres: ["loop"] });
-
-    expect(caps.artistProfiles.findByArtistId).toHaveBeenCalledWith("artist-1");
     const persisted = caps.artistProfiles.upsert.mock.calls[0][0];
     expect(persisted).toStrictEqual({
       id: "profile-existing",
@@ -112,10 +90,7 @@ describe("updateMyAttributes", () => {
   });
 
   it("公開中の更新で公開条件を割ったら非公開へ降ろして保存する", async () => {
-    const caps = createCaps();
-    caps.artistProfiles.findByArtistId.mockResolvedValue(
-      reconstructArtistProfile(publishedContent),
-    );
+    const caps = createCaps(reconstructArtistProfile(publishedContent));
 
     const result = await updateMyAttributes(caps, { name: null });
 
@@ -123,7 +98,7 @@ describe("updateMyAttributes", () => {
     expect(result.ok).toBe(true);
   });
 
-  it("不正な name は err(InvalidProfileNameFormatError)（参照も保存もしない）", async () => {
+  it("不正な name は err(InvalidProfileNameFormatError)（保存しない）", async () => {
     const caps = createCaps();
 
     const result = await updateMyAttributes(caps, { name: "a".repeat(256) });
@@ -132,7 +107,6 @@ describe("updateMyAttributes", () => {
     if (!result.ok) {
       expect(result.error.type).toBe("InvalidProfileNameFormatError");
     }
-    expect(caps.artistProfiles.findByArtistId).not.toHaveBeenCalled();
     expect(caps.artistProfiles.upsert).not.toHaveBeenCalled();
   });
 });
