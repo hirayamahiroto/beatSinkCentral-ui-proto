@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync } from "node:fs";
-import { join, sep } from "node:path";
+import { join, sep, dirname, basename } from "node:path";
 
 const TYPE_ASSERTION_MESSAGE =
   "`as` による型アサーションは使用しない。型ガード関数に切り出すか、正しく型付けされた契約から値を取得する。";
@@ -612,6 +612,61 @@ export const entityBehaviorRules = (files) => ({
   plugins: { local: entityBehaviorPlugin },
   rules: {
     "local/entity-behavior-has-caller": "error",
+  },
+});
+
+// ClientAdapter/hooks/useXxx/index.ts は状態・副作用ロジックを純粋関数として
+// 切り出す置き場所（docs/architecture/frontend/ui/component-design.md
+// 「Hooksの切り出しルール」）。切り出した先でテストが無いままだと、UIを描画
+// せずロジックだけを検証できるという切り出しの目的自体が達成されない。
+const HOOK_TEST_MESSAGE =
+  "hook（useXxx）には同じディレクトリに対応するテスト（index.test.ts / index.test.tsx）を実装する。" +
+  "UIを描画せずロジックだけを検証できることが、hookをコンポーネント本体から切り出す目的のため。";
+
+const HOOK_DIR_PATTERN = new RegExp(
+  `\\${sep}hooks\\${sep}use[A-Z][A-Za-z0-9]*$`,
+);
+
+const HOOK_TEST_FILE_PATTERN = /^index\.test\.tsx?$/;
+
+const hasHookTestFile = (dir) =>
+  readdirSync(dir).some((entry) => HOOK_TEST_FILE_PATTERN.test(entry));
+
+const hookHasTestRule = {
+  meta: {
+    type: "problem",
+    docs: { description: HOOK_TEST_MESSAGE },
+    schema: [],
+  },
+  create(context) {
+    const filename = context.filename;
+    if (basename(filename) !== "index.ts" && basename(filename) !== "index.tsx") {
+      return {};
+    }
+
+    const dir = dirname(filename);
+    if (!HOOK_DIR_PATTERN.test(dir)) return {};
+    if (hasHookTestFile(dir)) return {};
+
+    return {
+      "Program:exit"(node) {
+        context.report({ node, message: HOOK_TEST_MESSAGE });
+      },
+    };
+  },
+};
+
+const hookTestPlugin = {
+  rules: {
+    "hook-has-test": hookHasTestRule,
+  },
+};
+
+export const hookTestRules = (files) => ({
+  files,
+  plugins: { local: hookTestPlugin },
+  rules: {
+    "local/hook-has-test": "error",
   },
 });
 

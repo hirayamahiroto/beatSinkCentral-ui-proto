@@ -554,6 +554,48 @@ function canDeleteAsset(inaccessibleCount: number): boolean {
 | 認証・認可・キャッシュに絡む                   | エントリポイント層 | Server Action、APIハンドラ           |
 | 上記の複数entityにまたがるオーケストレーション | feature層          | 複合操作、ワークフロー               |
 
+### 9-3. packages/ui コンポーネントのローカル状態と副作用の切り分け
+
+`packages/ui` の Organism/Molecule/Atom は「表示にとじた一時的な状態」と「外部に効果が及ぶ副作用」を区別する。判断基準は **その state/effect を消したとき、表示が変わるだけか、外部への通知（analytics送信・API呼び出し・ブラウザAPI経由の検知）が欠落するか**。
+
+- **コンポーネント内部の `useState` で保持してよい**: 開閉・編集モード・入力ドラフトなど、消えても表示が変わるだけで業務上の意味を持たない一時的な状態（例: `InlineEditableField` の `isEditing`/`draft`）
+- **呼び出し側（ClientAdapter）の hook に切り出す**: ブラウザAPI依存の検知（`IntersectionObserver`/`ResizeObserver`等）、analytics送信やAPI呼び出しにつながる副作用、Next.js依存（`useRouter`等）。詳細は `docs/architecture/frontend/ui/component-design.md`「Hooksと`use client`境界の責務分離」
+
+```typescript
+// OK: 表示にとじた一時的な状態はコンポーネント内部で保持してよい
+// (InlineEditableField) 消えても「編集モードの見た目」が変わるだけで、業務上の意味は持たない
+const [isEditing, setIsEditing] = useState(false);
+const [draft, setDraft] = useState(value);
+// 実際の保存だけを onSave（呼び出し側の関数）に委譲する
+const save = async () => {
+  const ok = await onSave(draft.trim());
+  if (ok) setIsEditing(false);
+};
+
+// NG: ブラウザAPI依存の検知・analytics送信につながる副作用をコンポーネント内部に持つ
+// 消えると「章末到達の計測」自体が欠落する（表示だけの問題では済まない）
+useEffect(() => {
+  const observer = new IntersectionObserver((entries) => {
+    /* ... */ onStoryScroll(depth);
+  });
+  // ...
+}, []);
+
+// OK: 検知ロジックは ClientAdapter の hook へ切り出し、Organism は
+// ref 登録用の関数を props で受け取って呼ぶだけにする
+// packages/ui 側（Organism）
+<div ref={(el) => onChapterEndRef(index, el)} />;
+
+// apps/ 側: hooks/useStoryScrollTracking/index.ts に
+// IntersectionObserver・analytics送信の副作用を集約する
+```
+
+### チェックポイント
+
+- コンポーネントに追加した `useState`/`useEffect` は「消えたら表示が変わるだけ」か「消えたら外部への通知・計測・呼び出しが欠落する」かを確認する
+- 後者（ブラウザAPI依存の検知・analytics送信・API呼び出し・Next.js依存）が Organism/Molecule/Atom に直書きされていないか
+- 副作用を ClientAdapter の hook へ切り出す際、Organism 側は ref 登録関数など「DOM要素を橋渡しするためのprops」だけを受け取る形になっているか
+
 ---
 
 ## 10. トランザクション境界 🔴 ブロッキング
@@ -820,6 +862,7 @@ expect(record).toHaveBeenCalledWith({
 - 複数の書き込みを行うとき（トランザクション境界）
 - 既存コードに似た処理を新規に書こうとしたとき
 - hookやstateの初期値を設定するとき
+- `packages/ui` のコンポーネントに `useState`/`useEffect` を書こうとしたとき（表示にとじた一時状態か、外部に効果が及ぶ副作用かを見分ける）
 - コメントを書こうとしたとき（言い換えでないか／外部制約・業務理由か）
 - `?? 既定値` を書こうとしたとき（その値は必須か任意か）
 - 種別・媒体・分類を扱うとき（マスタ参照にできないか／種別を保存しているか・推定で復元していないか）
