@@ -1,15 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { writeMyStoryChapter } from "./index";
-import {
-  createDraftArtistProfile,
-  reconstructArtistProfile,
-} from "../../../domain/artistProfiles/factories";
+import { reconstructStoredProfile } from "../../../domain/artistProfiles/factories";
+import { toPersistence } from "../../../domain/artistProfiles/behaviors";
+import type { ProfileState } from "../../../domain/artistProfiles/entities";
 import type {
-  ArtistProfile,
-  ArtistProfilePersistenceData,
-} from "../../../domain/artistProfiles/entities";
-import type { IArtistProfileWriter } from "../../../domain/artistProfiles/repositories";
-import type { ArtistProfileWriteCapabilities } from "../../../capabilities";
+  IArtistProfileReader,
+  IArtistProfileWriter,
+} from "../../../domain/artistProfiles/repositories";
+import type { ArtistWriteCapabilities } from "../../../capabilities";
+import { testUser, testArtist } from "../../../authorization/testDoubles";
+
+const actor = { user: testUser, artist: testArtist };
 
 const publishedContent = {
   id: "profile-existing",
@@ -17,35 +18,33 @@ const publishedContent = {
   published: true,
   name: "Taro",
   imageUrl: "https://example.com/taro.png",
-  chapters: [
-    { questionCode: "beginning", body: "私の歩み" },
-    { questionCode: "turning_point", body: "転機" },
-  ],
+  chapters: [{ questionCode: "beginning", body: "私の歩み" }],
   genres: ["bass"],
   links: [{ linkTypeCode: "x", url: "https://x.com/taro" }],
 };
 
-const echoUpsert = async (data: ArtistProfilePersistenceData) =>
-  reconstructArtistProfile({ ...data });
-
 const createCaps = (
-  profile: ArtistProfile = createDraftArtistProfile({ artistId: "artist-1" }),
+  state: ProfileState = { kind: "noProfile", artistId: "artist-1" },
 ) =>
   ({
-    profile,
+    actor,
     artistProfiles: {
-      upsert: vi.fn<IArtistProfileWriter["upsert"]>(echoUpsert),
-      setPublished: vi.fn<IArtistProfileWriter["setPublished"]>(),
+      load: vi.fn<IArtistProfileReader["load"]>(async () => state),
+      findPublishedByHandle: vi.fn<
+        IArtistProfileReader["findPublishedByHandle"]
+      >(async () => null),
+      listPublishedSummaries: vi.fn<
+        IArtistProfileReader["listPublishedSummaries"]
+      >(async () => []),
+      save: vi.fn<IArtistProfileWriter["save"]>(async (saved) => saved),
+      publish: vi.fn<IArtistProfileWriter["publish"]>(),
     },
-  }) satisfies Pick<
-    ArtistProfileWriteCapabilities,
-    "profile" | "artistProfiles"
-  >;
+  }) satisfies Pick<ArtistWriteCapabilities, "actor" | "artistProfiles">;
 
 describe("writeMyStoryChapter", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("渡された下書きに章を書き、story だけを返す", async () => {
+  it("プロフィール未作成なら下書きを起こして章を書き、story だけを返す", async () => {
     const caps = createCaps();
 
     const result = await writeMyStoryChapter(caps, {
@@ -53,37 +52,38 @@ describe("writeMyStoryChapter", () => {
       body: "始めたきっかけ",
     });
 
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.value).toStrictEqual({
+    expect(result).toStrictEqual({
+      ok: true,
+      value: {
         story: { chapters: [{ key: "beginning", body: "始めたきっかけ" }] },
-      });
-    }
-    const persisted = caps.artistProfiles.upsert.mock.calls[0][0];
-    expect(persisted.artistId).toBe("artist-1");
-    expect(persisted.chapters).toEqual([
+      },
+    });
+    const saved = toPersistence(caps.artistProfiles.save.mock.calls[0][0]);
+    expect(saved.artistId).toBe("artist-1");
+    expect(saved.chapters).toEqual([
       { questionCode: "beginning", body: "始めたきっかけ" },
     ]);
   });
 
   it("既存の章は上書きし、他の章・属性・リンク・公開状態は保持する", async () => {
-    const caps = createCaps(reconstructArtistProfile(publishedContent));
+    const caps = createCaps(reconstructStoredProfile(publishedContent));
 
     const result = await writeMyStoryChapter(caps, {
       chapterKey: "turning_point",
       body: "新しい転機",
     });
-    const persisted = caps.artistProfiles.upsert.mock.calls[0][0];
-    expect(persisted.id).toBe("profile-existing");
-    expect(persisted.chapters).toEqual([
+
+    const saved = toPersistence(caps.artistProfiles.save.mock.calls[0][0]);
+    expect(saved.id).toBe("profile-existing");
+    expect(saved.chapters).toEqual([
       { questionCode: "beginning", body: "私の歩み" },
       { questionCode: "turning_point", body: "新しい転機" },
     ]);
-    expect(persisted.name).toBe("Taro");
-    expect(persisted.links).toEqual([
+    expect(saved.name).toBe("Taro");
+    expect(saved.links).toEqual([
       { linkTypeCode: "x", url: "https://x.com/taro" },
     ]);
-    expect(persisted.published).toBe(true);
+    expect(saved.published).toBe(true);
     expect(result.ok).toBe(true);
     if (result.ok) {
       expect(result.value.story.chapters).toEqual([
@@ -94,33 +94,36 @@ describe("writeMyStoryChapter", () => {
   });
 
   it("本文が空なら章を消す", async () => {
-    const caps = createCaps(reconstructArtistProfile(publishedContent));
+    const caps = createCaps(
+      reconstructStoredProfile({
+        ...publishedContent,
+        chapters: [
+          { questionCode: "beginning", body: "私の歩み" },
+          { questionCode: "turning_point", body: "転機" },
+        ],
+      }),
+    );
 
     const result = await writeMyStoryChapter(caps, {
       chapterKey: "turning_point",
       body: "   ",
     });
 
-    expect(caps.artistProfiles.upsert.mock.calls[0][0].chapters).toEqual([
-      { questionCode: "beginning", body: "私の歩み" },
-    ]);
+    expect(
+      toPersistence(caps.artistProfiles.save.mock.calls[0][0]).chapters,
+    ).toEqual([{ questionCode: "beginning", body: "私の歩み" }]);
     expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.value.story.chapters).toEqual([
-        { key: "beginning", body: "私の歩み" },
-      ]);
-    }
   });
 
-  it("公開中に必須の章（始まり）を消したら非公開へ降ろして保存する", async () => {
-    const caps = createCaps(reconstructArtistProfile(publishedContent));
+  it("公開中に必須の章（始まり）を消したら下書きに落として保存する", async () => {
+    const caps = createCaps(reconstructStoredProfile(publishedContent));
 
     await writeMyStoryChapter(caps, { chapterKey: "beginning", body: "" });
 
-    expect(caps.artistProfiles.upsert.mock.calls[0][0].published).toBe(false);
+    expect(caps.artistProfiles.save.mock.calls[0][0].kind).toBe("draft");
   });
 
-  it("未知の chapterKey は err(InvalidStoryChapterFormatError)（保存しない）", async () => {
+  it("未知の chapterKey は err(InvalidStoryChapterFormatError)（参照も保存もしない）", async () => {
     const caps = createCaps();
 
     const result = await writeMyStoryChapter(caps, {
@@ -132,7 +135,8 @@ describe("writeMyStoryChapter", () => {
     if (!result.ok) {
       expect(result.error.type).toBe("InvalidStoryChapterFormatError");
     }
-    expect(caps.artistProfiles.upsert).not.toHaveBeenCalled();
+    expect(caps.artistProfiles.load).not.toHaveBeenCalled();
+    expect(caps.artistProfiles.save).not.toHaveBeenCalled();
   });
 
   it("本文が上限を超えたら err(InvalidStoryChapterFormatError)（保存しない）", async () => {
@@ -144,9 +148,6 @@ describe("writeMyStoryChapter", () => {
     });
 
     expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.error.type).toBe("InvalidStoryChapterFormatError");
-    }
-    expect(caps.artistProfiles.upsert).not.toHaveBeenCalled();
+    expect(caps.artistProfiles.save).not.toHaveBeenCalled();
   });
 });

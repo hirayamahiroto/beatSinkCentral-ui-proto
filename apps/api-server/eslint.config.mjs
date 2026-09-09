@@ -56,11 +56,7 @@ const eslintConfig = [
     "src/capabilities/**/*.ts",
     "src/usecases/**/*.test.ts",
   ]),
-  usecaseSubjectNotFoundExempt([
-    "src/authorization/resolution/**/*.ts",
-    // NOTE: handle による公開プロフィールの解決は経路が 1 本のため usecase 内に留めている。2 本目が現れた時点で resolution へ移し、この行を削る
-    "src/usecases/artistProfiles/getPublicProfile/index.ts",
-  ]),
+  usecaseSubjectNotFoundExempt(["src/authorization/resolution/**/*.ts"]),
   entityBehaviorRules(["src/domain/*/entities/index.ts"]),
 ];
 

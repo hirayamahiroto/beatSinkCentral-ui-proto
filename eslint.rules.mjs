@@ -480,12 +480,15 @@ const usecaseCapabilityParameterRule = {
 };
 
 const USECASE_SUBJECT_NOT_FOUND_MESSAGE =
-  "主体（User / Artist / ArtistProfile 等）の NotFound エラーは authorization/resolution だけが生成する。" +
-  "usecase は主体の有無を判定せず、経路モジュールが解決済みの主体を権能で受け取る。";
+  "主体（User / Artist）の NotFound エラーは authorization/resolution だけが生成する。" +
+  "usecase は Actor の有無を判定せず、経路モジュールが解決済みの Actor を権能で受け取る。";
 
-// `create*NotFoundError` の import 元。型（`import type` / inline `type`）の参照は
-// 経路モジュールの Error 型合成に必要なので許し、値の import（= 生成）だけを見る。
-const SUBJECT_NOT_FOUND_ERROR_SOURCE = /(^|\/)errors\/[A-Za-z]*NotFound$/;
+// Actor を構成する主体の `create*NotFoundError` の import 元。型（`import type` /
+// inline `type`）の参照は経路モジュールの Error 型合成に必要なので許し、値の import
+// （= 生成）だけを見る。集約の状態（ArtistProfile の有無など）は usecase が load した
+// 状態ユニオンから遷移を選ぶ責務のため、対象にしない。
+const SUBJECT_NOT_FOUND_ERROR_SOURCE =
+  /(^|\/)errors\/(userNotFound|artistNotFound)$/;
 
 const isSubjectNotFoundErrorSource = (source) =>
   typeof source === "string" && SUBJECT_NOT_FOUND_ERROR_SOURCE.test(source);

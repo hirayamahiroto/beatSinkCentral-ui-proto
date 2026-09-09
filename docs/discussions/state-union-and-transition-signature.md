@@ -41,25 +41,26 @@ KAKEHASHI Tech Blog「サーバサイド TypeScript を選んで嬉しかった�
 
 前提の重複: 編集系 5 usecase が `loadOrDraftMyProfile`（無ければ下書き）を各自呼び、`publishMyProfile` が自前で `findByArtistId` → 404、`getMyProfile` が自前で null、と 3 通りの扱いが usecase 内に埋まっていた。
 
-| 変更         | 内容                                                                                                                                                               |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 状態ユニオン | `ProfileResolution = noProfile \| existing`（draft / published は Entity の `isPublished()` が持つため重複させない）                                               |
-| 解決         | `infrastructure/capabilities/resolveProfileState`。境界の中で解決するため `runInTransaction` の組み立てを非同期許容に                                              |
-| 畳み込み     | `resolution` に `toEditableProfile`（下書きに昇格）/ `toExistingProfile`（404 に畳む）                                                                             |
-| 経路         | `artistProfileEdit` / `artistProfilePublish` の 2 本。`ArtistWriteCapabilities` から `artistProfiles` を外す                                                       |
-| 権能         | `ArtistProfileWriteCapabilities = { actor, profile, artistProfiles: Writer }`。Reader を載せないので usecase は有無を判定できない                                  |
-| usecase      | 編集系 5 本は `caps.profile` を受け取るだけ（`actor` 不要）。`publishMyProfile` の Error から `ArtistProfileNotFoundError` が消える。`loadOrDraftMyProfile` は削除 |
-| lint         | `local/usecase-subject-not-found`: `create*NotFoundError` の値 import を `resolution` 以外で禁止                                                                   |
+最初は「解決ユニオンを認可層で畳み、usecase に解決済みの profile を権能で渡す」形で実装したが、ワークフローを型で先に書く（`profile-workflow-types.md`）と、畳み込みは認可層ではなく **ワークフローの入力型** が引き受けるものだと分かり、関数型 DDD の形に組み直した。
 
-検証結果: api-server の test 637 件 green、`tsc` エラー 0、lint エラー 0、knip / knip:production 検出 0。
+| 変更           | 内容                                                                                                                                                                                                                                     |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 状態           | `ProfileState = NoProfile \| DraftProfile \| PublishedProfile`（domain/entities）。`PublishedProfile.content` は必須条件が揃った `PublishableContent` 型で、「公開中なのに欠けている」状態は型として存在しない                           |
+| 内容の書き換え | `behaviors`: `reviseAttributes` / `writeStoryChapter` / `clearStoryChapter` / `replaceLinks` / `choosePresentationPattern` / `changeImage`（`ProfileContent → ProfileContent`）、`unpublish`、`toView` / `toPersistence`                 |
+| 状態の規則     | `policies/publishability`: `toPublishableContent`、`assessPublishability`、`edit(state, change) → StoredProfile`（無ければ下書きを起こし、公開中は必須条件を割れば下書きに落とす）、`publish(draft) → Result<Published, NotPublishable>` |
+| 復元           | `factories.reconstructStoredProfile`。published 行は `toPublishableContent` を通し、欠けていればスロー（不変条件の破れ）                                                                                                                 |
+| I/O            | `IArtistProfileReader.load(artistId) → ProfileState`（null を返さない）、`IArtistProfileWriter.save(StoredProfile)`（公開フラグは降格のみ）/ `publish(PublishedProfile)`                                                                 |
+| usecase        | 読む → 純粋な遷移 → 書く のサンドイッチ。`publishMyProfile` は `switch (state.kind)` で遷移を選ぶ（noProfile → 404、目的の状態なら冪等）                                                                                                 |
+| 認可層         | Actor の解決だけに戻す。`ArtistWriteCapabilities` に `artistProfiles: Reader & Writer` を戻し、プロフィール専用の経路・権能・解決は削除                                                                                                  |
+| lint           | `local/usecase-subject-not-found` は Actor 系（`userNotFound` / `artistNotFound`）の生成に限定                                                                                                                                           |
+| 構成           | `capabilities` / `authorization` を `usecases/` の外へ出し、usecase を業務処理だけの層にする                                                                                                                                             |
 
 判断した点（規範に無く暫定で決めたこと）:
 
-- `ProfileResolution` を 2 状態にした。3 状態（draft / published）にすると Entity の `published` と二重の真実になる
-- 解決を境界の中で行う。編集は読み書きが同一トランザクションに乗る（従来の `loadOrDraftMyProfile` と同じ整合性）
-- 公開経路は `noProfile` を境界の中で `err` に畳む。境界を張った直後に返るだけで書き込みは無い
-- `getPublicProfile` の NotFound 生成は lint の暫定除外。handle による解決の経路が 2 本目になったら `resolution` へ移す
-- `getMyProfile` は今回触っていない。出力を `kind` ユニオンにする案は BFF 契約の変更を伴うため別 PR
+- プロフィールだけ Entity をクロージャから状態ごとの型に変えた。状態遷移を持つ集約はこれだけで、他集約はクロージャ Entity のまま
+- published 行の必須条件欠落は `reconstructStoredProfile` がスローする。従来は公開ページで応答契約違反として 500 になっていたので、失敗の位置が repository に前進しただけ。既存データに該当行が無いかは**マージ前に確認が必要**
+- 公開フラグの並行更新保護（`save` は降格のみ、`publish` だけが上げる）は従来の upsert / setPublished の意味論を Writer の 2 メソッドとして保った
+- `getMyProfile` の応答契約は変えていない（`profile` / `publishability` の nullable 2 本）。`kind` ユニオンにする案は BFF 契約変更を伴うため別 PR
 
 ## 次のアクション
 

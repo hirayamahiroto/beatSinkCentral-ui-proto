@@ -3,7 +3,7 @@ import { bodyLimit } from "hono/body-limit";
 import { z } from "zod";
 import { getCapabilityDeps } from "../../../../../../infrastructure/capabilities";
 import { withArtistStorageWriteCapabilitiesById } from "../../../../../../authorization/artistStorageWrite";
-import { withArtistProfileEditCapabilitiesById } from "../../../../../../authorization/artistProfileEdit";
+import { withArtistWriteCapabilitiesById } from "../../../../../../authorization/artistWrite";
 import { uploadMyProfileImage } from "../../../../../../usecases/artistProfiles/uploadMyProfileImage";
 import { changeMyProfileImage } from "../../../../../../usecases/artistProfiles/changeMyProfileImage";
 import { PROFILE_IMAGE_MAX_SIZE_BYTES } from "../../../../../../domain/artistProfiles/valueObjects/profileImage";
@@ -59,7 +59,7 @@ const app = new Hono().post(
       return handleAppError(uploaded.error, c);
     }
 
-    const result = await withArtistProfileEditCapabilitiesById(
+    const result = await withArtistWriteCapabilitiesById(
       deps,
       auth0User.sub,
       artistId,

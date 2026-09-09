@@ -17,12 +17,12 @@ class RollbackSignal<T, E> extends Error {
 
 export const runInTransaction = async <Caps, T, E>(
   db: DatabaseClient,
-  buildCaps: (executor: Executor) => Caps | Promise<Caps>,
+  buildCaps: (executor: Executor) => Caps,
   work: (caps: Caps) => Promise<Result<T, E>>,
 ): Promise<Result<T, E>> => {
   try {
     return await db.transaction(async (tx) => {
-      const result = await work(await buildCaps(tx));
+      const result = await work(buildCaps(tx));
       if (!result.ok) throw new RollbackSignal(result);
       return result;
     });

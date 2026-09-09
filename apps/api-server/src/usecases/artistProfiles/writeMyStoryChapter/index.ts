@@ -7,8 +7,13 @@ import {
   type StoryChapter,
   type StoryQuestionCode,
 } from "../../../domain/artistProfiles/valueObjects/storyChapter";
-import type { ArtistProfileWriteCapabilities } from "../../../capabilities";
-import { persistMyProfile } from "../persistMyProfile";
+import {
+  clearStoryChapter,
+  toView,
+  writeStoryChapter as writeChapter,
+} from "../../../domain/artistProfiles/behaviors";
+import { edit } from "../../../domain/artistProfiles/policies/publishability";
+import type { ArtistWriteCapabilities } from "../../../capabilities";
 import { type Result, ok, err } from "../../../utils/result";
 
 export type WriteMyStoryChapterInput = {
@@ -23,8 +28,8 @@ export type WriteMyStoryChapterOutput = {
 export type WriteMyStoryChapterError = InvalidStoryChapterFormatError;
 
 type WriteMyStoryChapterCaps = Pick<
-  ArtistProfileWriteCapabilities,
-  "profile" | "artistProfiles"
+  ArtistWriteCapabilities,
+  "actor" | "artistProfiles"
 >;
 
 const toChapterOrClear = (
@@ -46,12 +51,16 @@ export const writeMyStoryChapter = async (
 
   const chapter = toChapterOrClear(questionCode, input.body);
   if (!chapter.ok) return chapter;
+  const written = chapter.value;
 
-  const revised =
-    chapter.value === null
-      ? caps.profile.clearStoryChapter(questionCode)
-      : caps.profile.writeStoryChapter(chapter.value);
-  const saved = await persistMyProfile(caps, revised);
+  const state = await caps.artistProfiles.load(caps.actor.artist.getArtistId());
+  const saved = await caps.artistProfiles.save(
+    edit(state, (content) =>
+      written === null
+        ? clearStoryChapter(content, questionCode)
+        : writeChapter(content, written),
+    ),
+  );
 
-  return ok({ story: saved.toView().story });
+  return ok({ story: toView(saved).story });
 };

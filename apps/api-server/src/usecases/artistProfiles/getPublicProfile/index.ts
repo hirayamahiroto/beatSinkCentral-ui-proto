@@ -3,6 +3,7 @@ import {
   createArtistProfileNotFoundError,
   type ArtistProfileNotFoundError,
 } from "../../../domain/artistProfiles/errors/artistProfileNotFound";
+import { toView } from "../../../domain/artistProfiles/behaviors";
 import {
   createHandle,
   type InvalidHandleFormatError,
@@ -39,7 +40,7 @@ export const getPublicProfile = async (
 
   return ok({
     handle: handle.value,
-    artistId: profile.getArtistId(),
-    profile: profile.toView(),
+    artistId: profile.artistId,
+    profile: toView(profile),
   });
 };

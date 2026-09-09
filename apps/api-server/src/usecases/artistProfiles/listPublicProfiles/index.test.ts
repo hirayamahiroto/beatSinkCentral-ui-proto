@@ -6,9 +6,10 @@ import type { PublicReadCapabilities } from "../../../capabilities";
 const createCaps = () =>
   ({
     artistProfiles: {
-      findByArtistId: vi.fn<IArtistProfileReader["findByArtistId"]>(
-        async () => null,
-      ),
+      load: vi.fn<IArtistProfileReader["load"]>(async (artistId) => ({
+        kind: "noProfile",
+        artistId,
+      })),
       findPublishedByHandle: vi.fn<
         IArtistProfileReader["findPublishedByHandle"]
       >(async () => null),

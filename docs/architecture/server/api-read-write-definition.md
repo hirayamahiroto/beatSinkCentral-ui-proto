@@ -61,7 +61,7 @@
 
 - **入力はその構造の項目だけ。** 属性の更新に Story を渡さない。渡せない型にする。
 - **集合は集合ごと差し替える。** SNS リンクは 1 本ずつ足す／消すではなく `links[]` を丸ごと受ける（順序も本人が決めるため）。要素単位の操作が必要になったら `links/:linkId/delete` を足す。
-- **不変条件は各更新で拒否しない。** 公開可能性を理由に更新を弾くのは `publish` のときだけ（`ensurePublishable` の位置は変えない）。下書き中は部分的な状態を許す。ただし公開中のプロフィールが更新で公開条件を割ったときは非公開へ降ろす（`enforcePublishInvariant`）。公開 read の契約（`name` 必須等）を守るためで、更新自体は成功する。
+- **不変条件は各更新で拒否しない。** 公開可能性を理由に更新を弾くのは `publish` のときだけ（`DraftProfile → Result<PublishedProfile, ProfileNotPublishableError>`）。下書き中は部分的な状態を許す。ただし公開中のプロフィールが更新で公開条件を割ったときは下書きへ降ろす（`edit` の戻り値が `DraftProfile` になる）。公開 read の契約（`name` 必須等）を守るためで、更新自体は成功する。
 - 更新の成功応答は、**更新した構造だけ**を返す（集約全体を返さない）。全体が必要なら取得 API を呼ぶ。
 - 更新の名前は行為にする（`updateAttributes` / `writeStoryChapter` / `replaceLinks`）。画面名・ボタン名を入れない。
 

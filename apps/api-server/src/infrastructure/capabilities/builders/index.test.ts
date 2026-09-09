@@ -6,7 +6,6 @@ import {
   buildRegistrationCapabilities,
   buildUserWriteCapabilities,
   buildArtistWriteCapabilities,
-  buildArtistProfileResolutionCapabilities,
 } from "./index";
 import { createUserReader } from "../../repositories/userRepository";
 import { createArtistReader } from "../../repositories/artistRepository";
@@ -38,17 +37,15 @@ vi.mock("../../repositories/artistRepository", () => ({
   })),
 }));
 
-const mockFindByArtistId = vi.fn();
-
 vi.mock("../../repositories/artistProfileRepository", () => ({
   createArtistProfileReader: vi.fn(() => ({
-    findByArtistId: mockFindByArtistId,
+    load: vi.fn(),
     findPublishedByHandle: vi.fn(),
     listPublishedSummaries: vi.fn(),
   })),
   createArtistProfileWriter: vi.fn(() => ({
-    upsert: vi.fn(),
-    setPublished: vi.fn(),
+    save: vi.fn(),
+    publish: vi.fn(),
   })),
 }));
 
@@ -161,49 +158,20 @@ describe("buildArtistWriteCapabilities", () => {
     vi.clearAllMocks();
   });
 
-  it("Actor とアカウント集約の Reader / Writer を渡し、artistProfiles は渡さない", () => {
+  it("Actor と全集約の Reader / Writer を渡した executor で組み立てる", () => {
     const caps = buildArtistWriteCapabilities(actor)(executor);
 
     expect(Object.keys(caps).sort()).toStrictEqual([
       "actor",
       "artistHandleHistories",
+      "artistProfiles",
       "artists",
       "users",
     ]);
     expect(caps.actor).toBe(actor);
     expect(createUserReader).toHaveBeenCalledWith(executor);
     expect(createArtistHandleHistoryWriter).toHaveBeenCalledWith(executor);
-    expect(createArtistProfileReader).not.toHaveBeenCalled();
-    expect(createArtistProfileWriter).not.toHaveBeenCalled();
-  });
-});
-
-describe("buildArtistProfileResolutionCapabilities", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it("Actor の artistId でプロフィールの状態を解決し、Writer だけを権能に載せる", async () => {
-    mockFindByArtistId.mockResolvedValue(null);
-
-    const caps =
-      await buildArtistProfileResolutionCapabilities(actor)(executor);
-
-    expect(Object.keys(caps).sort()).toStrictEqual([
-      "actor",
-      "artistProfiles",
-      "profileResolution",
-    ]);
-    expect(caps.actor).toBe(actor);
-    expect(caps.profileResolution).toStrictEqual({ status: "noProfile" });
-    expect(createArtistProfileReader).toHaveBeenCalledWith(executor);
-    expect(mockFindByArtistId).toHaveBeenCalledExactlyOnceWith("artist-1");
     expect(createArtistProfileWriter).toHaveBeenCalledWith(executor);
-    expect(Object.keys(caps.artistProfiles).sort()).toStrictEqual([
-      "setPublished",
-      "upsert",
-    ]);
-    expect(createUserReader).not.toHaveBeenCalled();
   });
 });
 

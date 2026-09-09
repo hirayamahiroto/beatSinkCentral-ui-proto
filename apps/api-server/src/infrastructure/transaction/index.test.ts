@@ -44,17 +44,6 @@ describe("runInTransaction", () => {
     expect(buildCaps).toHaveBeenCalledWith(tx);
   });
 
-  it("権能の組み立てが非同期（境界の中で状態を解決する）でも待って渡す", async () => {
-    const { db, tx } = createDbStub();
-    const buildCaps = vi.fn(async (executor: unknown) => ({ executor }));
-
-    const result = await runInTransaction(db, buildCaps, async (caps) =>
-      ok(caps.executor),
-    );
-
-    expect(result).toStrictEqual(ok(tx));
-  });
-
   it("err ならロールバックしたうえで err を復元して返す", async () => {
     const { db, calls } = createDbStub();
     const failure = { type: "SomeBusinessError" };

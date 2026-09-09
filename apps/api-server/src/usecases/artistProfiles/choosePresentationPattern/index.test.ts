@@ -1,17 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { choosePresentationPattern } from "./index";
-import {
-  createDraftArtistProfile,
-  reconstructArtistProfile,
-} from "../../../domain/artistProfiles/factories";
+import { reconstructStoredProfile } from "../../../domain/artistProfiles/factories";
+import { toPersistence } from "../../../domain/artistProfiles/behaviors";
+import type { ProfileState } from "../../../domain/artistProfiles/entities";
 import type {
-  ArtistProfile,
-  ArtistProfilePersistenceData,
-} from "../../../domain/artistProfiles/entities";
-import type { IArtistProfileWriter } from "../../../domain/artistProfiles/repositories";
-import type { ArtistProfileWriteCapabilities } from "../../../capabilities";
+  IArtistProfileReader,
+  IArtistProfileWriter,
+} from "../../../domain/artistProfiles/repositories";
+import type { ArtistWriteCapabilities } from "../../../capabilities";
+import { testUser, testArtist } from "../../../authorization/testDoubles";
 
-const existingProfile = reconstructArtistProfile({
+const actor = { user: testUser, artist: testArtist };
+
+const existingProfile = reconstructStoredProfile({
   id: "profile-existing",
   artistId: "artist-1",
   published: true,
@@ -20,30 +21,30 @@ const existingProfile = reconstructArtistProfile({
   chapters: [{ questionCode: "beginning", body: "私の歩み" }],
   genres: ["bass"],
   links: [{ linkTypeCode: "x", url: "https://x.com/taro" }],
-  presentationPatternCode: "interview",
 });
 
-const echoUpsert = async (data: ArtistProfilePersistenceData) =>
-  reconstructArtistProfile({ ...data });
-
 const createCaps = (
-  profile: ArtistProfile = createDraftArtistProfile({ artistId: "artist-1" }),
+  state: ProfileState = { kind: "noProfile", artistId: "artist-1" },
 ) =>
   ({
-    profile,
+    actor,
     artistProfiles: {
-      upsert: vi.fn<IArtistProfileWriter["upsert"]>(echoUpsert),
-      setPublished: vi.fn<IArtistProfileWriter["setPublished"]>(),
+      load: vi.fn<IArtistProfileReader["load"]>(async () => state),
+      findPublishedByHandle: vi.fn<
+        IArtistProfileReader["findPublishedByHandle"]
+      >(async () => null),
+      listPublishedSummaries: vi.fn<
+        IArtistProfileReader["listPublishedSummaries"]
+      >(async () => []),
+      save: vi.fn<IArtistProfileWriter["save"]>(async (saved) => saved),
+      publish: vi.fn<IArtistProfileWriter["publish"]>(),
     },
-  }) satisfies Pick<
-    ArtistProfileWriteCapabilities,
-    "profile" | "artistProfiles"
-  >;
+  }) satisfies Pick<ArtistWriteCapabilities, "actor" | "artistProfiles">;
 
 describe("choosePresentationPattern", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("渡された下書きにパターンを保存し、presentation だけを返す", async () => {
+  it("プロフィール未作成なら下書きを起こしてパターンを保存し、presentation だけを返す", async () => {
     const caps = createCaps();
 
     const result = await choosePresentationPattern(caps, {
@@ -54,10 +55,10 @@ describe("choosePresentationPattern", () => {
       ok: true,
       value: { presentation: { patternCode: "editorial" } },
     });
-    const persisted = caps.artistProfiles.upsert.mock.calls[0][0];
-    expect(persisted.artistId).toBe("artist-1");
-    expect(persisted.presentationPatternCode).toBe("editorial");
-    expect(persisted.published).toBe(false);
+    const saved = caps.artistProfiles.save.mock.calls[0][0];
+    expect(saved.kind).toBe("draft");
+    expect(saved.artistId).toBe("artist-1");
+    expect(saved.content.presentationPattern).toBe("editorial");
   });
 
   it("既存プロフィールの他の構造には触らずパターンだけを差し替える", async () => {
@@ -68,7 +69,9 @@ describe("choosePresentationPattern", () => {
     });
 
     expect(result.ok).toBe(true);
-    expect(caps.artistProfiles.upsert).toHaveBeenCalledExactlyOnceWith({
+    expect(
+      toPersistence(caps.artistProfiles.save.mock.calls[0][0]),
+    ).toStrictEqual({
       id: "profile-existing",
       artistId: "artist-1",
       name: "Taro",
@@ -94,6 +97,6 @@ describe("choosePresentationPattern", () => {
     if (!result.ok) {
       expect(result.error.type).toBe("InvalidPresentationPatternError");
     }
-    expect(caps.artistProfiles.upsert).not.toHaveBeenCalled();
+    expect(caps.artistProfiles.save).not.toHaveBeenCalled();
   });
 });

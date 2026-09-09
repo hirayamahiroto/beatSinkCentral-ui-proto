@@ -16,7 +16,6 @@ import { createAnalyticsEventWriter } from "../../repositories/analyticsEventRep
 import { createStoryQuestionReader } from "../../repositories/storyQuestionRepository";
 import { createPresentationPatternReader } from "../../repositories/presentationPatternRepository";
 import type { Executor } from "../../transaction";
-import { resolveProfileState } from "../resolveProfileState";
 import type { User } from "../../../domain/users/entities";
 import type { IProfileImageStorage } from "../../../domain/artistProfiles/repositories";
 import type {
@@ -27,7 +26,6 @@ import type {
   RegistrationCapabilities,
   UserWriteCapabilities,
   ArtistWriteCapabilities,
-  ArtistProfileResolutionCapabilities,
   ArtistStorageWriteCapabilities,
 } from "../../../capabilities";
 
@@ -79,17 +77,10 @@ export const buildArtistWriteCapabilities =
     actor,
     ...buildAccountRepositories(executor),
     artistHandleHistories: createArtistHandleHistoryWriter(executor),
-  });
-
-export const buildArtistProfileResolutionCapabilities =
-  (actor: Actor) =>
-  async (executor: Executor): Promise<ArtistProfileResolutionCapabilities> => ({
-    actor,
-    profileResolution: await resolveProfileState(
-      createArtistProfileReader(executor),
-      actor.artist.getArtistId(),
-    ),
-    artistProfiles: createArtistProfileWriter(executor),
+    artistProfiles: {
+      ...createArtistProfileReader(executor),
+      ...createArtistProfileWriter(executor),
+    },
   });
 
 export const buildRegistrationCapabilities = (

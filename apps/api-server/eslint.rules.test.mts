@@ -25,7 +25,6 @@ const AUTHORIZATION = "src/authorization/example/index.ts";
 const USECASE_TEST = "src/usecases/artistProfiles/example/index.test.ts";
 
 const RESOLUTION = "src/authorization/resolution/index.ts";
-const PUBLIC_PROFILE = "src/usecases/artistProfiles/getPublicProfile/index.ts";
 
 const BOUNDARY = "local/usecase-capability-boundary";
 const PARAMETER = "local/usecase-capability-parameter";
@@ -264,14 +263,14 @@ describe("local/usecase-capability-parameter", () => {
 });
 
 describe("local/usecase-subject-not-found", () => {
-  it("usecase が主体の NotFound エラーを生成するための import を検出する", async () => {
+  it("usecase が Actor 系の NotFound エラーを生成するための import を検出する", async () => {
     const ruleIds = await ruleIdsFor(
       USECASE,
       [
-        `import { createArtistProfileNotFoundError } from "../../../domain/artistProfiles/errors/artistProfileNotFound";`,
-        `import type { ArtistProfileWriteCapabilities } from "../../capabilities";`,
-        `export const run = async (caps: ArtistProfileWriteCapabilities) =>`,
-        `  caps.profile ? null : createArtistProfileNotFoundError();`,
+        `import { createArtistNotFoundError } from "../../../domain/artists/errors/artistNotFound";`,
+        `import type { ArtistWriteCapabilities } from "../../../capabilities";`,
+        `export const run = async (caps: ArtistWriteCapabilities) =>`,
+        `  caps.actor ? null : createArtistNotFoundError();`,
         ``,
       ].join("\n"),
     );
@@ -311,9 +310,9 @@ describe("local/usecase-subject-not-found", () => {
     expect(ruleIds).not.toContain(SUBJECT_NOT_FOUND);
   });
 
-  it("handle による公開プロフィールの解決は経路が 1 本のため例外として許可する", async () => {
+  it("集約の状態に由来する NotFound（ArtistProfile 等）は usecase が遷移の選択として生成してよい", async () => {
     const ruleIds = await ruleIdsFor(
-      PUBLIC_PROFILE,
+      USECASE,
       `import { createArtistProfileNotFoundError } from "../../../domain/artistProfiles/errors/artistProfileNotFound";\n`,
     );
 

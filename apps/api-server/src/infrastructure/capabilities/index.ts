@@ -12,7 +12,6 @@ import {
   buildRegistrationCapabilities,
   buildUserWriteCapabilities,
   buildArtistWriteCapabilities,
-  buildArtistProfileResolutionCapabilities,
   buildArtistStorageWriteCapabilities,
 } from "./builders";
 import type { CapabilityDeps } from "../../capabilities";
@@ -50,13 +49,6 @@ export const getCapabilityDeps = (() => {
 
         runWithArtistWriteCapabilities: (actor, work) =>
           runInTransaction(db, buildArtistWriteCapabilities(actor), work),
-
-        runWithArtistProfileResolutionCapabilities: (actor, work) =>
-          runInTransaction(
-            db,
-            buildArtistProfileResolutionCapabilities(actor),
-            work,
-          ),
 
         runWithRegistrationCapabilities: (work) =>
           runInTransaction(db, buildRegistrationCapabilities, work),

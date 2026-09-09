@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { z } from "zod";
 import { getCapabilityDeps } from "../../../../../../infrastructure/capabilities";
-import { withArtistProfilePublishCapabilitiesById } from "../../../../../../authorization/artistProfilePublish";
+import { withArtistWriteCapabilitiesById } from "../../../../../../authorization/artistWrite";
 import { publishMyProfile } from "../../../../../../usecases/artistProfiles/publishMyProfile";
 import { validateRequest } from "../../../validators/validateRequest";
 import { handleAppError } from "../../../../../../errorMap";
@@ -28,7 +28,7 @@ const app = new Hono().post(
     const body = c.req.valid("json");
     const auth0User = c.get("auth0User");
 
-    const result = await withArtistProfilePublishCapabilitiesById(
+    const result = await withArtistWriteCapabilitiesById(
       getCapabilityDeps(),
       auth0User.sub,
       artistId,

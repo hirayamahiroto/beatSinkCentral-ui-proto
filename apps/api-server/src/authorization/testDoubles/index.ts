@@ -1,6 +1,5 @@
 import type {
   ActorResolution,
-  ProfileResolution,
   CapabilityDeps,
   RegistrationCapabilities,
 } from "../../capabilities";
@@ -12,7 +11,6 @@ import type {
 import type { IStoryQuestionReader } from "../../domain/storyQuestions/repositories";
 import { reconstructUser } from "../../domain/users/factories";
 import { reconstructArtist } from "../../domain/artists/factories";
-import { reconstructArtistProfile } from "../../domain/artistProfiles/factories";
 
 export const testUser = reconstructUser({
   id: "user-1",
@@ -27,18 +25,10 @@ export const testArtist = reconstructArtist({
   profile: null,
 });
 
-export const testDraftProfile = reconstructArtistProfile({
-  id: "profile-1",
-  artistId: "artist-1",
-  published: false,
-  name: "Taro",
-});
-
 export type BoundaryCalls = {
   resolvedSubIds: string[];
   userWriteBoundaries: number;
   artistWriteBoundaries: number;
-  artistProfileWriteBoundaries: number;
   registrationBoundaries: number;
 };
 
@@ -47,14 +37,14 @@ const unusedInAuthorizationTests = () => {
 };
 
 const createArtistProfileReaderStub = (): IArtistProfileReader => ({
-  findByArtistId: async () => null,
+  load: async (artistId) => ({ kind: "noProfile", artistId }),
   findPublishedByHandle: async () => null,
   listPublishedSummaries: async () => [],
 });
 
 const createArtistProfileWriterStub = (): IArtistProfileWriter => ({
-  upsert: unusedInAuthorizationTests,
-  setPublished: unusedInAuthorizationTests,
+  save: unusedInAuthorizationTests,
+  publish: unusedInAuthorizationTests,
 });
 
 const createProfileImageStorageStub = (): IProfileImageStorage => ({
@@ -81,13 +71,11 @@ const createRegistrationCapabilitiesStub = (): RegistrationCapabilities => ({
 
 export const createCapabilityDepsStub = (
   resolution: ActorResolution,
-  profileResolution: ProfileResolution = { status: "noProfile" },
 ): { deps: CapabilityDeps; calls: BoundaryCalls } => {
   const calls: BoundaryCalls = {
     resolvedSubIds: [],
     userWriteBoundaries: 0,
     artistWriteBoundaries: 0,
-    artistProfileWriteBoundaries: 0,
     registrationBoundaries: 0,
   };
 
@@ -129,15 +117,10 @@ export const createCapabilityDepsStub = (
         actor,
         ...createRegistrationCapabilitiesStub(),
         artistHandleHistories: { record: unusedInAuthorizationTests },
-      });
-    },
-
-    async runWithArtistProfileResolutionCapabilities(actor, work) {
-      calls.artistProfileWriteBoundaries += 1;
-      return work({
-        actor,
-        profileResolution,
-        artistProfiles: createArtistProfileWriterStub(),
+        artistProfiles: {
+          ...createArtistProfileReaderStub(),
+          ...createArtistProfileWriterStub(),
+        },
       });
     },
 
