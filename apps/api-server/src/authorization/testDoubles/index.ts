@@ -7,10 +7,10 @@ import type {
   IArtistProfileReader,
   IArtistProfileWriter,
   IProfileImageStorage,
-} from "../../../domain/artistProfiles/repositories";
-import type { IStoryQuestionReader } from "../../../domain/storyQuestions/repositories";
-import { reconstructUser } from "../../../domain/users/factories";
-import { reconstructArtist } from "../../../domain/artists/factories";
+} from "../../domain/artistProfiles/repositories";
+import type { IStoryQuestionReader } from "../../domain/storyQuestions/repositories";
+import { reconstructUser } from "../../domain/users/factories";
+import { reconstructArtist } from "../../domain/artists/factories";
 
 export const testUser = reconstructUser({
   id: "user-1",
@@ -37,14 +37,14 @@ const unusedInAuthorizationTests = () => {
 };
 
 const createArtistProfileReaderStub = (): IArtistProfileReader => ({
-  findByArtistId: async () => null,
+  load: async (artistId) => ({ kind: "noProfile", artistId }),
   findPublishedByHandle: async () => null,
   listPublishedSummaries: async () => [],
 });
 
 const createArtistProfileWriterStub = (): IArtistProfileWriter => ({
-  upsert: unusedInAuthorizationTests,
-  setPublished: unusedInAuthorizationTests,
+  save: unusedInAuthorizationTests,
+  publish: unusedInAuthorizationTests,
 });
 
 const createProfileImageStorageStub = (): IProfileImageStorage => ({

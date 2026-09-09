@@ -27,7 +27,7 @@ import type {
   UserWriteCapabilities,
   ArtistWriteCapabilities,
   ArtistStorageWriteCapabilities,
-} from "../../../usecases/capabilities";
+} from "../../../capabilities";
 
 const buildUserRepository = (executor: Executor) => ({
   ...createUserReader(executor),
