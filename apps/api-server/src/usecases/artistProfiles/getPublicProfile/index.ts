@@ -7,7 +7,7 @@ import {
   createHandle,
   type InvalidHandleFormatError,
 } from "../../../domain/artists/valueObjects/handle";
-import type { PublicReadCapabilities } from "../../capabilities";
+import type { PublicReadCapabilities } from "../../../capabilities";
 import { type Result, ok, err } from "../../../utils/result";
 
 export type GetPublicProfileInput = {

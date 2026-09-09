@@ -7,7 +7,7 @@ import {
   type StoryChapter,
   type StoryQuestionCode,
 } from "../../../domain/artistProfiles/valueObjects/storyChapter";
-import type { ArtistProfileWriteCapabilities } from "../../capabilities";
+import type { ArtistProfileWriteCapabilities } from "../../../capabilities";
 import { persistMyProfile } from "../persistMyProfile";
 import { type Result, ok, err } from "../../../utils/result";
 

@@ -3,9 +3,9 @@ import type {
   ResolveActorError,
   ArtistProfileWriteCapabilities,
 } from "../../capabilities";
-import type { ArtistProfileNotFoundError } from "../../../domain/artistProfiles/errors/artistProfileNotFound";
+import type { ArtistProfileNotFoundError } from "../../domain/artistProfiles/errors/artistProfileNotFound";
 import { toAddressedActor, toExistingProfile } from "../resolution";
-import type { Result } from "../../../utils/result";
+import type { Result } from "../../utils/result";
 
 export const withArtistProfilePublishCapabilitiesById = async <T, E>(
   deps: CapabilityDeps,

@@ -8,11 +8,11 @@ import type {
   IArtistProfileReader,
   IArtistProfileWriter,
   IProfileImageStorage,
-} from "../../../domain/artistProfiles/repositories";
-import type { IStoryQuestionReader } from "../../../domain/storyQuestions/repositories";
-import { reconstructUser } from "../../../domain/users/factories";
-import { reconstructArtist } from "../../../domain/artists/factories";
-import { reconstructArtistProfile } from "../../../domain/artistProfiles/factories";
+} from "../../domain/artistProfiles/repositories";
+import type { IStoryQuestionReader } from "../../domain/storyQuestions/repositories";
+import { reconstructUser } from "../../domain/users/factories";
+import { reconstructArtist } from "../../domain/artists/factories";
+import { reconstructArtistProfile } from "../../domain/artistProfiles/factories";
 
 export const testUser = reconstructUser({
   id: "user-1",

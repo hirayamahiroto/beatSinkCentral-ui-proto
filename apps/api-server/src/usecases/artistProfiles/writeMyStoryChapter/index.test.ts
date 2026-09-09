@@ -9,7 +9,7 @@ import type {
   ArtistProfilePersistenceData,
 } from "../../../domain/artistProfiles/entities";
 import type { IArtistProfileWriter } from "../../../domain/artistProfiles/repositories";
-import type { ArtistProfileWriteCapabilities } from "../../capabilities";
+import type { ArtistProfileWriteCapabilities } from "../../../capabilities";
 
 const publishedContent = {
   id: "profile-existing",

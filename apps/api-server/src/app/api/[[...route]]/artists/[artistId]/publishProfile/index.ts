@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { z } from "zod";
 import { getCapabilityDeps } from "../../../../../../infrastructure/capabilities";
-import { withArtistProfilePublishCapabilitiesById } from "../../../../../../usecases/authorization/artistProfilePublish";
+import { withArtistProfilePublishCapabilitiesById } from "../../../../../../authorization/artistProfilePublish";
 import { publishMyProfile } from "../../../../../../usecases/artistProfiles/publishMyProfile";
 import { validateRequest } from "../../../validators/validateRequest";
 import { handleAppError } from "../../../../../../errorMap";

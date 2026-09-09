@@ -25,7 +25,7 @@ const eslintConfig = [
     "src/infrastructure/repositories/*/index.test.ts",
     "src/infrastructure/transaction/index.test.ts",
     "src/middlewares/auth0/errors/unauthorized/index.ts",
-    "src/usecases/authorization/conflict/index.ts",
+    "src/authorization/conflict/index.ts",
     "src/utils/result/index.ts",
   ]),
   responseValidationRules([
@@ -46,15 +46,18 @@ const eslintConfig = [
     "src/app/api/\\[\\[...route\\]\\]/artists/me/profile/image/post/index.ts",
     "src/app/api/\\[\\[...route\\]\\]/artists/me/profile/publish/post/index.ts",
   ]),
-  usecaseCapabilityRules(["src/usecases/**/*.ts"]),
+  usecaseCapabilityRules([
+    "src/usecases/**/*.ts",
+    "src/authorization/**/*.ts",
+    "src/capabilities/**/*.ts",
+  ]),
   usecaseCapabilityParameterExempt([
-    "src/usecases/authorization/**/*.ts",
-    "src/usecases/capabilities/**/*.ts",
-    "src/usecases/**/testDoubles/**/*.ts",
+    "src/authorization/**/*.ts",
+    "src/capabilities/**/*.ts",
     "src/usecases/**/*.test.ts",
   ]),
   usecaseSubjectNotFoundExempt([
-    "src/usecases/authorization/resolution/**/*.ts",
+    "src/authorization/resolution/**/*.ts",
     // NOTE: handle による公開プロフィールの解決は経路が 1 本のため usecase 内に留めている。2 本目が現れた時点で resolution へ移し、この行を削る
     "src/usecases/artistProfiles/getPublicProfile/index.ts",
   ]),

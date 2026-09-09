@@ -3,7 +3,7 @@ import {
   createPresentationPatternCode,
   type InvalidPresentationPatternError,
 } from "../../../domain/artistProfiles/valueObjects/presentationPattern";
-import type { ArtistProfileWriteCapabilities } from "../../capabilities";
+import type { ArtistProfileWriteCapabilities } from "../../../capabilities";
 import { persistMyProfile } from "../persistMyProfile";
 import { type Result, ok } from "../../../utils/result";
 

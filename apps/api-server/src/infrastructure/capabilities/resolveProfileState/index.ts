@@ -1,5 +1,5 @@
 import type { IArtistProfileReader } from "../../../domain/artistProfiles/repositories";
-import type { ProfileResolution } from "../../../usecases/capabilities";
+import type { ProfileResolution } from "../../../capabilities";
 
 export const resolveProfileState = async (
   reader: IArtistProfileReader,

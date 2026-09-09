@@ -29,7 +29,7 @@ import type {
   ArtistWriteCapabilities,
   ArtistProfileResolutionCapabilities,
   ArtistStorageWriteCapabilities,
-} from "../../../usecases/capabilities";
+} from "../../../capabilities";
 
 const buildUserRepository = (executor: Executor) => ({
   ...createUserReader(executor),

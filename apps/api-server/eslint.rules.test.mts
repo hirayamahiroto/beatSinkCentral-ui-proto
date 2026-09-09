@@ -21,10 +21,10 @@ const ruleIdsFor = async (filePath: string, code: string) => {
 };
 
 const USECASE = "src/usecases/artistProfiles/example/index.ts";
-const AUTHORIZATION = "src/usecases/authorization/example/index.ts";
+const AUTHORIZATION = "src/authorization/example/index.ts";
 const USECASE_TEST = "src/usecases/artistProfiles/example/index.test.ts";
 
-const RESOLUTION = "src/usecases/authorization/resolution/index.ts";
+const RESOLUTION = "src/authorization/resolution/index.ts";
 const PUBLIC_PROFILE = "src/usecases/artistProfiles/getPublicProfile/index.ts";
 
 const BOUNDARY = "local/usecase-capability-boundary";
@@ -386,7 +386,7 @@ describe("local/entity-behavior-has-caller", () => {
     const messages = await entityBehaviorMessagesIn({
       [ENTITY]: EXAMPLE_ENTITY,
       "src/usecases/example/index.test.ts": `example.getId(); example.getName(); example.toPersistence();\n`,
-      "src/usecases/authorization/testDoubles/index.ts": `example.getId(); example.getName(); example.toPersistence();\n`,
+      "src/authorization/testDoubles/index.ts": `example.getId(); example.getName(); example.toPersistence();\n`,
     });
 
     expect(messages).toHaveLength(3);

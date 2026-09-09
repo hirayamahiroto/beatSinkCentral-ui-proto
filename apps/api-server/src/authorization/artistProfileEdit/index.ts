@@ -4,7 +4,7 @@ import type {
   ArtistProfileWriteCapabilities,
 } from "../../capabilities";
 import { toAddressedActor, toEditableProfile } from "../resolution";
-import type { Result } from "../../../utils/result";
+import type { Result } from "../../utils/result";
 
 export const withArtistProfileEditCapabilitiesById = async <T, E>(
   deps: CapabilityDeps,

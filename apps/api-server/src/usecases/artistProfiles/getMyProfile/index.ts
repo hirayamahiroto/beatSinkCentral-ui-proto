@@ -3,7 +3,7 @@ import {
   assessPublishability,
   type Publishability,
 } from "../../../domain/artistProfiles/policies/publishability";
-import type { ArtistReadCapabilities } from "../../capabilities";
+import type { ArtistReadCapabilities } from "../../../capabilities";
 import { type Result, ok } from "../../../utils/result";
 
 export type GetMyProfileOutput = {

@@ -6,7 +6,7 @@ import {
   testArtist as artist,
   testDraftProfile as profile,
 } from "../testDoubles";
-import { ok } from "../../../utils/result";
+import { ok } from "../../utils/result";
 
 describe("withArtistProfileEditCapabilitiesById", () => {
   it("未登録なら境界を張らず UserNotFoundError を返す", async () => {

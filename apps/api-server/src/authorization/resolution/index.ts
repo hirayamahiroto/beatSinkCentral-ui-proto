@@ -5,16 +5,16 @@ import type {
   ResolveActorError,
   ResolveUserError,
 } from "../../capabilities";
-import type { User } from "../../../domain/users/entities";
-import type { ArtistProfile } from "../../../domain/artistProfiles/entities";
-import { createDraftArtistProfile } from "../../../domain/artistProfiles/factories";
-import { createUserNotFoundError } from "../../../domain/users/errors/userNotFound";
-import { createArtistNotFoundError } from "../../../domain/artists/errors/artistNotFound";
+import type { User } from "../../domain/users/entities";
+import type { ArtistProfile } from "../../domain/artistProfiles/entities";
+import { createDraftArtistProfile } from "../../domain/artistProfiles/factories";
+import { createUserNotFoundError } from "../../domain/users/errors/userNotFound";
+import { createArtistNotFoundError } from "../../domain/artists/errors/artistNotFound";
 import {
   createArtistProfileNotFoundError,
   type ArtistProfileNotFoundError,
-} from "../../../domain/artistProfiles/errors/artistProfileNotFound";
-import { type Result, ok, err } from "../../../utils/result";
+} from "../../domain/artistProfiles/errors/artistProfileNotFound";
+import { type Result, ok, err } from "../../utils/result";
 
 const toActor = (
   resolution: ActorResolution,

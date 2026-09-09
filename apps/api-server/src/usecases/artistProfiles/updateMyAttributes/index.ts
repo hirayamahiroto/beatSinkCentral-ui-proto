@@ -4,7 +4,7 @@ import {
   type ArtistProfileAttributesContent,
   type ArtistProfileAttributesError,
 } from "../../../domain/artistProfiles/factories";
-import type { ArtistProfileWriteCapabilities } from "../../capabilities";
+import type { ArtistProfileWriteCapabilities } from "../../../capabilities";
 import { persistMyProfile } from "../persistMyProfile";
 import { type Result, ok } from "../../../utils/result";
 

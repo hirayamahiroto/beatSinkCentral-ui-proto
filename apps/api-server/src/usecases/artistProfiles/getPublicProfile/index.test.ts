@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { reconstructArtistProfile } from "../../../domain/artistProfiles/factories";
 import { getPublicProfile } from "./index";
 import type { IArtistProfileReader } from "../../../domain/artistProfiles/repositories";
-import type { PublicReadCapabilities } from "../../capabilities";
+import type { PublicReadCapabilities } from "../../../capabilities";
 
 const createCaps = () =>
   ({

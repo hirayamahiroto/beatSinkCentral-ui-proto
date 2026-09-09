@@ -2,7 +2,7 @@ import {
   createImageUrl,
   type InvalidImageUrlFormatError,
 } from "../../../domain/artistProfiles/valueObjects/imageUrl";
-import type { ArtistProfileWriteCapabilities } from "../../capabilities";
+import type { ArtistProfileWriteCapabilities } from "../../../capabilities";
 import { persistMyProfile } from "../persistMyProfile";
 import { type Result, ok } from "../../../utils/result";
 

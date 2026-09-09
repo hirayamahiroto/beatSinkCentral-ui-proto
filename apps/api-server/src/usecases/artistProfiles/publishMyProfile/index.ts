@@ -2,7 +2,7 @@ import {
   ensurePublishable,
   type ProfileNotPublishableError,
 } from "../../../domain/artistProfiles/policies/publishability";
-import type { ArtistProfileWriteCapabilities } from "../../capabilities";
+import type { ArtistProfileWriteCapabilities } from "../../../capabilities";
 import { type Result, ok } from "../../../utils/result";
 
 export type PublishMyProfileInput = {

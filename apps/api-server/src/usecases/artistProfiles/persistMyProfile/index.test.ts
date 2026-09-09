@@ -3,7 +3,7 @@ import { persistMyProfile } from "./index";
 import { reconstructArtistProfile } from "../../../domain/artistProfiles/factories";
 import type { ArtistProfilePersistenceData } from "../../../domain/artistProfiles/entities";
 import type { IArtistProfileWriter } from "../../../domain/artistProfiles/repositories";
-import type { ArtistProfileWriteCapabilities } from "../../capabilities";
+import type { ArtistProfileWriteCapabilities } from "../../../capabilities";
 
 const publishableContent = {
   id: "profile-1",

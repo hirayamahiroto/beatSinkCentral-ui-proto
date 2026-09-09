@@ -4,7 +4,7 @@ import type {
   CreateProfileLinkError,
   ProfileLinkInput,
 } from "../../../domain/artistProfiles/valueObjects/profileLink";
-import type { ArtistProfileWriteCapabilities } from "../../capabilities";
+import type { ArtistProfileWriteCapabilities } from "../../../capabilities";
 import { persistMyProfile } from "../persistMyProfile";
 import { type Result, ok } from "../../../utils/result";
 
